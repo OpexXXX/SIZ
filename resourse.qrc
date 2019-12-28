@@ -1,2 +1,12 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/new/icon">
+        <file>icon-yes.svg</file>
+        <file>04markerE.svg</file>
+        <file>substation.svg</file>
+        <file>04marker.svg</file>
+        <file>153.svg</file>
+    </qresource>
+    <qresource prefix="/new/database">
+        <file>siz.db</file>
+    </qresource>
+</RCC>

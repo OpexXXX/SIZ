@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT += sql
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SIZ
@@ -26,10 +26,15 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainsizwindow.cpp
+        mainsizwindow.cpp \
+        database.cpp \
+    sizmodel.cpp
 
 HEADERS += \
-        mainsizwindow.h
+        mainsizwindow.h \
+        database.h \
+    sizmodel.h
+
 
 FORMS += \
         mainsizwindow.ui
@@ -38,3 +43,8 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
+
+RESOURCES += \
+    resourse.qrc

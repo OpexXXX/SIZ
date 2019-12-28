@@ -58,6 +58,7 @@ void MainSizWindow::setupModels()
               );*/
     sizTableModel = new QSqlTableModel(this);
     sizTableModel->setTable(SIZTABLE);
+    
     sizTableModel->select();
 
         for (int i = 0; i < sizTableModel->rowCount(); ++i) {
