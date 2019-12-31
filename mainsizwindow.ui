@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
-    <height>402</height>
+    <width>806</width>
+    <height>451</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainSizWindow</string>
+   <string> Журнал СИЗ</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resourse.qrc">
+    <normaloff>:/new/icon/icon.svg</normaloff>:/new/icon/icon.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
@@ -34,143 +38,138 @@
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Объекты</string>
+        <string>Список СИЗ</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_3"/>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="text">
+             <string>Удалить запись</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>Добавить запись</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1">
+         <widget class="QTableView" name="tableView"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QTreeWidget" name="treeWidget">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="showDropIndicator" stdset="0">
+           <bool>false</bool>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+          <property name="headerHidden">
+           <bool>false</bool>
+          </property>
+          <attribute name="headerVisible">
+           <bool>true</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string/>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Кол-во</string>
+           </property>
+          </column>
+          <item>
+           <property name="text">
+            <string>Объекты</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Типы СИЗ</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Персонал</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>События</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QListView" name="listView"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
-        <string>Все</string>
+        <string>Перечни</string>
        </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_2"/>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
         <string>Tab 2</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QTableView" name="tableView"/>
-        </item>
-       </layout>
+       <layout class="QGridLayout" name="gridLayout"/>
       </widget>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QTreeWidget" name="treeWidget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
-      </property>
-      <property name="headerHidden">
-       <bool>true</bool>
-      </property>
-      <column>
-       <property name="text">
-        <string>Новый столбец</string>
-       </property>
-      </column>
-      <item>
-       <property name="text">
-        <string>Объекты</string>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-        </font>
-       </property>
-       <item>
-        <property name="text">
-         <string>33 &quot;Ермаковская&quot;</string>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="icon">
-         <iconset resource="resourse.qrc">
-          <normaloff>:/new/icon/153.svg</normaloff>:/new/icon/153.svg</iconset>
-        </property>
-        <item>
-         <property name="text">
-          <string>Новый дочерний элемент</string>
-         </property>
-        </item>
-       </item>
-       <item>
-        <property name="text">
-         <string>10 &quot;Мигна&quot;</string>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="icon">
-         <iconset resource="resourse.qrc">
-          <normaloff>:/new/icon/153.svg</normaloff>:/new/icon/153.svg</iconset>
-        </property>
-        <property name="flags">
-         <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled|ItemIsTristate</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>32 &quot;Морозово&quot;</string>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="icon">
-         <iconset resource="resourse.qrc">
-          <normaloff>:/new/icon/153.svg</normaloff>:/new/icon/153.svg</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>40 &quot;Григорьевка&quot;</string>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="icon">
-         <iconset resource="resourse.qrc">
-          <normaloff>:/new/icon/153.svg</normaloff>:/new/icon/153.svg</iconset>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>41 &quot;Танзыбей&quot;</string>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="icon">
-         <iconset resource="resourse.qrc">
-          <normaloff>:/new/icon/153.svg</normaloff>:/new/icon/153.svg</iconset>
-        </property>
-       </item>
-      </item>
      </widget>
     </item>
    </layout>
@@ -180,8 +179,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>783</width>
-     <height>23</height>
+     <width>806</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

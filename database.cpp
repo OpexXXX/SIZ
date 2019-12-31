@@ -1,4 +1,15 @@
 #include "database.h"
+#include "sizmodel.h"
+
+#include <QObject>
+#include <QSql>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSqlDatabase>
+#include <QFile>
+#include <QDate>
+#include <QDebug>
+#include <QSqlRecord>
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -124,4 +135,63 @@ bool DataBase::inserIntoTable(const QVariantList &data)
         return true;
     }
     return false;
+}
+QList<QString>  DataBase::getObject()
+{
+    QSqlQuery q("select * from Object");
+    QList<QString> list = *new QList<QString> ();
+
+    QSqlRecord rec = q.record();
+    qDebug() << "Читаем данные из Object " << rec.count()<<" записей";
+    while (q.next()){
+
+
+        list.append(q.value(rec.indexOf("name")).toString());
+                  }
+    return list;
+}
+QList<QString>  DataBase::getTypeSiz()
+{
+    QSqlQuery q("select * from TypeSiz");
+    QList<QString> list = *new QList<QString> ();
+
+    QSqlRecord rec = q.record();
+    qDebug() << "Читаем данные из TypeSiz " << rec.count()<<" записей";
+    while (q.next()){
+        list.append(q.value(rec.indexOf("name")).toString());
+                  }
+    return list;
+}
+QList<QString>  DataBase::getPersonal()
+{
+    QSqlQuery q("select * from Personal");
+    QList<QString> list = *new QList<QString> ();
+
+    QSqlRecord rec = q.record();
+    qDebug() << "Читаем данные из Personal " << rec.count()<<" записей";
+    while (q.next()){
+        list.append(q.value(rec.indexOf("name")).toString());
+                  }
+    return list;
+}
+bool  DataBase::readSizFromDB()
+{
+    QSqlQuery q("select * from Siz");
+    QSqlRecord rec = q.record();
+    qDebug() << "Читаем данные из SizTable " << rec.count()<<" записей";
+    int nameCol = rec.indexOf("number"); // index of the field "name"
+
+
+    while (q.next()){
+
+        sizmodel* siz = new sizmodel();
+        siz->number =           q.value(rec.indexOf("number")).toString();
+        siz->typeSiz=           q.value(rec.indexOf("typeSiz")).toUInt();         //Тип СИЗ
+        siz->removed=           q.value(rec.indexOf("removed")).toBool();          //Изъято
+        siz->verification=      q.value(rec.indexOf("verification")).toDate();    //Дата испытания
+        siz->endVerification=   q.value(rec.indexOf("endVerification")).toDate();  //Дата следующего испытания
+
+        sizmodel::allSiz.append(siz);
+    }
+    return true;
 }

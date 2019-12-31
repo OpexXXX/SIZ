@@ -5,6 +5,7 @@
         <file>substation.svg</file>
         <file>04marker.svg</file>
         <file>153.svg</file>
+        <file>icon.svg</file>
     </qresource>
     <qresource prefix="/new/database">
         <file>siz.db</file>

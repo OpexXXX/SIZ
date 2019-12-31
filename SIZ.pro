@@ -28,12 +28,18 @@ SOURCES += \
         main.cpp \
         mainsizwindow.cpp \
         database.cpp \
-    sizmodel.cpp
+    sizmodel.cpp \
+    comboboxitemdelegate.cpp \
+    checkboxitemdelegate.cpp \
+    dateedititemdelegate.cpp
 
 HEADERS += \
         mainsizwindow.h \
         database.h \
-    sizmodel.h
+    sizmodel.h \
+    comboboxitemdelegate.h \
+    checkboxitemdelegate.h \
+    dateedititemdelegate.h
 
 
 FORMS += \

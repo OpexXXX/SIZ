@@ -9,7 +9,7 @@
 #include <QFile>
 #include <QDate>
 #include <QDebug>
-
+#include "sizmodel.h"
 /* Директивы имен таблицы, полей таблицы и базы данных */
 #define DATABASE_HOSTNAME   "ExampleDataBase"
 #define DATABASE_NAME       "siz.db"
@@ -19,6 +19,7 @@
 #define TABLE_TIME              "Time"
 #define TABLE_MESSAGE           "Message"
 #define TABLE_RANDOM            "Random"
+
 #define SIZTABLE                "Siz"
 #define TYPESIZTABLE            "TypeSiz"
 #define OBJECTTABLE             "Object"
@@ -36,7 +37,10 @@ public:
      * */
     void connectToDataBase();
     bool inserIntoTable(const QVariantList &data);
-
+    QList<QString> getObject();
+     QList<QString> getTypeSiz();
+     QList<QString>  getPersonal();
+bool readSizFromDB();
 private:
     // Сам объект базы данных, с которым будет производиться работа
     QSqlDatabase    db;
@@ -46,6 +50,9 @@ private:
     bool restoreDataBase();
     void closeDataBase();
     bool createTable();
+
+
+
 };
 
 #endif // DATABASE_H

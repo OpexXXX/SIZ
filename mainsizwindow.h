@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QSqlTableModel>
+#include <QTreeWidgetItem>
+
 /* Подключаем заголовочный файл для работы с информацией, которая помещена в базу данных */
 #include "database.h"
 
@@ -18,12 +20,23 @@ public:
     explicit MainSizWindow(QWidget *parent = nullptr);
     ~MainSizWindow();
 
-private:
+private slots:
+    void on_treeWidget_itemSelectionChanged();
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
+
+
+    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
+public:
     Ui::MainSizWindow *ui;
     /* В проекте используются объекты для взаимодействия с информацией в базе данных
          * и моделью представления таблицы базы данных
          * */
         DataBase        *db;
+private:
         QSqlTableModel  *sizTableModel;
         QSqlTableModel  *sizTypeTableModel;
         QSqlTableModel  *ObjectTableModel;

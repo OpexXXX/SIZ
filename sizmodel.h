@@ -11,18 +11,26 @@
 #include <QDebug>
 
 
+
 class sizmodel
 {
 
 public:
-    std::string number;     //Номер СИЗ
+    inline  static QList<sizmodel*> allSiz; //Список всех СИЗ3
+
+
+    QString number;     //Номер СИЗ
     uint typeSiz;           //Тип СИЗ
     bool veri;
     bool removed;           //Изъято
     QDate verification;     //Дата испытания
     QDate endVerification;  //Дата следующего испытания
+    QVariantList eventDate; //Список осмотров
+    uint indexOfTable;
+    sizmodel(); //Конструктор
 
-    sizmodel();
+    inline static void refreshSiz(); //Обновить СИЗ из БД
+
     //Функции возвращающие значения
     QString getTypeNames();  //Имя во множественном лице
     QString getTypeName();  //Имя
@@ -38,5 +46,6 @@ public:
     QString getPersonalName();  //Имя работника которому выдан СИЗ
 
 };
+
 
 #endif // SIZMODEL_H
