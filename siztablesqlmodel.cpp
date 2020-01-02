@@ -53,5 +53,15 @@ QVariant SizVerifiSqlModel::data(const QModelIndex &index, int role) const
             return qVariantFromValue(QColor(Qt::red));
         }
     }
+    if (role == Qt::FontRole && index.column() == 1)
+    {
+               QFont font;
+
+              font.setPixelSize(16);
+
+
+               return font;
+
+    }
     return value;
 }

@@ -4,6 +4,7 @@
 #include <QSqlQueryModel>
 #include <QColor>
 #include <QDate>
+#include <QFont>
 class SizVerifiSqlModel : public QSqlQueryModel
 {
     Q_OBJECT

@@ -40,11 +40,11 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Список СИЗ</string>
+        <string>Журнал</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="1">
@@ -164,8 +164,14 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QToolBox" name="toolBox">
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page">
            <property name="geometry">
@@ -173,7 +179,7 @@
              <x>0</x>
              <y>0</y>
              <width>1112</width>
-             <height>523</height>
+             <height>491</height>
             </rect>
            </property>
            <attribute name="label">

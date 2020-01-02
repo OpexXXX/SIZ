@@ -83,6 +83,15 @@ void MainSizWindow::setupModels()
     sizTableModel->setHeaderData(9, Qt::Horizontal, tr("Сотрудник"));
 
     sizTypeTableModel->setTable(TYPESIZTABLE);
+    sizTypeTableModel->setHeaderData(0, Qt::Horizontal, tr("Наименование"));
+    sizTypeTableModel->setHeaderData(1, Qt::Horizontal, tr("Испытывается"));
+    sizTypeTableModel->setHeaderData(2, Qt::Horizontal, tr("Переодичность испытаний мес."));
+    sizTypeTableModel->setHeaderData(3, Qt::Horizontal, tr("Переодичность осмотров мес."));
+    sizTypeTableModel->setHeaderData(4, Qt::Horizontal, tr("Персональный"));
+
+
+
+
     ObjectTableModel->setTable(OBJECTTABLE);
     PersonalTableModel->setTable(PERSONALTABEL);
     QDate stopDate = QDate::currentDate(); // возвращаем текущую дату
