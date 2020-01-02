@@ -43,12 +43,17 @@ void CheckBoxItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
     Q_ASSERT(cb);
     model->setData(index, cb->isChecked(), Qt::EditRole);
 }
+
 void CheckBoxItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
  const QModelIndex &index) const
 {
  QString val;
- if (index.data().toBool()) {
+
+ if (index.data().toBool())
+ {
+
  const int PaintingScaleFactor = 100;
+
  QPolygonF diamondPolygon;
  painter->save();
  painter->setRenderHint(QPainter::Antialiasing, true);
@@ -65,7 +70,9 @@ void CheckBoxItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
  painter->drawPolygon(diamondPolygon, Qt::WindingFill);
  painter->translate(1.0, 0.0);
  painter->restore();
- } else {
+
+ }
+ else {
 
 // Для всех отстальных случаев выполняем действие по умолчанию
  //QItemDelegate::paint(painter, option, index);

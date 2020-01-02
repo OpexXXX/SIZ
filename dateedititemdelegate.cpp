@@ -31,9 +31,9 @@ void DateEditItemDelegate::setEditorData(QWidget *editor, const QModelIndex &ind
 
     // if it is valid, adjust the combobox
  QDate datte = *new QDate () ;
- datte.fromString(currentText,"dd.MM.yyyy");
+ datte.fromString(currentText,"yyyy-MM-dd");
 
-    cb->setDate(QDate::fromString(currentText,"dd.MM.yyyy"));
+    cb->setDate(QDate::fromString(currentText,"yyyy-MM-dd"));
 
 }
 
@@ -42,5 +42,11 @@ void DateEditItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 {
     QDateEdit *cb = qobject_cast<QDateEdit *>(editor);
     Q_ASSERT(cb);
-    model->setData(index, cb->date().toString("dd.MM.yyyy"), Qt::EditRole);
+    if(cb->date().toString("yyyy-MM-dd" )=="2014-01-01" )
+    {
+         model->setData(index, "", Qt::EditRole);
+    }else{
+
+        model->setData(index, cb->date().toString("yyyy-MM-dd"), Qt::EditRole);
+    }
 }

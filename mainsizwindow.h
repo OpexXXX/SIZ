@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QSqlTableModel>
 #include <QTreeWidgetItem>
-
+#include "siztablesqlmodel.h"
 /* Подключаем заголовочный файл для работы с информацией, которая помещена в базу данных */
 #include "database.h"
 
@@ -30,6 +30,26 @@ private slots:
 
 
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
+    void on_treeWidget_itemChanged(QTreeWidgetItem *item, int column);
+
+    void on_treeWidget_itemActivated(QTreeWidgetItem *item, int column);
+
+    void on_spinBox_valueChanged(int arg1);
+
+    void on_pushButton_6_clicked();
+
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_5_clicked();
+
+    void on_tabWidget_currentChanged(int index);
+
+    void on_pushButton_8_clicked();
+
+    void on_pushButton_7_clicked();
+
 public:
     Ui::MainSizWindow *ui;
     /* В проекте используются объекты для взаимодействия с информацией в базе данных
@@ -41,7 +61,7 @@ private:
         QSqlTableModel  *sizTypeTableModel;
         QSqlTableModel  *ObjectTableModel;
         QSqlTableModel  *PersonalTableModel;
-        QSqlTableModel  *eventDateTableModel;
+        SizVerifiSqlModel  *eventDateTableModel;
 private:
     /* Также присутствуют два метода, которые формируют модель
      * и внешний вид TableView

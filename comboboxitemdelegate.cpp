@@ -5,9 +5,9 @@
 ComboBoxItemDelegate::ComboBoxItemDelegate(QObject *parent , const QStringList &itemName )
     : QStyledItemDelegate(parent)
 {
-qDebug()<<itemName.length()<< " Количество объектов";
+
 this->objects = itemName;
-qDebug()<<this->objects.length()<< " Количество объектов";
+
 }
 
 

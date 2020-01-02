@@ -9,7 +9,7 @@
 #include <QFile>
 #include <QDate>
 #include <QDebug>
-#include "sizmodel.h"
+
 /* Директивы имен таблицы, полей таблицы и базы данных */
 #define DATABASE_HOSTNAME   "ExampleDataBase"
 #define DATABASE_NAME       "siz.db"

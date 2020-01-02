@@ -142,7 +142,7 @@ QList<QString>  DataBase::getObject()
     QList<QString> list = *new QList<QString> ();
 
     QSqlRecord rec = q.record();
-    qDebug() << "Читаем данные из Object " << rec.count()<<" записей";
+    qDebug() << "Читаем данные из Object ";
     while (q.next()){
 
 
@@ -156,9 +156,9 @@ QList<QString>  DataBase::getTypeSiz()
     QList<QString> list = *new QList<QString> ();
 
     QSqlRecord rec = q.record();
-    qDebug() << "Читаем данные из TypeSiz " << rec.count()<<" записей";
+    qDebug() << "Читаем данные из TypeSiz ";
     while (q.next()){
-        list.append(q.value(rec.indexOf("name")).toString());
+        list.append(q.value(rec.indexOf("oneName")).toString());
                   }
     return list;
 }
@@ -168,7 +168,7 @@ QList<QString>  DataBase::getPersonal()
     QList<QString> list = *new QList<QString> ();
 
     QSqlRecord rec = q.record();
-    qDebug() << "Читаем данные из Personal " << rec.count()<<" записей";
+    qDebug() << "Читаем данные из Personal";
     while (q.next()){
         list.append(q.value(rec.indexOf("name")).toString());
                   }
@@ -178,7 +178,7 @@ bool  DataBase::readSizFromDB()
 {
     QSqlQuery q("select * from Siz");
     QSqlRecord rec = q.record();
-    qDebug() << "Читаем данные из SizTable " << rec.count()<<" записей";
+    qDebug() << "Читаем данные из SizTable";
     int nameCol = rec.indexOf("number"); // index of the field "name"
 
 
