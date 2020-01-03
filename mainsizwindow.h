@@ -50,6 +50,8 @@ private slots:
 
     void on_pushButton_7_clicked();
 
+    void on_listView_doubleClicked(const QModelIndex &index);
+
 public:
     Ui::MainSizWindow *ui;
     /* В проекте используются объекты для взаимодействия с информацией в базе данных

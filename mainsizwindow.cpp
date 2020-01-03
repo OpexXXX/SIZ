@@ -490,3 +490,15 @@ void MainSizWindow::on_pushButton_7_clicked()
 
     }
 }
+
+void MainSizWindow::on_listView_doubleClicked(const QModelIndex &index)
+{
+      QModelIndexList indexes = ui->listView->selectionModel()->selection().indexes();
+
+QString filter = QString( " index ="+indexes.at(0).data().toString());
+qDebug()<<filter<< " <<fiter";
+      sizTableModel->setFilter(filter);
+
+      sizTableModel->select();
+
+}
