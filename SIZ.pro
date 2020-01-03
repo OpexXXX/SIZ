@@ -32,7 +32,9 @@ SOURCES += \
     comboboxitemdelegate.cpp \
     checkboxitemdelegate.cpp \
     dateedititemdelegate.cpp \
-    siztablesqlmodel.cpp
+    siztablesqlmodel.cpp \
+    maintablemodel.cpp \
+    eventmodel.cpp
 
 HEADERS += \
         mainsizwindow.h \
@@ -41,7 +43,9 @@ HEADERS += \
     comboboxitemdelegate.h \
     checkboxitemdelegate.h \
     dateedititemdelegate.h \
-    siztablesqlmodel.h
+    siztablesqlmodel.h \
+    maintablemodel.h \
+    eventmodel.h
 
 
 FORMS += \

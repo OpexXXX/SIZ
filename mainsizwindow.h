@@ -4,7 +4,10 @@
 #include <QMainWindow>
 #include <QSqlTableModel>
 #include <QTreeWidgetItem>
+#include <QSystemTrayIcon>
+#include <QTimer>
 #include "siztablesqlmodel.h"
+#include "maintablemodel.h"
 /* Подключаем заголовочный файл для работы с информацией, которая помещена в базу данных */
 #include "database.h"
 
@@ -19,8 +22,19 @@ class MainSizWindow : public QMainWindow
 public:
     explicit MainSizWindow(QWidget *parent = nullptr);
     ~MainSizWindow();
+protected:
+    /* Виртуальная функция родительского класса в нашем классе
+     * переопределяется для изменения поведения приложения,
+     *  чтобы оно сворачивалось в трей, когда мы этого хотим
+     */
+    void closeEvent(QCloseEvent * event);
 
 private slots:
+    /* Слот, который будет принимать сигнал от события
+       * нажатия на иконку приложения в трее
+       */
+    void updateTime();
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_treeWidget_itemSelectionChanged();
 
     void on_pushButton_clicked();
@@ -52,6 +66,18 @@ private slots:
 
     void on_listView_doubleClicked(const QModelIndex &index);
 
+    void on_tableView_viewportEntered();
+
+    void on_tableView_entered(const QModelIndex &index);
+
+    void on_tableView_activated(const QModelIndex &index);
+
+    void on_tableView_clicked(const QModelIndex &index);
+
+    void on_tableView_pressed(const QModelIndex &index);
+
+    void on_pushButton_9_clicked();
+
 public:
     Ui::MainSizWindow *ui;
     /* В проекте используются объекты для взаимодействия с информацией в базе данных
@@ -59,15 +85,20 @@ public:
          * */
         DataBase        *db;
 private:
-        QSqlTableModel  *sizTableModel;
+        MainTableModel *sizTableModel;
         QSqlTableModel  *sizTypeTableModel;
         QSqlTableModel  *ObjectTableModel;
         QSqlTableModel  *PersonalTableModel;
         SizVerifiSqlModel  *eventDateTableModel;
+        /* Объявляем объект будущей иконки приложения для трея */
+           QSystemTrayIcon         * trayIcon;
+
+           QTimer *tmr;
 private:
     /* Также присутствуют два метода, которые формируют модель
      * и внешний вид TableView
      * */
+    void reloadEvents();
     void setupModel(const QString &tableName, const QStringList &headers);
     void setupModels();
     void createUI();

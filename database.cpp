@@ -29,7 +29,7 @@ void DataBase::connectToDataBase()
      * В зависимости от результата производим открытие базы данных или её восстановление
      * */
     if(!QFile(DATABASE_NAME).exists()){
-         qDebug() << "Не удалось найти фаил базы данных";
+        qDebug() << "Не удалось найти фаил базы данных";
         this->restoreDataBase();
     } else {
         qDebug() << "Удалось найти фаил базы данных, открываем";
@@ -87,12 +87,12 @@ bool DataBase::createTable()
      * */
     QSqlQuery query;
     if(!query.exec( "CREATE TABLE " TABLE " ("
-                            "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                            TABLE_DATE      " DATE            NOT NULL,"
-                            TABLE_TIME      " TIME            NOT NULL,"
-                            TABLE_RANDOM    " INTEGER         NOT NULL,"
-                            TABLE_MESSAGE   " VARCHAR(255)    NOT NULL"
-                        " )"
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    TABLE_DATE      " DATE            NOT NULL,"
+                    TABLE_TIME      " TIME            NOT NULL,"
+                    TABLE_RANDOM    " INTEGER         NOT NULL,"
+                    TABLE_MESSAGE   " VARCHAR(255)    NOT NULL"
+                    " )"
                     )){
         qDebug() << "DataBase: error of create " << TABLE;
         qDebug() << query.lastError().text();
@@ -116,10 +116,10 @@ bool DataBase::inserIntoTable(const QVariantList &data)
      * для подстановки данных из QVariantList
      * */
     query.prepare("INSERT INTO " TABLE " ( " TABLE_DATE ", "
-                                             TABLE_TIME ", "
-                                             TABLE_RANDOM ", "
-                                             TABLE_MESSAGE " ) "
-                  "VALUES (:Date, :Time, :Random, :Message )");
+                  TABLE_TIME ", "
+                  TABLE_RANDOM ", "
+                  TABLE_MESSAGE " ) "
+                                "VALUES (:Date, :Time, :Random, :Message )");
     query.bindValue(":Date",        data[0].toDate().toString("dd.MM.yyyy"));
     query.bindValue(":Time",        data[1].toTime().toString("hh:mm"));
     query.bindValue(":Random",      data[2].toInt());
@@ -147,7 +147,7 @@ QList<QString>  DataBase::getObject()
 
 
         list.append(q.value(rec.indexOf("name")).toString());
-                  }
+    }
     return list;
 }
 QList<QString>  DataBase::getTypeSiz()
@@ -159,7 +159,7 @@ QList<QString>  DataBase::getTypeSiz()
     qDebug() << "Читаем данные из TypeSiz ";
     while (q.next()){
         list.append(q.value(rec.indexOf("oneName")).toString());
-                  }
+    }
     return list;
 }
 QList<QString>  DataBase::getPersonal()
@@ -171,9 +171,57 @@ QList<QString>  DataBase::getPersonal()
     qDebug() << "Читаем данные из Personal";
     while (q.next()){
         list.append(q.value(rec.indexOf("name")).toString());
-                  }
+    }
     return list;
 }
+
+int DataBase::getMounthInspection(QString name)
+{
+    QSqlQuery q("select periodicityInsp from TypeSiz WHERE oneName='"+name+"'");
+    int result = -1;
+
+    if(q.record().count()>0){
+        QSqlRecord rec = q.record();
+        while (q.next()){
+            result = q.value(rec.indexOf("periodicityInsp")).toInt();
+        }
+        return result;
+    }else {
+        return result;
+    }
+}
+int DataBase::getVerifi(QString name)
+{
+    QSqlQuery q("select verification from TypeSiz WHERE oneName='"+name+"'");
+    int result = -1;
+
+    if(q.record().count()>0){
+        QSqlRecord rec = q.record();
+        while (q.next()){
+            result = q.value(rec.indexOf("verification")).toInt();
+        }
+        return result;
+    }else {
+        return result;
+    }
+}
+int DataBase::getVerifiMounth(QString name)
+{
+    QSqlQuery q("select periodicityVer from TypeSiz WHERE oneName='"+name+"'");
+    int result = -1;
+
+    if(q.record().count()>0){
+        QSqlRecord rec = q.record();
+        while (q.next()){
+            result = q.value(rec.indexOf("periodicityVer")).toInt();
+        }
+        return result;
+    }else {
+        return result;
+    }
+}
+
+
 bool  DataBase::readSizFromDB()
 {
     QSqlQuery q("select * from Siz");

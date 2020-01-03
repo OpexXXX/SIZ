@@ -38,9 +38,14 @@ public:
     void connectToDataBase();
     bool inserIntoTable(const QVariantList &data);
     QList<QString> getObject();
-     QList<QString> getTypeSiz();
-     QList<QString>  getPersonal();
-bool readSizFromDB();
+    QList<QString> getTypeSiz();
+    QList<QString>  getPersonal();
+
+    int getMounthInspection(QString name);
+    int getVerifi(QString name);
+    int getVerifiMounth(QString name);
+
+    bool readSizFromDB();
 private:
     // Сам объект базы данных, с которым будет производиться работа
     QSqlDatabase    db;

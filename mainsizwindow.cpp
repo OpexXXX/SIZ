@@ -18,7 +18,39 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
     /* Первым делом необходимо создать объект, который будет использоваться для работы с данными нашей БД
         * и инициализировать подключение к базе данных
         * */
+    /* Инициализируем иконку трея, устанавливаем иконку из набора системных иконок,
+        * а также задаем всплывающую подсказку
+        * */
+       trayIcon = new QSystemTrayIcon(this);
+       trayIcon->setIcon(this->style()->standardIcon(QStyle::SP_ComputerIcon));
+       trayIcon->setToolTip("Tray Program" "\n"
+                            "Работа со сворачиванием программы трей");
+       /* После чего создаем контекстное меню из двух пунктов*/
+           QMenu * menu = new QMenu(this);
+           QAction * viewWindow = new QAction(trUtf8("Развернуть окно"), this);
+           QAction * quitAction = new QAction(trUtf8("Выход"), this);
 
+           /* подключаем сигналы нажатий на пункты меню к соответсвующим слотам.
+            * Первый пункт меню разворачивает приложение из трея,
+            * а второй пункт меню завершает приложение
+            * */
+           connect(viewWindow, SIGNAL(triggered()), this, SLOT(show()));
+           connect(quitAction, SIGNAL(triggered()), this, SLOT(close()));
+
+           menu->addAction(viewWindow);
+           menu->addAction(quitAction);
+
+           /* Устанавливаем контекстное меню на иконку
+            * и показываем иконку приложения в трее
+            * */
+           trayIcon->setContextMenu(menu);
+           trayIcon->show();
+
+           /* Также подключаем сигнал нажатия на иконку к обработчику
+            * данного нажатия
+            * */
+           connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+                   this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     db = new DataBase();
     db->connectToDataBase();
 
@@ -30,11 +62,56 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
 
 
     setupModels();
+    tmr = new QTimer();
+    tmr->setInterval(1200000);
+    connect(tmr, SIGNAL(timeout()), this, SLOT(updateTime()));
+    tmr->start();
+    updateTime();
     /* Инициализируем внешний вид таблицы с данными
         * */
     // this->createUI();
 }
+void MainSizWindow::closeEvent(QCloseEvent * event)
+{
+    /* Если окно видимо и чекбокс отмечен, то завершение приложения
+     * игнорируется, а окно просто скрывается, что сопровождается
+     * соответствующим всплывающим сообщением
+     */
 
+        this->hide();
+        QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
+
+        trayIcon->showMessage("Tray Program",
+                              trUtf8("Приложение свернуто в трей. Для того чтобы, "
+                                     "развернуть окно приложения, щелкните по иконке приложения в трее"),
+                              icon,
+                              2000);
+
+}
+
+/* Метод, который обрабатывает нажатие на иконку приложения в трее
+ * */
+void MainSizWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason){
+    case QSystemTrayIcon::Trigger:
+        /* Событие игнорируется в том случае, если чекбокс не отмечен
+         * */
+
+            /* иначе, если окно видимо, то оно скрывается,
+             * и наоборот, если скрыто, то разворачивается на экран
+             * */
+            if(!this->isVisible()){
+                this->show();
+            } else {
+                this->hide();
+            }
+
+        break;
+    default:
+        break;
+    }
+}
 MainSizWindow::~MainSizWindow()
 {
     delete ui;
@@ -64,7 +141,7 @@ void MainSizWindow::setupModels()
                      << "Сообщение"
                      << "ццц"
                      );
-    sizTableModel = new QSqlTableModel(this);
+    sizTableModel = new MainTableModel(this);
     sizTypeTableModel= new QSqlTableModel(this);
     ObjectTableModel= new QSqlTableModel(this);
     PersonalTableModel= new QSqlTableModel(this);
@@ -78,7 +155,7 @@ void MainSizWindow::setupModels()
     sizTableModel->setHeaderData(4, Qt::Horizontal, tr("Испытать"));
     sizTableModel->setHeaderData(5, Qt::Horizontal, tr("Наименование"));
     sizTableModel->setHeaderData(6, Qt::Horizontal, tr("Осмотренно"));
-    sizTableModel->setHeaderData(7, Qt::Horizontal, tr("Осмотреть"));
+    sizTableModel->setHeaderData(7, Qt::Horizontal, tr("Осмотренно"));
     sizTableModel->setHeaderData(8, Qt::Horizontal, tr("Объект"));
     sizTableModel->setHeaderData(9, Qt::Horizontal, tr("Сотрудник"));
 
@@ -98,10 +175,10 @@ void MainSizWindow::setupModels()
     QDate startDate = stopDate.addDays(10); // возвращаем текущую дату
 
 
-   // eventDateTableModel->setQuery("SELECT * FROM Siz WHERE endVerification BETWEEN '2014-01-02' AND '"+stopDate.toString("yyyy-MM-dd")+"'");
-       int addDay = ui->spinBox->value();
-      QString filterDate = QDate::currentDate().addDays(addDay).toString("yyyy-MM-dd");
-      eventDateTableModel->setQuery(QString( "SELECT * FROM Siz WHERE endVerification BETWEEN '2014-01-01' AND '"+filterDate+"'"));
+    // eventDateTableModel->setQuery("SELECT * FROM Siz WHERE endVerification BETWEEN '2014-01-02' AND '"+stopDate.toString("yyyy-MM-dd")+"'");
+    int addDay = ui->spinBox->value();
+    QString filterDate = QDate::currentDate().addDays(-(addDay+90)).toString("yyyy-MM-dd");
+    eventDateTableModel->setQuery(QString( "SELECT * FROM Siz WHERE inspectionDate BETWEEN '2014-01-01' AND '"+filterDate+"'"));
     sizTableModel->select();
     sizTypeTableModel->select();
     ObjectTableModel->select();
@@ -157,7 +234,7 @@ void MainSizWindow::setupModel(const QString &tableName, const QStringList &head
      * с установкой имени таблицы в базе данных, по которому
      * будет производится обращение в таблице
      * */
-    sizTableModel = new QSqlTableModel(this);
+    sizTableModel = new MainTableModel(this);
     sizTableModel->setTable(tableName);
     /* Устанавливаем названия колонок в таблице с сортировкой данных
      * */
@@ -166,6 +243,111 @@ void MainSizWindow::setupModel(const QString &tableName, const QStringList &head
     }
     // Устанавливаем сортировку по возрастанию данных по нулевой колонке
     sizTableModel->setSort(0,Qt::AscendingOrder);
+}
+void MainSizWindow::reloadEvents()
+{
+    ui->listWidget->clear();
+    QSqlQuery q("select * from Siz ");
+
+    QSqlRecord rec = q.record();
+    QList<QPair<int,QPair<int,QString> > >  array = *new   QList<QPair<int,QPair<int,QString> > >() ;
+
+
+    //
+
+    while (q.next()){
+
+        bool ispit = false, oldOsmotr = false, badVerification=false;                                                             // ИСПЫТЫВАЕТСЯ??
+        int periodOsmotra = 0, periodIspitania =0;                                                          //переодичность осмотра
+
+        QString result ="";
+        QString number = q.value(rec.indexOf("number")).toString();     //Номер
+        if(number=="48993")
+        {
+            qDebug()<<1;
+        }
+        QVariant  tSiz = q.value(rec.indexOf("typeSiz"));                 //Тип СИЗ
+        QString typeSiz =tSiz.toString();
+
+        ispit = db->getVerifi(typeSiz);
+        periodOsmotra = db->getMounthInspection(typeSiz);
+        periodIspitania = db->getVerifiMounth(typeSiz);
+
+        QVariant  dateIsp = q.value(rec.indexOf("endVerification"));                 //Дата истечения испытания
+        QDate  endDate =QDate::fromString(dateIsp.toString(),"yyyy-MM-dd");             //Дата истечения испытания
+
+        QVariant  dateOsm = q.value(rec.indexOf("inspectionDate"));                 //Дата осмотра
+        QDate  osmotrDate =QDate::fromString(dateOsm.toString(),"yyyy-MM-dd");          //Дата осмотра
+
+        QDate curr = QDate::currentDate();
+
+        QDate nextOsmotr = osmotrDate.addMonths(periodOsmotra);                               //Дата следующего осмотра
+        //Проверяем не просрочен ли осмотр
+
+        long long daysToNextOsmotr = curr.daysTo(nextOsmotr);                           //Дней до следующего осмотра
+        long long daysToNextVerification = curr.daysTo(endDate);                        //Дней до испытания
+
+        int index =q.value(rec.indexOf("index")).toInt();
+
+        oldOsmotr = !(daysToNextOsmotr>0);
+        badVerification = (daysToNextVerification<0);
+
+
+        if (badVerification) {
+
+            result+=QString("ИЗЪЯТЬ \""+typeSiz+"\" №"+number+" просрочен на "+QString::number(daysToNextVerification*-1)+ " дней");
+
+            QPair<int,QPair<int,QString> > res = *new QPair<int,QPair<int,QString> >();
+            res.first = QString::number(daysToNextVerification).toInt();
+            res.second = *new QPair<int,QString> (index,result);
+            array.append(res);
+
+        }else if ((!badVerification) && oldOsmotr ) {
+            result+=QString("ОСМОТРЕТЬ \""+typeSiz+"\" №"+number+" просрочен на "+QString::number(daysToNextOsmotr*-1)+ " дней");
+
+            QPair<int,QPair<int,QString> > res = *new QPair<int,QPair<int,QString> >();
+            res.first = QString::number(daysToNextOsmotr).toInt();
+            res.second = *new QPair<int,QString> (index,result);
+            array.append(res);
+
+        }else if ((daysToNextOsmotr<ui->spinBox->value())&&(daysToNextVerification> daysToNextOsmotr)&&ispit) {
+            result+=QString(QString::number(daysToNextOsmotr)+" дней до осмотра \""+typeSiz+"\" №"+number);
+
+            QPair<int,QPair<int,QString> > res = *new QPair<int,QPair<int,QString> >();
+            res.first = QString::number(daysToNextOsmotr).toInt();
+            res.second = *new QPair<int,QString> (index,result);
+            array.append(res);
+
+        }else if ((daysToNextOsmotr<ui->spinBox->value())&&daysToNextVerification< daysToNextOsmotr&&ispit) {
+            result+=QString(QString::number(daysToNextVerification)+" дней до изъятия \""+typeSiz+"\" №"+number);
+
+            QPair<int,QPair<int,QString> > res = *new QPair<int,QPair<int,QString> >();
+            res.first = QString::number(daysToNextVerification).toInt();
+            res.second = *new QPair<int,QString> (index,result);
+            array.append(res);
+
+        }else if ((daysToNextOsmotr<ui->spinBox->value())&&(!ispit)) {
+            result+=QString(QString::number(daysToNextOsmotr)+" дней до осмотра \""+typeSiz+"\" №"+number);
+
+            QPair<int,QPair<int,QString> > res = *new QPair<int,QPair<int,QString> >();
+            res.first = QString::number(daysToNextOsmotr).toInt();
+            res.second = *new QPair<int,QString> (index,result);
+            array.append(res);
+
+        }
+
+
+
+    }
+    qSort(array.begin(), array.end(), [](QPair<int,QPair<int,QString> >  a, QPair<int,QPair<int,QString> >  b) { return a.first < b.first; } );
+    // qSort(array.begin(), array.end(), [](QPair<int,QString> a, QPair<int,QString> b) { return a.first < b.first; } );
+
+    for (int i=0;i<array.count();i++) {
+
+        ui->listWidget->addItem(QString(QString::number(i+1)+". "+array[i].second.second));
+
+
+    }
 }
 
 void MainSizWindow::createUI()
@@ -209,21 +391,21 @@ void MainSizWindow::createUI()
     ComboBoxItemDelegate* cbid = new ComboBoxItemDelegate(ui->tableView,db->getTypeSiz());
 
     ComboBoxItemDelegate* cbido = new ComboBoxItemDelegate(ui->tableView,db->getObject());
-     ComboBoxItemDelegate* cbidp = new ComboBoxItemDelegate(ui->tableView,db->getPersonal());
+    ComboBoxItemDelegate* cbidp = new ComboBoxItemDelegate(ui->tableView,db->getPersonal());
     // ComboBox only in column 2
     CheckBoxItemDelegate* chbib = new CheckBoxItemDelegate (ui->tableView);
     DateEditItemDelegate* deid = new DateEditItemDelegate(ui->tableView);
 
-    ui->listView->setModel(eventDateTableModel);
-   ui->listView->setModelColumn(1);
 
 
-   int addDay = ui->spinBox->value();
 
-   QString filterDate = QDate::currentDate().addDays(addDay).toString("yyyy-MM-dd");
-   eventDateTableModel->setQuery(QString( "SELECT * FROM Siz WHERE endVerification BETWEEN '2014-01-01' AND '"+filterDate+"'"));
+    int addDay = ui->spinBox->value();
 
-  //  ui->listView->setItemDelegateForColumn(4,deid);
+    QString filterDate = QDate::currentDate().addDays(-(addDay+90)).toString("yyyy-MM-dd");
+
+    eventDateTableModel->setQuery(QString( "SELECT * FROM Siz WHERE inspectionDate BETWEEN '2014-01-01' AND '"+filterDate+"'"));
+
+    //  ui->listView->setItemDelegateForColumn(4,deid);
 
     ui->tableView->setItemDelegateForColumn(2,chbib);
     ui->tableView->setItemDelegateForColumn(5, cbid);
@@ -238,8 +420,11 @@ void MainSizWindow::createUI()
     ui->tableView->hideColumn(2);
     ui->tableView->hideColumn(6);
 
-
+    sizTableModel->setEditStrategy(QSqlTableModel::OnFieldChange);
     sizTableModel->select(); // Делаем выборку данных из таблицы
+    reloadEvents();
+
+
 }
 
 void MainSizWindow::on_treeWidget_itemSelectionChanged()
@@ -334,23 +519,23 @@ void MainSizWindow::on_spinBox_valueChanged(int arg1)
 
     int addDay = ui->spinBox->value();
 
-    QString filterDate = QDate::currentDate().addDays(addDay).toString("yyyy-MM-dd");
-    eventDateTableModel->setQuery(QString( "SELECT * FROM Siz WHERE endVerification BETWEEN '2014-01-01' AND '"+filterDate+"'"));
+   reloadEvents();
+
 
 }
 
 void MainSizWindow::on_pushButton_6_clicked()
 {
-     ObjectTableModel->insertRow(0);
+    ObjectTableModel->insertRow(0);
 }
 
 void MainSizWindow::on_pushButton_4_clicked()
 {
-     PersonalTableModel->insertRow(0);
+    PersonalTableModel->insertRow(0);
 }
 void MainSizWindow::on_pushButton_8_clicked()
 {
-      sizTypeTableModel->insertRow(0);
+    sizTypeTableModel->insertRow(0);
 }
 
 void MainSizWindow::on_pushButton_3_clicked()
@@ -413,7 +598,7 @@ void MainSizWindow::on_tabWidget_currentChanged(int index)
     sizTypeTableModel->select();
     ObjectTableModel->select();
     PersonalTableModel->select();
-    eventDateTableModel->setQuery(eventDateTableModel->query().lastQuery());
+    reloadEvents();
 
     //Заполняем treeWidget
     QList<QString> listObject = db->getObject();
@@ -425,7 +610,7 @@ void MainSizWindow::on_tabWidget_currentChanged(int index)
     int count = model->rowCount(id1);
     for (int i = count ; i>=0;i--)
     {
- model->removeRow(i,id1);
+        model->removeRow(i,id1);
     }
     for (int i = 0 ; i<listObject.length();i++)
     {
@@ -440,7 +625,7 @@ void MainSizWindow::on_tabWidget_currentChanged(int index)
     count = model->rowCount(id2);
     for (int i = count ; i>=0;i--)
     {
- model->removeRow(i,id2);
+        model->removeRow(i,id2);
     }
     for (int i = 0 ; i<listObject.length();i++)
     {
@@ -453,10 +638,10 @@ void MainSizWindow::on_tabWidget_currentChanged(int index)
     QModelIndex id3 = model->index(2,0);
 
 
-     count = model->rowCount(id1);
+    count = model->rowCount(id3);
     for (int i = count ; i>=0;i--)
     {
- model->removeRow(i,id3);
+        model->removeRow(i,id3);
     }
     for (int i = 0 ; i<listObject.length();i++)
     {
@@ -493,12 +678,60 @@ void MainSizWindow::on_pushButton_7_clicked()
 
 void MainSizWindow::on_listView_doubleClicked(const QModelIndex &index)
 {
-      QModelIndexList indexes = ui->listView->selectionModel()->selection().indexes();
 
-QString filter = QString( " index ="+indexes.at(0).data().toString());
-qDebug()<<filter<< " <<fiter";
-      sizTableModel->setFilter(filter);
 
-      sizTableModel->select();
 
+}
+
+void MainSizWindow::on_tableView_viewportEntered()
+{
+
+}
+
+void MainSizWindow::on_tableView_entered(const QModelIndex &index)
+{
+
+}
+
+void MainSizWindow::on_tableView_activated(const QModelIndex &index)
+{
+    sizTableModel->select();
+}
+
+void MainSizWindow::on_tableView_clicked(const QModelIndex &index)
+{
+
+}
+
+void MainSizWindow::on_tableView_pressed(const QModelIndex &index)
+{
+
+}
+void MainSizWindow::updateTime()
+{
+   if( !this->hasFocus() ){
+    QString message;
+    reloadEvents();
+    if(ui->listWidget->count()>0){
+    for (int i=0;i<ui->listWidget->count()&&i<4;i++) {
+        message+= ui->listWidget->item(i)->text()+"; \n";
+    }
+     QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
+    trayIcon->showMessage("Журнал СИЗ",
+                          trUtf8(message.toUtf8()),
+                          icon,
+                          10000);}
+}}
+void MainSizWindow::on_pushButton_9_clicked()
+{
+    QString message;
+    if(ui->listWidget->count()>0){
+    for (int i=0;i<ui->listWidget->count()&&i<4;i++) {
+        message+= ui->listWidget->item(i)->text()+"; \n";
+    }
+     QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
+    trayIcon->showMessage("Журнал СИЗ",
+                          trUtf8(message.toUtf8()),
+                          icon,
+                          10000);}
 }
