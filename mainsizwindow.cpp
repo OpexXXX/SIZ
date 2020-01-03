@@ -1,6 +1,6 @@
 #include "mainsizwindow.h"
 #include "ui_mainsizwindow.h"
-#include "sizmodel.h"
+
 #include <QSqlRecord>
 #include "comboboxitemdelegate.h"
 #include "checkboxitemdelegate.h"

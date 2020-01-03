@@ -1,5 +1,5 @@
 #include "database.h"
-#include "sizmodel.h"
+
 
 #include <QObject>
 #include <QSql>
@@ -230,16 +230,6 @@ bool  DataBase::readSizFromDB()
     int nameCol = rec.indexOf("number"); // index of the field "name"
 
 
-    while (q.next()){
 
-        sizmodel* siz = new sizmodel();
-        siz->number =           q.value(rec.indexOf("number")).toString();
-        siz->typeSiz=           q.value(rec.indexOf("typeSiz")).toUInt();         //Тип СИЗ
-        siz->removed=           q.value(rec.indexOf("removed")).toBool();          //Изъято
-        siz->verification=      q.value(rec.indexOf("verification")).toDate();    //Дата испытания
-        siz->endVerification=   q.value(rec.indexOf("endVerification")).toDate();  //Дата следующего испытания
-
-        sizmodel::allSiz.append(siz);
-    }
     return true;
 }
