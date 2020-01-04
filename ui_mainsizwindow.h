@@ -81,7 +81,7 @@ public:
     {
         if (MainSizWindow->objectName().isEmpty())
             MainSizWindow->setObjectName(QString::fromUtf8("MainSizWindow"));
-        MainSizWindow->resize(1152, 701);
+        MainSizWindow->resize(1331, 833);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -110,6 +110,8 @@ public:
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         tableView = new QTableView(tab);
         tableView->setObjectName(QString::fromUtf8("tableView"));
+        tableView->setStyleSheet(QString::fromUtf8("selection-color: rgb(210, 219, 230);\n"
+"selection-background-color: rgb(190, 255, 253);"));
 
         gridLayout_3->addWidget(tableView, 2, 1, 1, 1);
 
@@ -163,6 +165,9 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         listWidget = new QListWidget(tab_4);
         listWidget->setObjectName(QString::fromUtf8("listWidget"));
+        listWidget->setStyleSheet(QString::fromUtf8("selection-color: rgb(210, 219, 230);\n"
+"\n"
+""));
 
         verticalLayout->addWidget(listWidget);
 
@@ -202,7 +207,7 @@ public:
         toolBox->setAutoFillBackground(false);
         page = new QWidget();
         page->setObjectName(QString::fromUtf8("page"));
-        page->setGeometry(QRect(0, 0, 1112, 491));
+        page->setGeometry(QRect(0, 0, 1291, 629));
         verticalLayout_3 = new QVBoxLayout(page);
         verticalLayout_3->setSpacing(6);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -226,13 +231,15 @@ public:
 
         personalTableView = new QTableView(page);
         personalTableView->setObjectName(QString::fromUtf8("personalTableView"));
+        personalTableView->setStyleSheet(QString::fromUtf8("selection-color: rgb(190, 255, 253);\n"
+"selection-background-color: rgb(210, 219, 230);"));
 
         verticalLayout_3->addWidget(personalTableView);
 
         toolBox->addItem(page, QString::fromUtf8("\320\241\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\270"));
         page_3 = new QWidget();
         page_3->setObjectName(QString::fromUtf8("page_3"));
-        page_3->setGeometry(QRect(0, 0, 301, 122));
+        page_3->setGeometry(QRect(0, 0, 267, 121));
         verticalLayout_5 = new QVBoxLayout(page_3);
         verticalLayout_5->setSpacing(6);
         verticalLayout_5->setContentsMargins(11, 11, 11, 11);
@@ -261,7 +268,7 @@ public:
         toolBox->addItem(page_3, QString::fromUtf8("\320\222\320\270\320\264\321\213 \320\241\320\230\320\227"));
         page_2 = new QWidget();
         page_2->setObjectName(QString::fromUtf8("page_2"));
-        page_2->setGeometry(QRect(0, 0, 301, 122));
+        page_2->setGeometry(QRect(0, 0, 267, 121));
         verticalLayout_4 = new QVBoxLayout(page_2);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -310,7 +317,7 @@ public:
         MainSizWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainSizWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1152, 23));
+        menuBar->setGeometry(QRect(0, 0, 1331, 22));
         MainSizWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainSizWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -318,7 +325,7 @@ public:
 
         retranslateUi(MainSizWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(1);
         toolBox->setCurrentIndex(0);
 
 

@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QTreeWidgetItem>
 #include <QStandardItemModel>
+#include <QIcon>
 MainSizWindow::MainSizWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainSizWindow)
@@ -22,7 +23,9 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
         * а также задаем всплывающую подсказку
         * */
        trayIcon = new QSystemTrayIcon(this);
-       trayIcon->setIcon(this->style()->standardIcon(QStyle::SP_ComputerIcon));
+      QIcon  myicon = *new QIcon(":/new/icon/icon.svg");
+       trayIcon->setIcon(myicon);
+
        trayIcon->setToolTip("Tray Program" "\n"
                             "Работа со сворачиванием программы трей");
        /* После чего создаем контекстное меню из двух пунктов*/
@@ -67,6 +70,7 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
     connect(tmr, SIGNAL(timeout()), this, SLOT(updateTime()));
     tmr->start();
     updateTime();
+    ui->listWidget->setStyleSheet("font: 12pt;");
     /* Инициализируем внешний вид таблицы с данными
         * */
     // this->createUI();
@@ -158,7 +162,8 @@ void MainSizWindow::setupModels()
     sizTableModel->setHeaderData(7, Qt::Horizontal, tr("Осмотренно"));
     sizTableModel->setHeaderData(8, Qt::Horizontal, tr("Объект"));
     sizTableModel->setHeaderData(9, Qt::Horizontal, tr("Сотрудник"));
-
+    sizTableModel->setHeaderData(10, Qt::Horizontal, tr("Примечание"));
+    sizTableModel->setHeaderData(11, Qt::Horizontal, tr("Выдан в пользование"));
     sizTypeTableModel->setTable(TYPESIZTABLE);
     sizTypeTableModel->setHeaderData(0, Qt::Horizontal, tr("Наименование"));
     sizTypeTableModel->setHeaderData(1, Qt::Horizontal, tr("Испытывается"));
