@@ -1,11 +1,9 @@
 <RCC>
     <qresource prefix="/new/icon">
         <file>icon-yes.svg</file>
-        <file>04markerE.svg</file>
-        <file>substation.svg</file>
-        <file>04marker.svg</file>
         <file>153.svg</file>
-        <file>icon.svg</file>
+        <file>153png.png</file>
+        <file>128.png</file>
     </qresource>
     <qresource prefix="/new/database">
         <file>siz.db</file>

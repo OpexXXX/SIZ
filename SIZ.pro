@@ -31,7 +31,6 @@ SOURCES += \
     comboboxitemdelegate.cpp \
     checkboxitemdelegate.cpp \
     dateedititemdelegate.cpp \
-    siztablesqlmodel.cpp \
     maintablemodel.cpp \
     eventmodel.cpp
 
@@ -41,7 +40,6 @@ HEADERS += \
     comboboxitemdelegate.h \
     checkboxitemdelegate.h \
     dateedititemdelegate.h \
-    siztablesqlmodel.h \
     maintablemodel.h \
     eventmodel.h
 
@@ -58,3 +56,8 @@ DISTFILES +=
 
 RESOURCES += \
     resourse.qrc
+
+win32 {
+        RC_FILE += win.rc
+        OTHER_FILES += win.rc
+}

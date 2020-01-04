@@ -16,6 +16,7 @@ public:
     MainTableModel(QObject *parent = nullptr, DataBase        *db = nullptr);
     ~MainTableModel();
     QVariant data(const QModelIndex &item, int role) const;
+
 };
 
 

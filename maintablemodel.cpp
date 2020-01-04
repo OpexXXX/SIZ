@@ -16,7 +16,7 @@ MainTableModel::~MainTableModel(){}
 
 QVariant MainTableModel::data(const QModelIndex &index, int role) const
 {
-    QVariant value = QSqlQueryModel::data(index, role);
+    QVariant value = QSqlTableModel::data(index, role);
 
 if (role == Qt::DisplayRole){
     switch (index.column()) {

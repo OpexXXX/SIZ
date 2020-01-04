@@ -139,10 +139,10 @@ bool DataBase::inserIntoTable(const QVariantList &data)
 QList<QString>  DataBase::getObject()
 {
     QSqlQuery q("select * from Object");
-    QList<QString> list = *new QList<QString> ();
+    QList<QString> list;
 
     QSqlRecord rec = q.record();
-    qDebug() << "Читаем данные из Object ";
+
     while (q.next()){
 
 
@@ -153,10 +153,10 @@ QList<QString>  DataBase::getObject()
 QList<QString>  DataBase::getTypeSiz()
 {
     QSqlQuery q("select * from TypeSiz");
-    QList<QString> list = *new QList<QString> ();
+    QList<QString> list;
 
     QSqlRecord rec = q.record();
-    qDebug() << "Читаем данные из TypeSiz ";
+
     while (q.next()){
         list.append(q.value(rec.indexOf("oneName")).toString());
     }
@@ -165,10 +165,10 @@ QList<QString>  DataBase::getTypeSiz()
 QList<QString>  DataBase::getPersonal()
 {
     QSqlQuery q("select * from Personal");
-    QList<QString> list = *new QList<QString> ();
+    QList<QString> list;
 
     QSqlRecord rec = q.record();
-    qDebug() << "Читаем данные из Personal";
+
     while (q.next()){
         list.append(q.value(rec.indexOf("name")).toString());
     }
@@ -226,7 +226,7 @@ bool  DataBase::readSizFromDB()
 {
     QSqlQuery q("select * from Siz");
     QSqlRecord rec = q.record();
-    qDebug() << "Читаем данные из SizTable";
+
     int nameCol = rec.indexOf("number"); // index of the field "name"
 
 
