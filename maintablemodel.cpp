@@ -23,12 +23,29 @@ QColor MainTableModel::calculateColorForRow(int index) const
     }
     return col;
 }
-
+QString MainTableModel::getTooltipForRow(int index) const
+{
+    QString tooltip = "";
+    for (int i = 0;i<eventArray->count() ;i++ ) {
+        if(eventArray->at(i).second.first==index){
+           tooltip= eventArray->at(i).second.second;
+            return tooltip;
+        }
+    }
+    return tooltip;
+}
 
 QVariant MainTableModel::data(const QModelIndex &index, int role) const
 {
     QVariant value = QSqlTableModel::data(index, role);
 
+    if (role == Qt::ToolTipRole) {
+        QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
+        int id = data(primaryKeyIndex,0).toInt();
+
+        QString tooltip = getTooltipForRow(id);
+        return tooltip;
+    }
     if (role == Qt::BackgroundRole) {
         QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
 

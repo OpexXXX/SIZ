@@ -13,6 +13,7 @@ class MainTableModel : public QSqlTableModel
     Q_OBJECT
 private:
     QColor calculateColorForRow(int index) const;
+    QString getTooltipForRow(int index) const;
 public:
     DataBase        *db;
     MainTableModel(QObject *parent = nullptr,QList<QPair<int,QPair<int,QString> > >  *eventArray=nullptr, DataBase        *db = nullptr);
