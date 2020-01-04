@@ -123,7 +123,7 @@ void MainSizWindow::setupModels()
                      << "Сообщение"
                      << "ццц"
                      );
-    sizTableModel = new MainTableModel(this);
+    sizTableModel = new MainTableModel(this,&eventArray);
     sizTypeTableModel= new QSqlTableModel(this);
     ObjectTableModel= new QSqlTableModel(this);
     PersonalTableModel= new QSqlTableModel(this);
@@ -151,7 +151,7 @@ void MainSizWindow::setupModels()
     sizTypeTableModel->setHeaderData(4, Qt::Horizontal, tr("Персональный"));
 
 
-
+    ui->tableView->setSortingEnabled(true);
 
     ObjectTableModel->setTable(OBJECTTABLE);
     PersonalTableModel->setTable(PERSONALTABEL);
