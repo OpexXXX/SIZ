@@ -110,8 +110,16 @@ public:
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         tableView = new QTableView(tab);
         tableView->setObjectName(QString::fromUtf8("tableView"));
-        tableView->setStyleSheet(QString::fromUtf8("selection-color: rgb(210, 219, 230);\n"
-"selection-background-color: rgb(190, 255, 253);"));
+        QPalette palette;
+        QBrush brush(QColor(48, 140, 198, 255));
+        brush.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::Highlight, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::Highlight, brush);
+        QBrush brush1(QColor(145, 145, 145, 255));
+        brush1.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush1);
+        tableView->setPalette(palette);
+        tableView->setStyleSheet(QString::fromUtf8(""));
 
         gridLayout_3->addWidget(tableView, 2, 1, 1, 1);
 
@@ -165,9 +173,7 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         listWidget = new QListWidget(tab_4);
         listWidget->setObjectName(QString::fromUtf8("listWidget"));
-        listWidget->setStyleSheet(QString::fromUtf8("selection-color: rgb(210, 219, 230);\n"
-"\n"
-""));
+        listWidget->setStyleSheet(QString::fromUtf8(""));
 
         verticalLayout->addWidget(listWidget);
 
@@ -231,15 +237,14 @@ public:
 
         personalTableView = new QTableView(page);
         personalTableView->setObjectName(QString::fromUtf8("personalTableView"));
-        personalTableView->setStyleSheet(QString::fromUtf8("selection-color: rgb(190, 255, 253);\n"
-"selection-background-color: rgb(210, 219, 230);"));
+        personalTableView->setStyleSheet(QString::fromUtf8(""));
 
         verticalLayout_3->addWidget(personalTableView);
 
         toolBox->addItem(page, QString::fromUtf8("\320\241\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\270"));
         page_3 = new QWidget();
         page_3->setObjectName(QString::fromUtf8("page_3"));
-        page_3->setGeometry(QRect(0, 0, 267, 121));
+        page_3->setGeometry(QRect(0, 0, 1291, 629));
         verticalLayout_5 = new QVBoxLayout(page_3);
         verticalLayout_5->setSpacing(6);
         verticalLayout_5->setContentsMargins(11, 11, 11, 11);
@@ -268,7 +273,7 @@ public:
         toolBox->addItem(page_3, QString::fromUtf8("\320\222\320\270\320\264\321\213 \320\241\320\230\320\227"));
         page_2 = new QWidget();
         page_2->setObjectName(QString::fromUtf8("page_2"));
-        page_2->setGeometry(QRect(0, 0, 267, 121));
+        page_2->setGeometry(QRect(0, 0, 1291, 629));
         verticalLayout_4 = new QVBoxLayout(page_2);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);

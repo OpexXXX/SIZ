@@ -49,9 +49,45 @@
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="2" column="1">
          <widget class="QTableView" name="tableView">
+          <property name="palette">
+           <palette>
+            <active>
+             <colorrole role="Highlight">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>48</red>
+                <green>140</green>
+                <blue>198</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </active>
+            <inactive>
+             <colorrole role="Highlight">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>48</red>
+                <green>140</green>
+                <blue>198</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </inactive>
+            <disabled>
+             <colorrole role="Highlight">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>145</red>
+                <green>145</green>
+                <blue>145</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </disabled>
+           </palette>
+          </property>
           <property name="styleSheet">
-           <string notr="true">selection-color: rgb(210, 219, 230);
-selection-background-color: rgb(190, 255, 253);</string>
+           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -149,9 +185,7 @@ selection-background-color: rgb(190, 255, 253);</string>
         <item>
          <widget class="QListWidget" name="listWidget">
           <property name="styleSheet">
-           <string notr="true">selection-color: rgb(210, 219, 230);
-
-</string>
+           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -249,8 +283,7 @@ selection-background-color: rgb(190, 255, 253);</string>
             <item>
              <widget class="QTableView" name="personalTableView">
               <property name="styleSheet">
-               <string notr="true">selection-color: rgb(190, 255, 253);
-selection-background-color: rgb(210, 219, 230);</string>
+               <string notr="true"/>
               </property>
              </widget>
             </item>
@@ -261,8 +294,8 @@ selection-background-color: rgb(210, 219, 230);</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>267</width>
-             <height>121</height>
+             <width>1291</width>
+             <height>629</height>
             </rect>
            </property>
            <attribute name="label">
@@ -297,8 +330,8 @@ selection-background-color: rgb(210, 219, 230);</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>267</width>
-             <height>121</height>
+             <width>1291</width>
+             <height>629</height>
             </rect>
            </property>
            <attribute name="label">

@@ -7,6 +7,7 @@
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include "siztablesqlmodel.h"
+#include <QListWidgetItem>
 #include "maintablemodel.h"
 /* Подключаем заголовочный файл для работы с информацией, которая помещена в базу данных */
 #include "database.h"
@@ -33,6 +34,7 @@ private slots:
     /* Слот, который будет принимать сигнал от события
        * нажатия на иконку приложения в трее
        */
+
     void updateTime();
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_treeWidget_itemSelectionChanged();
@@ -78,12 +80,15 @@ private slots:
 
     void on_pushButton_9_clicked();
 
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+
 public:
     Ui::MainSizWindow *ui;
     /* В проекте используются объекты для взаимодействия с информацией в базе данных
          * и моделью представления таблицы базы данных
          * */
         DataBase        *db;
+        QList<QPair<int,QPair<int,QString> > >  eventArray;
 private:
         MainTableModel *sizTableModel;
         QSqlTableModel  *sizTypeTableModel;
@@ -98,6 +103,7 @@ private:
     /* Также присутствуют два метода, которые формируют модель
      * и внешний вид TableView
      * */
+    void Style();
     void reloadEvents();
     void setupModel(const QString &tableName, const QStringList &headers);
     void setupModels();
