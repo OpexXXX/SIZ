@@ -1,7 +1,5 @@
 #include "maintablemodel.h"
 
-
-
 MainTableModel::MainTableModel(QObject *parent, QList<QPair<int,QPair<int,QString> > >  *eventArray, DataBase *db ):QSqlTableModel (parent)
 {
     this->db = db;
@@ -34,7 +32,6 @@ QString MainTableModel::getTooltipForRow(int index) const
     }
     return tooltip;
 }
-
 QVariant MainTableModel::data(const QModelIndex &index, int role) const
 {
     QVariant value = QSqlTableModel::data(index, role);
@@ -66,7 +63,7 @@ QVariant MainTableModel::data(const QModelIndex &index, int role) const
 
             }
             break;
-        case 4:         //Дата поверки
+        case 4:         //Дата
             if (value.isValid()) {
 
                 QString result ="";
@@ -76,7 +73,7 @@ QVariant MainTableModel::data(const QModelIndex &index, int role) const
 
             }
             break;
-        case 7:         //Дата поверки
+        case 7:         //Дата
             if (value.isValid()) {
 
                 QString result ="";
@@ -86,7 +83,7 @@ QVariant MainTableModel::data(const QModelIndex &index, int role) const
 
             }
             break;
-        case 11:         //Дата поверки
+        case 11:         //Дата
             if (value.isValid()) {
 
                 QString result ="";

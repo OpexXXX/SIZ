@@ -4,6 +4,8 @@
         <file>153.svg</file>
         <file>153png.png</file>
         <file>128.png</file>
+        <file>add.png</file>
+        <file>remove-trash.png</file>
     </qresource>
     <qresource prefix="/new/database">
         <file>siz.db</file>

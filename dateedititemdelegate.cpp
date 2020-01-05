@@ -5,6 +5,7 @@ DateEditItemDelegate::DateEditItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
 
+
 }
 DateEditItemDelegate::~DateEditItemDelegate()
 {
@@ -17,6 +18,7 @@ QWidget *DateEditItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
     QDateEdit *cb = new QDateEdit(parent);
     cb->setMaximumDate(QDate::fromString("01.01.2030","dd.MM.yyyy"));
     cb->setMinimumDate(QDate::fromString("01.01.2014","dd.MM.yyyy"));
+    cb->setCalendarPopup(true);
     const int row = index.row();
     return cb;
 }

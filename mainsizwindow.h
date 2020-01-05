@@ -46,6 +46,7 @@ private slots:
     /* Слот, который будет принимать сигнал от события
        * нажатия на иконку приложения в трее
        */
+
     void updateTime();
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_pushButton_clicked();
@@ -57,12 +58,14 @@ private slots:
     void on_pushButton_3_clicked();
 
     void on_tabWidget_currentChanged(int index);
-
+    void on_tableViewTriggerSelectionModel_currentRowChanged(QModelIndex current, QModelIndex prevous);
 
     void on_pushButton_9_clicked();
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_radioButton_group_toggle(int button,bool checked);
     void on_radioButton_3_toggled(bool checked);
+
+    void on_selectedItemOsmotrButton_clicked();
 
 public:
     Ui::MainSizWindow *ui;

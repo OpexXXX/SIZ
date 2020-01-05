@@ -14,6 +14,11 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
     setupModels();
     createUI();
     Style();
+
+    QItemSelectionModel *sm = ui->tableView->selectionModel();
+    connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+            this, SLOT(on_tableViewTriggerSelectionModel_currentRowChanged(QModelIndex,QModelIndex)));
+
     tmr = new QTimer();
     tmr->setInterval(1200000);
 
@@ -354,6 +359,7 @@ void MainSizWindow::createUI()
     // Устанавливаем размер колонок по содержимому
     ui->tableView->resizeColumnsToContents();
     ui->tableView->resizeRowsToContents();
+    ui->tableView->resizeColumnsToContents();
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
 
     ComboBoxItemDelegate* cbid = new ComboBoxItemDelegate(ui->tableView,db->getTypeSiz());
@@ -382,6 +388,9 @@ void MainSizWindow::createUI()
     sizTableModel->select(); // Делаем выборку данных из таблицы
     sizTableModel->setEditStrategy(QSqlTableModel::OnFieldChange);
     reloadEvents();
+
+    ui->selectedItemOsmotrButton->hide();
+    ui->selectedItemLabel->setText("");
 
 
 }
@@ -459,14 +468,10 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 
 }
 
-
-
 void MainSizWindow::on_spinBox_valueChanged(int arg1)
 {
     reloadEvents();
 }
-
-
 
 void MainSizWindow::on_pushButton_4_clicked()//Перечни удалить запись
 {
@@ -480,7 +485,7 @@ void MainSizWindow::on_pushButton_4_clicked()//Перечни удалить з�
                                        );
         if(ret==QMessageBox::Yes)
         {
-          ui->tableView_2->model()->removeRows(indexes.at(0).row(),1);
+            ui->tableView_2->model()->removeRows(indexes.at(0).row(),1);
             PersonalTableModel->select();
             ObjectTableModel->select();
             sizTypeTableModel->select();
@@ -489,13 +494,11 @@ void MainSizWindow::on_pushButton_4_clicked()//Перечни удалить з�
     }
 }
 
-
 void MainSizWindow::on_pushButton_3_clicked() //Перечни - добавить запись
 {
     ui->tableView_2->model()->insertRow(0);
 
 }
-
 
 void MainSizWindow::on_tabWidget_currentChanged(int index)
 {
@@ -507,10 +510,6 @@ void MainSizWindow::on_tabWidget_currentChanged(int index)
     ui->tableView->setItemDelegateForColumn(8, cbido);
     ui->tableView->setItemDelegateForColumn(9, cbidp);
 
-    sizTableModel->select();
-    sizTypeTableModel->select();
-    ObjectTableModel->select();
-    PersonalTableModel->select();
     reloadEvents();
 
     //Заполняем treeWidget
@@ -564,7 +563,6 @@ void MainSizWindow::on_tabWidget_currentChanged(int index)
     }
 }
 
-
 void MainSizWindow::updateTime()
 {
     if( !this->hasFocus() ){
@@ -600,7 +598,6 @@ void MainSizWindow::on_pushButton_9_clicked()
                               icon,ui->spinBox_2->value()
                               );}
 }
-
 void MainSizWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     int indexRow = ui->listWidget->currentRow();
@@ -609,6 +606,7 @@ void MainSizWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     QString filter =  "\"index\"="+ sqlTableIndex;
     sizTableModel->setFilter(filter);
     sizTableModel->select();
+    if(sizTableModel->rowCount()>0) ui->tableView->selectRow(0);
     ui->tabWidget->setCurrentIndex(0);
     ui->tableView->setFocus();
 }
@@ -656,4 +654,76 @@ void MainSizWindow::on_radioButton_group_toggle(int button,bool checked)
         }
     }
 
+}
+void MainSizWindow::on_tableViewTriggerSelectionModel_currentRowChanged(QModelIndex current,QModelIndex prevous)
+{
+    if(current.row()>=0)
+    {
+        bool SizOk = true;
+        QAbstractItemModel * model = sizTableModel;
+        QModelIndex primaryKeyIndex = model->index(current.row(), 0);
+        QModelIndex osmotrIndex = model->index(current.row(), 7);
+        QModelIndex typeSiz = model->index(current.row(), 5);
+
+        int id = model->data(primaryKeyIndex, Qt::DisplayRole).toInt();
+        QString sDate = model->data(osmotrIndex, Qt::DisplayRole).toString();
+        QDate dateOsmotr = QDate::fromString(model->data(osmotrIndex, Qt::DisplayRole).toString(),"dd.MM.yyyy");
+        QString typeS = model->data(typeSiz, Qt::DisplayRole).toString();
+        int mounthInspection  = db->getMounthInspection(typeS);
+        int mounthVerification  = db->getVerifiMounth(typeS);
+
+        QDate dateNextInspp = dateOsmotr.addMonths(mounthInspection);
+
+
+        for (int i=0;i<eventArray.count();i++) {
+            if(eventArray[i].second.first ==id)
+            {
+
+
+                ui->selectedItemOsmotrButton->show();
+                ui->selectedItemLabel->show();
+
+
+                ui->selectedItemDateEdit->setDate(dateNextInspp);
+                ui->selectedItemLabel->setText(eventArray[i].second.second + "\n Осмотр раз в "+QString::number(mounthInspection)+" мес. \n Следующий осмотр:");
+               SizOk = false;
+                break;
+
+            }
+            else
+            {
+                ui->selectedItemOsmotrButton->hide();
+            }
+
+        }
+        if(SizOk)
+        {
+
+            ui->selectedItemDateEdit->setDate(dateNextInspp);
+            QString ispit = mounthVerification>0?"Испытания раз в "+QString::number(mounthVerification)+"мес. \n":"Не испытывается. \n";
+            ui->selectedItemLabel->setText(ispit + "Осмотр раз в "+QString::number(mounthInspection)+" мес. \n Следующий осмотр:");
+        }
+
+
+
+
+    }
+
+
+}
+
+void MainSizWindow::on_selectedItemOsmotrButton_clicked()
+{
+    QModelIndexList listIndex = ui->tableView->selectionModel()->selectedRows();
+    if(listIndex.count()>0){
+QModelIndex current = ui->tableView->selectionModel()->selectedRows()[0];
+
+QAbstractItemModel * model = sizTableModel;
+QModelIndex osmotrIndex = model->index(current.row(), 7);
+sizTableModel->setData(osmotrIndex,ui->selectedItemDateEdit->date().toString("yyyy-MM-dd"));
+QModelIndexList listIndex = ui->tableView->selectionModel()->selectedRows();
+reloadEvents();
+sizTableModel->select();
+ui->tableView->selectRow(current.row());
+    }
 }
