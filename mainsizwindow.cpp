@@ -82,7 +82,6 @@ void MainSizWindow::closeEvent(QCloseEvent * event)
  {
      event->ignore();
      this->hide();
-
  }
 
 /* Метод, который обрабатывает нажатие на иконку приложения в трее
