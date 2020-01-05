@@ -8,4 +8,46 @@
     <qresource prefix="/new/database">
         <file>siz.db</file>
     </qresource>
+    <qresource prefix="/new/STO">
+        <file>STO/_030816_.html</file>
+        <file>STO/images/image1.png</file>
+        <file>STO/images/image2.jpg</file>
+        <file>STO/images/image3.jpg</file>
+        <file>STO/images/image4.jpg</file>
+        <file>STO/images/image5.jpg</file>
+        <file>STO/images/image6.jpg</file>
+        <file>STO/images/image7.jpg</file>
+        <file>STO/images/image8.jpg</file>
+        <file>STO/images/image9.png</file>
+        <file>STO/images/image10.png</file>
+        <file>STO/images/image11.jpg</file>
+        <file>STO/images/image12.jpg</file>
+        <file>STO/images/image13.jpg</file>
+        <file>STO/images/image14.jpg</file>
+        <file>STO/images/image15.png</file>
+        <file>STO/images/image16.png</file>
+        <file>STO/images/image17.png</file>
+        <file>STO/images/image18.png</file>
+        <file>STO/images/image19.png</file>
+        <file>STO/images/image20.png</file>
+        <file>STO/images/image21.png</file>
+        <file>STO/images/image22.png</file>
+        <file>STO/images/image23.jpg</file>
+        <file>STO/images/image24.png</file>
+        <file>STO/images/image25.jpg</file>
+        <file>STO/images/image26.png</file>
+        <file>STO/images/image27.jpg</file>
+        <file>STO/images/image28.jpg</file>
+        <file>STO/images/image29.jpg</file>
+        <file>STO/images/image30.jpg</file>
+        <file>STO/images/image31.jpg</file>
+        <file>STO/images/image32.jpg</file>
+        <file>STO/images/image33.jpg</file>
+        <file>STO/images/image34.png</file>
+        <file>STO/images/image35.png</file>
+        <file>STO/images/image36.png</file>
+        <file>STO/images/image37.png</file>
+        <file>STO/images/image38.gif</file>
+        <file>03-08-16.txt</file>
+    </qresource>
 </RCC>

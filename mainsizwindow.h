@@ -52,15 +52,17 @@ private slots:
     void on_pushButton_2_clicked();
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
     void on_spinBox_valueChanged(int arg1);
-    void on_pushButton_6_clicked();
+
     void on_pushButton_4_clicked();
     void on_pushButton_3_clicked();
-    void on_pushButton_5_clicked();
+
     void on_tabWidget_currentChanged(int index);
-    void on_pushButton_8_clicked();
-    void on_pushButton_7_clicked();
+
+
     void on_pushButton_9_clicked();
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+    void on_radioButton_group_toggle(int button,bool checked);
+    void on_radioButton_3_toggled(bool checked);
 
 public:
     Ui::MainSizWindow *ui;
