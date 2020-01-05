@@ -22,6 +22,8 @@
 #include <QTreeWidgetItem>
 #include <QStandardItemModel>
 #include <QIcon>
+#include <QCloseEvent>
+#include <QHideEvent>
 namespace Ui {
 class MainSizWindow;
 }
@@ -39,20 +41,16 @@ protected:
      *  чтобы оно сворачивалось в трей, когда мы этого хотим
      */
     void closeEvent(QCloseEvent * event);
-
+    void hideEvent(QHideEvent *event);
 private slots:
     /* Слот, который будет принимать сигнал от события
        * нажатия на иконку приложения в трее
        */
-
     void updateTime();
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
-
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
-
-
     void on_spinBox_valueChanged(int arg1);
     void on_pushButton_6_clicked();
     void on_pushButton_4_clicked();
@@ -60,17 +58,8 @@ private slots:
     void on_pushButton_5_clicked();
     void on_tabWidget_currentChanged(int index);
     void on_pushButton_8_clicked();
-
     void on_pushButton_7_clicked();
-
-
-
-
-
-
-
     void on_pushButton_9_clicked();
-
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 public:

@@ -44,8 +44,6 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
         * контентом, который будет отображаться в TableView
         * */
     QVariantList data;
-
-
     Style();
     setupModels();
     tmr = new QTimer();
@@ -53,8 +51,6 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
     connect(tmr, SIGNAL(timeout()), this, SLOT(updateTime()));
     tmr->start();
     updateTime();
-
-
     /* Инициализируем внешний вид таблицы с данными
         * */
     // this->createUI();
@@ -70,8 +66,24 @@ void MainSizWindow::Style()
 }
 void MainSizWindow::closeEvent(QCloseEvent * event)
 {
+    if(this->isVisible() ){
+           event->ignore();
+           this->hide();
+           QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
 
+           trayIcon->showMessage("Журнал СИЗ",
+                                 trUtf8("Приложение свернуто в трей. Для того чтобы, "
+                                        "развернуть окно приложения, щелкните по иконке приложения в трее"),
+                                 icon,
+                                 2000);
+       }
 }
+ void MainSizWindow::hideEvent(QHideEvent *event)
+ {
+     event->ignore();
+     this->hide();
+
+ }
 
 /* Метод, который обрабатывает нажатие на иконку приложения в трее
  * */
@@ -651,8 +663,8 @@ void MainSizWindow::updateTime()
             QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
             trayIcon->showMessage("Журнал СИЗ",
                                   trUtf8(message.toUtf8()),
-                                  icon,
-                                  10000);}
+                                  icon
+                                  );}
     }}
 void MainSizWindow::on_pushButton_9_clicked()
 {
@@ -671,8 +683,8 @@ void MainSizWindow::on_pushButton_9_clicked()
         QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
         trayIcon->showMessage("Журнал СИЗ",
                               trUtf8(message.toUtf8()),
-                              icon,
-                              10000);}
+                              icon
+                              );}
 }
 
 void MainSizWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
