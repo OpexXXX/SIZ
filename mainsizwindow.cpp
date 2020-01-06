@@ -30,9 +30,7 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
     tmr->start();
     updateTime();
 
-    QFile file(":/new/STO/03-08-16.txt");
-    file.open(QFile::ReadOnly | QFile::Text);
-    ui->plainTextEdit->setPlainText(file.readAll());
+
 
 }
 void MainSizWindow::Style()
@@ -262,16 +260,7 @@ void MainSizWindow::createUI()
 
     //    //Типы СИЗ
     setModelOnTableView(sizTypeTableModel);
-    ui->tableViewTemp->setModel(eventDateTableModel);
-    // Разрешаем выделение строк
-    ui->tableViewTemp->setSelectionBehavior(QAbstractItemView::SelectRows);
-    // Устанавливаем режим выделения лишь одно строки в таблице
-    ui->tableViewTemp->setSelectionMode(QAbstractItemView::SingleSelection);
-    // Устанавливаем размер колонок по содержимому
-    ui->tableViewTemp->resizeColumnsToContents();
-    ui->tableViewTemp->resizeRowsToContents();
-    ui->tableViewTemp->resizeColumnsToContents();
-    ui->tableViewTemp->horizontalHeader()->setStretchLastSection(true);
+
     //СИЗ
     ui->mainTableView->setModel(sizTableModel);     // Устанавливаем модель на mainTableView
     // Разрешаем выделение строк
@@ -294,7 +283,7 @@ void MainSizWindow::createUI()
 
     ui->selectedItemOsmotrButton->hide();
     ui->selectedItemLabel->setText("");
-    ui->textBrowser->hide();
+
 
 }
 void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
@@ -358,27 +347,7 @@ void MainSizWindow::updateTime()
                                   myicon
                                   );}
     }}
-void MainSizWindow::on_pushButton_9_clicked()
-{
-    QString message;
-    if(ui->listWidget->count()>0){
-        for (int i=0;i<ui->listWidget->count()&&i<4;i++) {
-            message+= ui->listWidget->item(i)->text()+"; \n";
-        }
 
-        int ret = QMessageBox::information(this, tr("Уведомление"), "QSystemTrayIcon::isSystemTrayAvailable()" + QSystemTrayIcon::isSystemTrayAvailable()?"Yes":"No"
-                                                                                                                                                          ,
-                                           QMessageBox::Ok
-
-                                           );
-
-
-        QIcon  myicon =  QIcon(":/new/icon/153png.png");
-        trayIcon->showMessage("Журнал СИЗ",
-                              trUtf8(message.toUtf8()),
-                              myicon,ui->spinBox_2->value()
-                              );}
-}
 void MainSizWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     int indexRow = ui->listWidget->currentRow();
@@ -391,10 +360,7 @@ void MainSizWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     ui->tabWidget->setCurrentIndex(0);
     ui->mainTableView->setFocus();
 }
-void MainSizWindow::on_radioButton_3_toggled(bool checked)
-{
 
-}
 void MainSizWindow::setModelOnTableView(QSqlTableModel* model){
     ui->perechenTableView->setModel(model);
     ui->perechenTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -486,15 +452,7 @@ void MainSizWindow::on_selectedItemOsmotrButton_clicked()
         sizTableModel->dataChanged(osmotrIndex,osmotrIndex);
     }
 }
-void MainSizWindow::on_pushButton_5_toggled(bool checked)
-{
-    if (checked) {
-        ui->textBrowser->show();
-    } else
-    {
-        ui->textBrowser->hide();
-    }
-}
+
 void MainSizWindow::reloadTreeWidgetItems()
 {
     ui->treeWidget->clear();
@@ -600,17 +558,5 @@ void MainSizWindow::on_daysOfEvent_valueChanged(int arg1)
 
 void MainSizWindow::on_pushButton_clicked()
 {
-    QModelIndex index = ui->tableViewTemp->selectionModel()->currentIndex();
-       if (index.isValid()) {
-           EventSiz& organization = eventDateTableModel->getEvent(index);
 
-
-
-               organization.setId(1452);
-               organization.setType("gzdfgzgdzgzdfg");
-               organization.setNumber("fesgrgsrhtshshs");
-
-eventDateTableModel->dataChanged(index,index);
-
-       }
 }

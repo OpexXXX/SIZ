@@ -50,12 +50,12 @@ private slots:
     void on_tabWidget_currentChanged(int index);
     void on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex current, QModelIndex prevous);
     void on_mainTableView_Data_Changed(QModelIndex current, QModelIndex prevous);
-    void on_pushButton_9_clicked();
+
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_radioButton_group_toggle(int button,bool checked);
-    void on_radioButton_3_toggled(bool checked);
+
     void on_selectedItemOsmotrButton_clicked();
-    void on_pushButton_5_toggled(bool checked);
+
     void on_addRowMainTable_clicked();
     void on_deleteRowMainTable_clicked();
     void on_addRowPerechniTable_clicked();
