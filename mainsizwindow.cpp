@@ -5,19 +5,22 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainSizWindow)
 {
-
     ui->setupUi(this);
-
     db = new DataBase();
     db->connectToDataBase();
 
     setupModels();
-    createUI();
     Style();
+    reloadEvents();
+    createUI();
+    sizTableModel->setSort(5,Qt::AscendingOrder);
+    sizTableModel->select();
 
     QItemSelectionModel *sm = ui->tableView->selectionModel();
     connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
             this, SLOT(on_tableViewTriggerSelectionModel_currentRowChanged(QModelIndex,QModelIndex)));
+    connect(ui->tableView->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
+            this, SLOT(on_tableView_Data_Changed(QModelIndex,QModelIndex)));
 
     tmr = new QTimer();
     tmr->setInterval(1200000);
@@ -30,19 +33,12 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
     file.open(QFile::ReadOnly | QFile::Text);
     ui->plainTextEdit->setPlainText(file.readAll());
 
-    //    QFile file(":/new/STO/STO/_030816_.html");
-    //    file.open(QFile::ReadOnly | QFile::Text);
-    //    QTextStream stream(&file);
-    //    ui->textEdit->setHtml(stream.readAll());
-    /* Инициализируем внешний вид таблицы с данными
-        * */
-    // this->createUI();
 }
 void MainSizWindow::Style()
 {
-    ui->listWidget->setStyleSheet("font: 13pt; selection-color: rgb(0, 0, 0); selection-background-color: rgb(232, 237, 240);");
-    qApp->setStyleSheet("QWidget {  selection-color: rgb(0, 0, 0); selection-background-color: rgb(232, 237, 240); }"
-                        "QTableView{ font: 12pt  }");
+    ui->listWidget->setStyleSheet("font: 14pt; selection-color: rgb(0, 0, 0); selection-background-color: rgb(232, 237, 240);");
+    qApp->setStyleSheet("QWidget {  selection-color: rgb(0, 0, 0); selection-background-color: rgb(232, 237, 240,  100); }"
+                        "QTableView{ font: 13pt  }");
 
 
 }
@@ -51,12 +47,12 @@ void MainSizWindow::closeEvent(QCloseEvent * event)
     if(this->isVisible() ){
         event->ignore();
         this->hide();
-        QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
 
+        QIcon  myicon =  QIcon(":/new/icon/153png.png");
         trayIcon->showMessage("Журнал СИЗ",
                               trUtf8("Приложение свернуто в трей. Для того чтобы, "
                                      "развернуть окно приложения, щелкните по иконке приложения в трее"),
-                              icon,
+                              myicon,
                               2000);
     }
 }
@@ -72,8 +68,6 @@ void MainSizWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason){
     case QSystemTrayIcon::Trigger:
-        /* Событие игнорируется в том случае, если чекбокс не отмечен
-         * */
 
         /* иначе, если окно видимо, то оно скрывается,
              * и наоборот, если скрыто, то разворачивается на экран
@@ -100,79 +94,61 @@ void MainSizWindow::setupModels()
     /* Инициализируем модель для представления данных
      * с заданием названий колонок
      * */
-
-    this->setupModel(SIZTABLE,
-                     QStringList() << "Дата"
-                     << "Время"
-                     <<"Рандомное число"
-                     << "Сообщение"
-                     << "ццц"
-                     << "Время"
-                     << "Рандомное число"
-                     << "Сообщение"
-                     << "ццц"
-                     << "Время"
-                     << "Рандомное число"
-                     << "Сообщение"
-                     << "ццц"
-                     );
     sizTableModel = new MainTableModel(this,&eventArray);
     sizTypeTableModel= new QSqlTableModel(this);
     ObjectTableModel= new QSqlTableModel(this);
     PersonalTableModel= new QSqlTableModel(this);
     eventDateTableModel= new QSqlTableModel(this);
 
-    sizTableModel->setTable(SIZTABLE);
-    sizTableModel->setHeaderData(0, Qt::Horizontal, tr("п/п"));
-    sizTableModel->setHeaderData(1, Qt::Horizontal, tr("Номер"));
-    sizTableModel->setHeaderData(2, Qt::Horizontal, tr("Изъято"));
-    sizTableModel->setHeaderData(3, Qt::Horizontal, tr("Испытанно"));
-    sizTableModel->setHeaderData(4, Qt::Horizontal, tr("Испытать"));
-    sizTableModel->setHeaderData(5, Qt::Horizontal, tr("Наименование"));
-    sizTableModel->setHeaderData(6, Qt::Horizontal, tr("Осмотренно"));
-    sizTableModel->setHeaderData(7, Qt::Horizontal, tr("Осмотренно"));
-    sizTableModel->setHeaderData(8, Qt::Horizontal, tr("Объект"));
-    sizTableModel->setHeaderData(9, Qt::Horizontal, tr("Сотрудник"));
-    sizTableModel->setHeaderData(10, Qt::Horizontal, tr("Примечание"));
-    sizTableModel->setHeaderData(11, Qt::Horizontal, tr("Выдан в пользование"));
-    sizTypeTableModel->setTable(TYPESIZTABLE);
+    QStringList headerList;
 
-    sizTypeTableModel->setHeaderData(0, Qt::Horizontal, tr("Наименование"));
-    sizTypeTableModel->setHeaderData(1, Qt::Horizontal, tr("Испытывается"));
-    sizTypeTableModel->setHeaderData(2, Qt::Horizontal, tr("Переодичность испытаний мес."));
-    sizTypeTableModel->setHeaderData(3, Qt::Horizontal, tr("Переодичность осмотров мес."));
-    sizTypeTableModel->setHeaderData(4, Qt::Horizontal, tr("Персональный"));
-    ui->tableView->setSortingEnabled(true);
-    ObjectTableModel->setTable(OBJECTTABLE);
-    PersonalTableModel->setTable(PERSONALTABEL);
+    headerList<< tr("п/п")
+              << tr("Номер")
+              <<tr("Изъято")
+             <<tr("Испытанно")
+            <<tr("Испытать")
+           <<tr("Наименование")
+          <<tr("Осмотренно")
+         <<tr("Осмотренно")
+        <<tr("Объект")
+       << tr("Сотрудник")
+       <<tr("Примечание")
+      <<tr("Выдан в пользование");
+    setupModel(SIZTABLE,sizTableModel,headerList);
+    headerList.clear();
 
-    QDate stopDate = QDate::currentDate(); // возвращаем текущую дату
-    QDate startDate = stopDate.addDays(10); // возвращаем текущую дату
-    // eventDateTableModel->setQuery("SELECT * FROM Siz WHERE endVerification BETWEEN '2014-01-02' AND '"+stopDate.toString("yyyy-MM-dd")+"'");
+    headerList<<  tr("Наименование")
+               <<tr("Испытывается")
+              <<tr("Переодичность испытаний мес.")
+             <<tr("Переодичность осмотров мес.")
+            <<tr("Персональный");
+    setupModel(TYPESIZTABLE,sizTypeTableModel,headerList);
+    headerList.clear();
+
+    setupModel(OBJECTTABLE,ObjectTableModel,headerList);
+
+    setupModel(PERSONALTABEL,PersonalTableModel,headerList);
+
+    sizTableModel->setSort(5,Qt::AscendingOrder);
     sizTableModel->select();
     sizTypeTableModel->select();
     ObjectTableModel->select();
     PersonalTableModel->select();
-    //Заполняем treeWidget
-
-
-
 }
-void MainSizWindow::setupModel(const QString &tableName, const QStringList &headers)
+void MainSizWindow::setupModel(const QString &tableName, QSqlTableModel* model, const QStringList &headers)
 {
-    /* Производим инициализацию модели представления данных
-     * с установкой имени таблицы в базе данных, по которому
-     * будет производится обращение в таблице
-     * */
-    sizTableModel = new MainTableModel(this);
-    sizTableModel->setTable(tableName);
+    model->setTable(tableName);
     /* Устанавливаем названия колонок в таблице с сортировкой данных
      * */
-    for(int i = 0, j = 0; i < sizTableModel->columnCount(); i++, j++){
-        sizTableModel->setHeaderData(i,Qt::Horizontal,headers[j]);
+    if(headers.count()>0&&headers.count()<=model->columnCount()){
+
+        for(int i = 0; i < headers.count(); i++){
+            model->setHeaderData(i,Qt::Horizontal,headers[i]);
+        }
     }
     // Устанавливаем сортировку по возрастанию данных по нулевой колонке
-    sizTableModel->setSort(0,Qt::AscendingOrder);
+    model->setEditStrategy(QSqlTableModel::OnFieldChange);
+    model->setSort(0,Qt::AscendingOrder);
 }
 void MainSizWindow::reloadEvents()
 {
@@ -305,50 +281,11 @@ void MainSizWindow::createUI()
             * */
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
-    QList<QString> listObject = db->getObject();
-    QAbstractItemModel* model;
-    model =  ui->treeWidget->model();
-    QModelIndex id1 = model->index(0,0);
-    for (int i = 0 ; i<listObject.length();i++)
-    {
 
-        model->insertRow(i,id1); //добавляем детей
-        model->setData(model->index(i,0,id1),listObject[i]); //добавляем детей
-    }
-    listObject.clear();
-    listObject = db->getTypeSiz();
-    QModelIndex id2 = model->index(1,0);
-
-
-    for (int i = 0 ; i<listObject.length();i++)
-    {
-
-        model->insertRow(i,id2); //добавляем детей
-        model->setData(model->index(i,0,id2),listObject[i]); //добавляем детей
-    }
-    listObject.clear();
-    listObject = db->getPersonal();
-    QModelIndex id3 = model->index(2,0);
-
-
-    for (int i = 0 ; i<listObject.length();i++)
-    {
-
-        model->insertRow(i,id3); //добавляем детей
-        model->setData(model->index(i,0,id3),listObject[i]); //добавляем детей
-    }
-
-    db->readSizFromDB();
+    reloadTreeWidgetItems();
 
     //    //Типы СИЗ
-    ui->tableView_2->setModel(sizTypeTableModel);
-    ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
-    // Устанавливаем режим выделения лишь одно строки в таблице
-    ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
-    // Устанавливаем размер колонок по содержимому
-    ui->tableView_2->resizeColumnsToContents();
-    ui->tableView_2->resizeRowsToContents();
-    ui->tableView_2->horizontalHeader()->setStretchLastSection(true);
+    setModelOnTableView(sizTypeTableModel);
 
     //СИЗ
     ui->tableView->setModel(sizTableModel);     // Устанавливаем модель на TableView
@@ -361,37 +298,18 @@ void MainSizWindow::createUI()
     ui->tableView->resizeRowsToContents();
     ui->tableView->resizeColumnsToContents();
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
-
-    ComboBoxItemDelegate* cbid = new ComboBoxItemDelegate(ui->tableView,db->getTypeSiz());
-    ComboBoxItemDelegate* cbido = new ComboBoxItemDelegate(ui->tableView,db->getObject());
-    ComboBoxItemDelegate* cbidp = new ComboBoxItemDelegate(ui->tableView,db->getPersonal());
-    // ComboBox only in column 2
-    CheckBoxItemDelegate* chbib = new CheckBoxItemDelegate (ui->tableView);
-    DateEditItemDelegate* deid = new DateEditItemDelegate(ui->tableView);
-
-    //  ui->listView->setItemDelegateForColumn(4,deid);
-
-    ui->tableView->setItemDelegateForColumn(2,chbib);
-    ui->tableView->setItemDelegateForColumn(5, cbid);
-    ui->tableView->setItemDelegateForColumn(6, chbib);
-    ui->tableView->setItemDelegateForColumn(3, deid);
-    ui->tableView->setItemDelegateForColumn(4, deid);
-    ui->tableView->setItemDelegateForColumn(7, deid);
-    ui->tableView->setItemDelegateForColumn(8, cbido);
-    ui->tableView->setItemDelegateForColumn(9, cbidp);
-    ui->tableView->setItemDelegateForColumn(11, deid);
-
     ui->tableView->hideColumn(0);
     ui->tableView->hideColumn(2);
     ui->tableView->hideColumn(6);
+    reloadDelegateMainTabView();
+    ui->tableView->setSortingEnabled(true);
 
     sizTableModel->select(); // Делаем выборку данных из таблицы
-    sizTableModel->setEditStrategy(QSqlTableModel::OnFieldChange);
-    reloadEvents();
+
 
     ui->selectedItemOsmotrButton->hide();
     ui->selectedItemLabel->setText("");
-
+    ui->textBrowser->hide();
 
 }
 
@@ -445,7 +363,7 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
                                      );
             sizTableModel->select();
         }
-        if(parrent == "Персонал")
+        if(parrent == "Сотрудники")
         {
             sizTableModel->setFilter(QString( " personal ='"+item->data(0,0).toString()+"'")
                                      );
@@ -502,65 +420,11 @@ void MainSizWindow::on_pushButton_3_clicked() //Перечни - добавит�
 
 void MainSizWindow::on_tabWidget_currentChanged(int index)
 {
-    ComboBoxItemDelegate* cbid = new ComboBoxItemDelegate(ui->tableView,db->getTypeSiz());
-    ComboBoxItemDelegate* cbido = new ComboBoxItemDelegate(ui->tableView,db->getObject());
-    ComboBoxItemDelegate* cbidp = new ComboBoxItemDelegate(ui->tableView,db->getPersonal());
-
-    ui->tableView->setItemDelegateForColumn(5, cbid);
-    ui->tableView->setItemDelegateForColumn(8, cbido);
-    ui->tableView->setItemDelegateForColumn(9, cbidp);
 
     reloadEvents();
+    reloadDelegateMainTabView();
+    reloadTreeWidgetItems();
 
-    //Заполняем treeWidget
-    QList<QString> listObject = db->getObject();
-    QAbstractItemModel* model;
-    model =  ui->treeWidget->model();
-    QModelIndex id1 = model->index(0,0);
-
-
-    int count = model->rowCount(id1);
-    for (int i = count ; i>=0;i--)
-    {
-        model->removeRow(i,id1);
-    }
-    for (int i = 0 ; i<listObject.length();i++)
-    {
-
-        model->insertRow(i,id1); //добавляем детей
-        model->setData(model->index(i,0,id1),listObject[i]); //добавляем детей
-    }
-
-    listObject = db->getTypeSiz();
-    QModelIndex id2 = model->index(1,0);
-
-    count = model->rowCount(id2);
-    for (int i = count ; i>=0;i--)
-    {
-        model->removeRow(i,id2);
-    }
-    for (int i = 0 ; i<listObject.length();i++)
-    {
-
-        model->insertRow(i,id2); //добавляем детей
-        model->setData(model->index(i,0,id2),listObject[i]); //добавляем детей
-    }
-
-    listObject = db->getPersonal();
-    QModelIndex id3 = model->index(2,0);
-
-
-    count = model->rowCount(id3);
-    for (int i = count ; i>=0;i--)
-    {
-        model->removeRow(i,id3);
-    }
-    for (int i = 0 ; i<listObject.length();i++)
-    {
-
-        model->insertRow(i,id3); //добавляем детей
-        model->setData(model->index(i,0,id3),listObject[i]); //добавляем детей
-    }
 }
 
 void MainSizWindow::updateTime()
@@ -572,10 +436,11 @@ void MainSizWindow::updateTime()
             for (int i=0;i<ui->listWidget->count()&&i<4;i++) {
                 message+= ui->listWidget->item(i)->text()+"; \n";
             }
-            QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
+            QIcon  myicon =  QIcon(":/new/icon/153png.png");
+
             trayIcon->showMessage("Журнал СИЗ",
                                   trUtf8(message.toUtf8()),
-                                  icon
+                                  myicon
                                   );}
     }}
 void MainSizWindow::on_pushButton_9_clicked()
@@ -592,10 +457,11 @@ void MainSizWindow::on_pushButton_9_clicked()
 
                                            );
 
-        QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
+
+        QIcon  myicon =  QIcon(":/new/icon/153png.png");
         trayIcon->showMessage("Журнал СИЗ",
                               trUtf8(message.toUtf8()),
-                              icon,ui->spinBox_2->value()
+                              myicon,ui->spinBox_2->value()
                               );}
 }
 void MainSizWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
@@ -615,39 +481,26 @@ void MainSizWindow::on_radioButton_3_toggled(bool checked)
 {
 
 }
+void MainSizWindow::setModelOnTableView(QSqlTableModel* model){
+    ui->tableView_2->setModel(model);
+    ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_2->resizeColumnsToContents();
+    ui->tableView_2->resizeRowsToContents();
+    ui->tableView_2->horizontalHeader()->setStretchLastSection(true);
+}
 void MainSizWindow::on_radioButton_group_toggle(int button,bool checked)
 {
     if(checked){
         switch (button) {
         case -2:
-            ui->tableView_2->setModel(sizTypeTableModel);
-            ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
-            // Устанавливаем режим выделения лишь одно строки в таблице
-            ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
-            // Устанавливаем размер колонок по содержимому
-            ui->tableView_2->resizeColumnsToContents();
-            ui->tableView_2->resizeRowsToContents();
-            ui->tableView_2->horizontalHeader()->setStretchLastSection(true);
+          setModelOnTableView(sizTypeTableModel);
             break;
         case -3:
-            ui->tableView_2->setModel(ObjectTableModel);
-            ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
-            // Устанавливаем режим выделения лишь одно строки в таблице
-            ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
-            // Устанавливаем размер колонок по содержимому
-            ui->tableView_2->resizeColumnsToContents();
-            ui->tableView_2->resizeRowsToContents();
-            ui->tableView_2->horizontalHeader()->setStretchLastSection(true);
+        setModelOnTableView(ObjectTableModel);
             break;
         case -4:
-            ui->tableView_2->setModel(PersonalTableModel);
-            ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
-            // Устанавливаем режим выделения лишь одно строки в таблице
-            ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
-            // Устанавливаем размер колонок по содержимому
-            ui->tableView_2->resizeColumnsToContents();
-            ui->tableView_2->resizeRowsToContents();
-            ui->tableView_2->horizontalHeader()->setStretchLastSection(true);
+         setModelOnTableView(PersonalTableModel);
             break;
         default:
             break;
@@ -655,10 +508,16 @@ void MainSizWindow::on_radioButton_group_toggle(int button,bool checked)
     }
 
 }
+void MainSizWindow::on_tableView_Data_Changed(QModelIndex current,QModelIndex prevous)
+{
+    reloadEvents();
+    on_tableViewTriggerSelectionModel_currentRowChanged(current,prevous);
+}
 void MainSizWindow::on_tableViewTriggerSelectionModel_currentRowChanged(QModelIndex current,QModelIndex prevous)
 {
     if(current.row()>=0)
     {
+
         bool SizOk = true;
         QAbstractItemModel * model = sizTableModel;
         QModelIndex primaryKeyIndex = model->index(current.row(), 0);
@@ -686,7 +545,7 @@ void MainSizWindow::on_tableViewTriggerSelectionModel_currentRowChanged(QModelIn
 
                 ui->selectedItemDateEdit->setDate(dateNextInspp);
                 ui->selectedItemLabel->setText(eventArray[i].second.second + "\n Осмотр раз в "+QString::number(mounthInspection)+" мес. \n Следующий осмотр:");
-               SizOk = false;
+                SizOk = false;
                 break;
 
             }
@@ -711,19 +570,70 @@ void MainSizWindow::on_tableViewTriggerSelectionModel_currentRowChanged(QModelIn
 
 
 }
-
 void MainSizWindow::on_selectedItemOsmotrButton_clicked()
 {
     QModelIndexList listIndex = ui->tableView->selectionModel()->selectedRows();
     if(listIndex.count()>0){
-QModelIndex current = ui->tableView->selectionModel()->selectedRows()[0];
+        QModelIndex current = ui->tableView->selectionModel()->selectedRows()[0];
 
-QAbstractItemModel * model = sizTableModel;
-QModelIndex osmotrIndex = model->index(current.row(), 7);
-sizTableModel->setData(osmotrIndex,ui->selectedItemDateEdit->date().toString("yyyy-MM-dd"));
-QModelIndexList listIndex = ui->tableView->selectionModel()->selectedRows();
-reloadEvents();
-sizTableModel->select();
-ui->tableView->selectRow(current.row());
+        QAbstractItemModel * model = sizTableModel;
+        QModelIndex osmotrIndex = model->index(current.row(), 7);
+        sizTableModel->setData(osmotrIndex,ui->selectedItemDateEdit->date().toString("yyyy-MM-dd"));
+        QModelIndexList listIndex = ui->tableView->selectionModel()->selectedRows();
+        reloadEvents();
+        sizTableModel->select();
+        ui->tableView->selectRow(current.row());
     }
+}
+void MainSizWindow::on_pushButton_5_toggled(bool checked)
+{
+    if (checked) {
+        ui->textBrowser->show();
+    } else
+    {
+        ui->textBrowser->hide();
+    }
+}
+void MainSizWindow::reloadTreeWidgetItems()
+{
+    ui->treeWidget->clear();
+    QList<QString> listObject = db->getObject();
+    addItemsTreeWidget(listObject,"Объекты");
+    listObject = db->getTypeSiz();
+    addItemsTreeWidget(listObject,"Типы СИЗ");
+    listObject = db->getPersonal();
+    addItemsTreeWidget(listObject,"Сотрудники");
+}
+void MainSizWindow::addItemsTreeWidget(QList<QString> listChild, QString nameTop)
+{
+    QFont topFont,childFont;
+    topFont.setPixelSize(20);
+    childFont.setPixelSize(16);
+    QTreeWidgetItem * topLevel = new QTreeWidgetItem();
+    topLevel->setText(0, nameTop);
+    topLevel->setFont(0,topFont);
+    ui->treeWidget->addTopLevelItem(topLevel);
+    for(int i=0;i<listChild.count();++i){
+        QTreeWidgetItem * item = new QTreeWidgetItem();
+        item->setText(0,listChild.at(i));
+        item->setFont(0,childFont);
+        topLevel->addChild(item);
+    }
+}
+void MainSizWindow::reloadDelegateMainTabView()
+{
+    ComboBoxItemDelegate* cbid = new ComboBoxItemDelegate(ui->tableView,db->getTypeSiz());
+    ComboBoxItemDelegate* cbido = new ComboBoxItemDelegate(ui->tableView,db->getObject());
+    ComboBoxItemDelegate* cbidp = new ComboBoxItemDelegate(ui->tableView,db->getPersonal());
+    CheckBoxItemDelegate* chbib = new CheckBoxItemDelegate (ui->tableView);
+    DateEditItemDelegate* deid = new DateEditItemDelegate(ui->tableView);
+    ui->tableView->setItemDelegateForColumn(2,chbib);
+    ui->tableView->setItemDelegateForColumn(5, cbid);
+    ui->tableView->setItemDelegateForColumn(6, chbib);
+    ui->tableView->setItemDelegateForColumn(3, deid);
+    ui->tableView->setItemDelegateForColumn(4, deid);
+    ui->tableView->setItemDelegateForColumn(7, deid);
+    ui->tableView->setItemDelegateForColumn(8, cbido);
+    ui->tableView->setItemDelegateForColumn(9, cbidp);
+    ui->tableView->setItemDelegateForColumn(11, deid);
 }

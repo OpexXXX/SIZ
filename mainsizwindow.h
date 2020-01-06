@@ -59,13 +59,15 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
     void on_tableViewTriggerSelectionModel_currentRowChanged(QModelIndex current, QModelIndex prevous);
-
+    void on_tableView_Data_Changed(QModelIndex current, QModelIndex prevous);
     void on_pushButton_9_clicked();
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_radioButton_group_toggle(int button,bool checked);
     void on_radioButton_3_toggled(bool checked);
 
     void on_selectedItemOsmotrButton_clicked();
+
+    void on_pushButton_5_toggled(bool checked);
 
 public:
     Ui::MainSizWindow *ui;
@@ -88,9 +90,13 @@ private:
     /* Также присутствуют два метода, которые формируют модель
      * и внешний вид TableView
      * */
+    void reloadTreeWidgetItems();
+    void addItemsTreeWidget(QList<QString> listChild, QString nameTop);
+    void reloadDelegateMainTabView();
+    void setModelOnTableView(QSqlTableModel* model);
     void Style();
     void reloadEvents();
-    void setupModel(const QString &tableName, const QStringList &headers);
+    void setupModel(const QString &tableName,  QSqlTableModel *model,const QStringList &headers);
     void setupModels();
     void createUI();
 
