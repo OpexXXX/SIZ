@@ -16,7 +16,7 @@ private:
     QString getTooltipForRow(int index) const;
 public:
     DataBase        *db;
-    MainTableModel(QObject *parent = nullptr,QList<QPair<int,QPair<int,QString> > >  *eventArray=nullptr, DataBase        *db = nullptr);
+    MainTableModel(QObject *parent = nullptr,QList<QPair<int,QPair<int,QString> > >  *eventArray=nullptr);
     ~MainTableModel();
     QVariant data(const QModelIndex &item, int role) const;
     QList<QPair<int,QPair<int,QString> > >  *eventArray;

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainsizwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.4
+** Created by: Qt User Interface Compiler version 5.14.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -49,13 +49,13 @@ public:
     QGroupBox *gridGroupBox;
     QGridLayout *gridLayout;
     QHBoxLayout *horizontalLayout_5;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QPushButton *addRowMainTable;
+    QPushButton *deleteRowMainTable;
     QPushButton *selectedItemOsmotrButton;
     QLabel *selectedItemLabel;
     QDateEdit *selectedItemDateEdit;
     QVBoxLayout *verticalLayout_8;
-    QTableView *tableView;
+    QTableView *mainTableView;
     QPushButton *pushButton_5;
     QTextBrowser *textBrowser;
     QWidget *tab_4;
@@ -63,7 +63,7 @@ public:
     QListWidget *listWidget;
     QHBoxLayout *horizontalLayout_9;
     QLabel *label;
-    QSpinBox *spinBox;
+    QSpinBox *daysOfEvent;
     QWidget *tab_3;
     QHBoxLayout *horizontalLayout_2;
     QVBoxLayout *verticalLayout_3;
@@ -74,15 +74,17 @@ public:
     QLabel *label_3;
     QLabel *label_2;
     QHBoxLayout *horizontalLayout_3;
-    QPushButton *pushButton_3;
-    QPushButton *pushButton_4;
-    QTableView *tableView_2;
+    QPushButton *addRowPerechniTable;
+    QPushButton *deleteRowPerechniTable;
+    QTableView *perechenTableView;
     QWidget *tab_2;
     QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout_5;
+    QTableView *tableViewTemp;
     QPlainTextEdit *plainTextEdit;
     QSpinBox *spinBox_2;
     QPushButton *pushButton_9;
+    QPushButton *pushButton;
     QButtonGroup *buttonGroup;
 
     void setupUi(QMainWindow *MainSizWindow)
@@ -167,27 +169,27 @@ public:
         horizontalLayout_5->setSpacing(6);
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
         horizontalLayout_5->setContentsMargins(-1, 10, -1, -1);
-        pushButton = new QPushButton(gridGroupBox);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        addRowMainTable = new QPushButton(gridGroupBox);
+        addRowMainTable->setObjectName(QString::fromUtf8("addRowMainTable"));
         QIcon icon1;
         icon1.addFile(QString::fromUtf8(":/new/icon/add.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton->setIcon(icon1);
-        pushButton->setIconSize(QSize(32, 32));
-        pushButton->setCheckable(false);
-        pushButton->setChecked(false);
-        pushButton->setAutoDefault(false);
-        pushButton->setFlat(false);
+        addRowMainTable->setIcon(icon1);
+        addRowMainTable->setIconSize(QSize(32, 32));
+        addRowMainTable->setCheckable(false);
+        addRowMainTable->setChecked(false);
+        addRowMainTable->setAutoDefault(false);
+        addRowMainTable->setFlat(false);
 
-        horizontalLayout_5->addWidget(pushButton);
+        horizontalLayout_5->addWidget(addRowMainTable);
 
-        pushButton_2 = new QPushButton(gridGroupBox);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        deleteRowMainTable = new QPushButton(gridGroupBox);
+        deleteRowMainTable->setObjectName(QString::fromUtf8("deleteRowMainTable"));
         QIcon icon2;
         icon2.addFile(QString::fromUtf8(":/new/icon/remove-trash.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_2->setIcon(icon2);
-        pushButton_2->setIconSize(QSize(32, 32));
+        deleteRowMainTable->setIcon(icon2);
+        deleteRowMainTable->setIconSize(QSize(32, 32));
 
-        horizontalLayout_5->addWidget(pushButton_2);
+        horizontalLayout_5->addWidget(deleteRowMainTable);
 
 
         gridLayout->addLayout(horizontalLayout_5, 6, 0, 1, 1);
@@ -228,8 +230,8 @@ public:
         verticalLayout_8->setSpacing(6);
         verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
         verticalLayout_8->setContentsMargins(-1, -1, 5, -1);
-        tableView = new QTableView(tab);
-        tableView->setObjectName(QString::fromUtf8("tableView"));
+        mainTableView = new QTableView(tab);
+        mainTableView->setObjectName(QString::fromUtf8("mainTableView"));
         QPalette palette;
         QBrush brush(QColor(48, 140, 198, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -238,11 +240,11 @@ public:
         QBrush brush1(QColor(145, 145, 145, 255));
         brush1.setStyle(Qt::SolidPattern);
         palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush1);
-        tableView->setPalette(palette);
-        tableView->setStyleSheet(QString::fromUtf8(""));
-        tableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
+        mainTableView->setPalette(palette);
+        mainTableView->setStyleSheet(QString::fromUtf8(""));
+        mainTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
 
-        verticalLayout_8->addWidget(tableView);
+        verticalLayout_8->addWidget(mainTableView);
 
         pushButton_5 = new QPushButton(tab);
         pushButton_5->setObjectName(QString::fromUtf8("pushButton_5"));
@@ -288,11 +290,11 @@ public:
 
         horizontalLayout_9->addWidget(label);
 
-        spinBox = new QSpinBox(tab_4);
-        spinBox->setObjectName(QString::fromUtf8("spinBox"));
-        spinBox->setValue(20);
+        daysOfEvent = new QSpinBox(tab_4);
+        daysOfEvent->setObjectName(QString::fromUtf8("daysOfEvent"));
+        daysOfEvent->setValue(20);
 
-        horizontalLayout_9->addWidget(spinBox);
+        horizontalLayout_9->addWidget(daysOfEvent);
 
 
         verticalLayout->addLayout(horizontalLayout_9);
@@ -348,19 +350,19 @@ public:
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         horizontalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
         horizontalLayout_3->setContentsMargins(-1, 0, -1, -1);
-        pushButton_3 = new QPushButton(tab_3);
-        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
-        pushButton_3->setIcon(icon1);
-        pushButton_3->setIconSize(QSize(32, 32));
+        addRowPerechniTable = new QPushButton(tab_3);
+        addRowPerechniTable->setObjectName(QString::fromUtf8("addRowPerechniTable"));
+        addRowPerechniTable->setIcon(icon1);
+        addRowPerechniTable->setIconSize(QSize(32, 32));
 
-        horizontalLayout_3->addWidget(pushButton_3);
+        horizontalLayout_3->addWidget(addRowPerechniTable);
 
-        pushButton_4 = new QPushButton(tab_3);
-        pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
-        pushButton_4->setIcon(icon2);
-        pushButton_4->setIconSize(QSize(32, 32));
+        deleteRowPerechniTable = new QPushButton(tab_3);
+        deleteRowPerechniTable->setObjectName(QString::fromUtf8("deleteRowPerechniTable"));
+        deleteRowPerechniTable->setIcon(icon2);
+        deleteRowPerechniTable->setIconSize(QSize(32, 32));
 
-        horizontalLayout_3->addWidget(pushButton_4);
+        horizontalLayout_3->addWidget(deleteRowPerechniTable);
 
 
         verticalLayout_4->addLayout(horizontalLayout_3);
@@ -372,10 +374,10 @@ public:
 
         horizontalLayout_2->addLayout(verticalLayout_3);
 
-        tableView_2 = new QTableView(tab_3);
-        tableView_2->setObjectName(QString::fromUtf8("tableView_2"));
+        perechenTableView = new QTableView(tab_3);
+        perechenTableView->setObjectName(QString::fromUtf8("perechenTableView"));
 
-        horizontalLayout_2->addWidget(tableView_2);
+        horizontalLayout_2->addWidget(perechenTableView);
 
         tabWidget->addTab(tab_3, QString());
         tab_2 = new QWidget();
@@ -387,6 +389,11 @@ public:
         verticalLayout_5 = new QVBoxLayout();
         verticalLayout_5->setSpacing(6);
         verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        tableViewTemp = new QTableView(tab_2);
+        tableViewTemp->setObjectName(QString::fromUtf8("tableViewTemp"));
+
+        verticalLayout_5->addWidget(tableViewTemp);
+
         plainTextEdit = new QPlainTextEdit(tab_2);
         plainTextEdit->setObjectName(QString::fromUtf8("plainTextEdit"));
 
@@ -405,6 +412,11 @@ public:
 
         verticalLayout_5->addWidget(pushButton_9);
 
+        pushButton = new QPushButton(tab_2);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        verticalLayout_5->addWidget(pushButton);
+
 
         verticalLayout_2->addLayout(verticalLayout_5);
 
@@ -417,7 +429,7 @@ public:
         retranslateUi(MainSizWindow);
 
         tabWidget->setCurrentIndex(0);
-        pushButton->setDefault(false);
+        addRowMainTable->setDefault(false);
 
 
         QMetaObject::connectSlotsByName(MainSizWindow);
@@ -425,27 +437,27 @@ public:
 
     void retranslateUi(QMainWindow *MainSizWindow)
     {
-        MainSizWindow->setWindowTitle(QApplication::translate("MainSizWindow", " \320\226\321\203\321\200\320\275\320\260\320\273 \320\241\320\230\320\227", nullptr));
+        MainSizWindow->setWindowTitle(QCoreApplication::translate("MainSizWindow", " \320\226\321\203\321\200\320\275\320\260\320\273 \320\241\320\230\320\227", nullptr));
 
         const bool __sortingEnabled = treeWidget->isSortingEnabled();
         treeWidget->setSortingEnabled(false);
         QTreeWidgetItem *___qtreewidgetitem = treeWidget->topLevelItem(0);
-        ___qtreewidgetitem->setText(0, QApplication::translate("MainSizWindow", "\320\236\320\261\321\212\320\265\320\272\321\202\321\213", nullptr));
+        ___qtreewidgetitem->setText(0, QCoreApplication::translate("MainSizWindow", "\320\236\320\261\321\212\320\265\320\272\321\202\321\213", nullptr));
         QTreeWidgetItem *___qtreewidgetitem1 = ___qtreewidgetitem->child(0);
-        ___qtreewidgetitem1->setText(0, QApplication::translate("MainSizWindow", "\320\235\320\276\320\262\321\213\320\271 \320\264\320\276\321\207\320\265\321\200\320\275\320\270\320\271 \321\215\320\273\320\265\320\274\320\265\320\275\321\202", nullptr));
+        ___qtreewidgetitem1->setText(0, QCoreApplication::translate("MainSizWindow", "\320\235\320\276\320\262\321\213\320\271 \320\264\320\276\321\207\320\265\321\200\320\275\320\270\320\271 \321\215\320\273\320\265\320\274\320\265\320\275\321\202", nullptr));
         QTreeWidgetItem *___qtreewidgetitem2 = treeWidget->topLevelItem(1);
-        ___qtreewidgetitem2->setText(0, QApplication::translate("MainSizWindow", "\320\242\320\270\320\277\321\213 \320\241\320\230\320\227", nullptr));
+        ___qtreewidgetitem2->setText(0, QCoreApplication::translate("MainSizWindow", "\320\242\320\270\320\277\321\213 \320\241\320\230\320\227", nullptr));
         QTreeWidgetItem *___qtreewidgetitem3 = treeWidget->topLevelItem(2);
-        ___qtreewidgetitem3->setText(0, QApplication::translate("MainSizWindow", "\320\237\320\265\321\200\321\201\320\276\320\275\320\260\320\273", nullptr));
+        ___qtreewidgetitem3->setText(0, QCoreApplication::translate("MainSizWindow", "\320\237\320\265\321\200\321\201\320\276\320\275\320\260\320\273", nullptr));
         treeWidget->setSortingEnabled(__sortingEnabled);
 
-        gridGroupBox->setTitle(QApplication::translate("MainSizWindow", "\320\222\321\213\320\264\320\265\320\273\320\265\320\275\320\275\320\260\321\217 \320\267\320\260\320\277\320\270\321\201\321\214", nullptr));
-        pushButton->setText(QApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 ", nullptr));
-        pushButton_2->setText(QApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 ", nullptr));
-        selectedItemOsmotrButton->setText(QApplication::translate("MainSizWindow", "\320\236\321\201\320\274\320\276\321\202\321\200\320\265\321\202\321\214", nullptr));
-        selectedItemLabel->setText(QApplication::translate("MainSizWindow", "123", nullptr));
-        pushButton_5->setText(QApplication::translate("MainSizWindow", "^^^^^^^^^^^^^^^^", nullptr));
-        textBrowser->setHtml(QApplication::translate("MainSizWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        gridGroupBox->setTitle(QCoreApplication::translate("MainSizWindow", "\320\222\321\213\320\264\320\265\320\273\320\265\320\275\320\275\320\260\321\217 \320\267\320\260\320\277\320\270\321\201\321\214", nullptr));
+        addRowMainTable->setText(QCoreApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 ", nullptr));
+        deleteRowMainTable->setText(QCoreApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 ", nullptr));
+        selectedItemOsmotrButton->setText(QCoreApplication::translate("MainSizWindow", "\320\236\321\201\320\274\320\276\321\202\321\200\320\265\321\202\321\214", nullptr));
+        selectedItemLabel->setText(QCoreApplication::translate("MainSizWindow", "123", nullptr));
+        pushButton_5->setText(QCoreApplication::translate("MainSizWindow", "^^^^^^^^^^^^^^^^", nullptr));
+        textBrowser->setHtml(QCoreApplication::translate("MainSizWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
@@ -672,20 +684,21 @@ public:
                         "\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217, \320\275\320\265 \321\201\320\275\320\270\320\274\320\260\321\217 \320\272\320\273\320\265\321\211\320\265\320\271 \321\201 \321\202\320\276\320\272\320\276\320\262\320\265\320\264\321\203\321\211\320\270\321\205 \321\207\320\260\321\201\321\202\320\265\320\271.</li>\n"
 "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\320\235\320\265 \320\264\320\276\320\277\321\203\321\201\320\272\320\260\320\265\321\202\321\201\321\217 \321\200\320\260\320\261\320\276\321\202\320\260\321\202\321\214 \321\201 \320\272\320\273\320\265\321\211\320\260\320\274\320\270 \320\264\320\276 1000 \320\222, \320\275\320\260\321\205\320\276\320\264\321\217\321\201\321\214 \320\275\320\260 \320\276\320\277\320\276\321\200\320\265 \320\222\320\233, \320\265\321\201\320\273\320\270 \320\272\320\273\320\265\321\211\320\270 \321\201\320\277\320\265\321\206\320\270\320\260\320\273\321\214\320\275\320\276"
                         " \320\275\320\265 \320\277\321\200\320\265\320\264\320\275\320\260\320\267\320\275\320\260\321\207\320\265\320\275\321\213 \320\264\320\273\321\217 \321\215\321\202\320\276\320\271 \321\206\320\265\320\273\320\270.</li></ul></body></html>", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainSizWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", nullptr));
-        label->setText(QApplication::translate("MainSizWindow", "\320\232\320\276\320\273-\320\262\320\276 \320\264\320\275\320\265\320\271 \320\264\320\276 \320\275\320\260\320\277\320\276\320\274\320\270\320\275\320\260\320\275\320\270\321\217", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainSizWindow", "\320\241\320\276\320\261\321\213\321\202\320\270\321\217", nullptr));
-        radioButton_3->setText(QApplication::translate("MainSizWindow", "\320\222\320\270\320\264\321\213 \321\201\321\200\320\265\320\264\321\201\321\202\320\262 \320\267\320\260\321\211\320\270\321\202\321\213", nullptr));
-        radioButton_2->setText(QApplication::translate("MainSizWindow", "\320\236\320\261\321\212\320\265\320\272\321\202\321\213", nullptr));
-        radioButton->setText(QApplication::translate("MainSizWindow", "\320\241\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\270", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainSizWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", nullptr));
+        label->setText(QCoreApplication::translate("MainSizWindow", "\320\232\320\276\320\273-\320\262\320\276 \320\264\320\275\320\265\320\271 \320\264\320\276 \320\275\320\260\320\277\320\276\320\274\320\270\320\275\320\260\320\275\320\270\321\217", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QCoreApplication::translate("MainSizWindow", "\320\241\320\276\320\261\321\213\321\202\320\270\321\217", nullptr));
+        radioButton_3->setText(QCoreApplication::translate("MainSizWindow", "\320\222\320\270\320\264\321\213 \321\201\321\200\320\265\320\264\321\201\321\202\320\262 \320\267\320\260\321\211\320\270\321\202\321\213", nullptr));
+        radioButton_2->setText(QCoreApplication::translate("MainSizWindow", "\320\236\320\261\321\212\320\265\320\272\321\202\321\213", nullptr));
+        radioButton->setText(QCoreApplication::translate("MainSizWindow", "\320\241\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\270", nullptr));
         label_3->setText(QString());
         label_2->setText(QString());
-        pushButton_3->setText(QApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", nullptr));
-        pushButton_4->setText(QApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainSizWindow", "\320\237\320\265\321\200\320\265\321\207\320\275\320\270", nullptr));
+        addRowPerechniTable->setText(QCoreApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", nullptr));
+        deleteRowPerechniTable->setText(QCoreApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QCoreApplication::translate("MainSizWindow", "\320\237\320\265\321\200\320\265\321\207\320\275\320\270", nullptr));
         plainTextEdit->setPlainText(QString());
-        pushButton_9->setText(QApplication::translate("MainSizWindow", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\203\320\262\320\265\320\264\320\276\320\274\320\273\320\265\320\275\320\270\320\265 [Test]", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainSizWindow", "\320\241\321\202\321\200\320\260\320\275\320\270\321\206\320\260", nullptr));
+        pushButton_9->setText(QCoreApplication::translate("MainSizWindow", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\203\320\262\320\265\320\264\320\276\320\274\320\273\320\265\320\275\320\270\320\265 [Test]", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainSizWindow", "PushButton", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainSizWindow", "\320\241\321\202\321\200\320\260\320\275\320\270\321\206\320\260", nullptr));
     } // retranslateUi
 
 };

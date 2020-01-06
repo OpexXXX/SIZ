@@ -1,8 +1,8 @@
 #include "maintablemodel.h"
 
-MainTableModel::MainTableModel(QObject *parent, QList<QPair<int,QPair<int,QString> > >  *eventArray, DataBase *db ):QSqlTableModel (parent)
+MainTableModel::MainTableModel(QObject *parent, QList<QPair<int,QPair<int,QString> > >  *eventArray):QSqlTableModel (parent)
 {
-    this->db = db;
+
     this->eventArray = eventArray;
 }
 MainTableModel::~MainTableModel(){}

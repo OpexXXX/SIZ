@@ -6,17 +6,8 @@
 #include <QTreeWidgetItem>
 #include <QSystemTrayIcon>
 #include <QTimer>
-
 #include <QListWidgetItem>
-#include "maintablemodel.h"
-/* Подключаем заголовочный файл для работы с информацией, которая помещена в базу данных */
-#include "database.h"
-#include "ui_mainsizwindow.h"
 #include <QSqlRecord>
-#include "comboboxitemdelegate.h"
-#include "checkboxitemdelegate.h"
-#include "dateedititemdelegate.h"
-
 #include <QMenu>
 #include <QMessageBox>
 #include <QTreeWidgetItem>
@@ -24,6 +15,14 @@
 #include <QIcon>
 #include <QCloseEvent>
 #include <QHideEvent>
+#include "database.h"
+#include "maintablemodel.h"
+#include "ui_mainsizwindow.h"
+#include "comboboxitemdelegate.h"
+#include "checkboxitemdelegate.h"
+#include "dateedititemdelegate.h"
+#include "eventmodel.h"
+
 namespace Ui {
 class MainSizWindow;
 }
@@ -31,7 +30,6 @@ class MainSizWindow;
 class MainSizWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit MainSizWindow(QWidget *parent = nullptr);
     ~MainSizWindow();
@@ -46,46 +44,42 @@ private slots:
     /* Слот, который будет принимать сигнал от события
        * нажатия на иконку приложения в трее
        */
-
     void updateTime();
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
-    void on_spinBox_valueChanged(int arg1);
-
-    void on_pushButton_4_clicked();
-    void on_pushButton_3_clicked();
-
     void on_tabWidget_currentChanged(int index);
-    void on_tableViewTriggerSelectionModel_currentRowChanged(QModelIndex current, QModelIndex prevous);
-    void on_tableView_Data_Changed(QModelIndex current, QModelIndex prevous);
+    void on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex current, QModelIndex prevous);
+    void on_mainTableView_Data_Changed(QModelIndex current, QModelIndex prevous);
     void on_pushButton_9_clicked();
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_radioButton_group_toggle(int button,bool checked);
     void on_radioButton_3_toggled(bool checked);
-
     void on_selectedItemOsmotrButton_clicked();
-
     void on_pushButton_5_toggled(bool checked);
+    void on_addRowMainTable_clicked();
+    void on_deleteRowMainTable_clicked();
+    void on_addRowPerechniTable_clicked();
+    void on_deleteRowPerechniTable_clicked();
+    void on_daysOfEvent_valueChanged(int arg1);
+    void on_pushButton_clicked();
 
 public:
     Ui::MainSizWindow *ui;
     /* В проекте используются объекты для взаимодействия с информацией в базе данных
          * и моделью представления таблицы базы данных
          * */
-        DataBase        *db;
-        QList<QPair<int,QPair<int,QString> > >  eventArray;
+    DataBase        *db;
+    QList<QPair<int,QPair<int,QString> > >  eventArray;
 private:
-        MainTableModel *sizTableModel;
-        QSqlTableModel  *sizTypeTableModel;
-        QSqlTableModel  *ObjectTableModel;
-        QSqlTableModel  *PersonalTableModel;
-        QSqlTableModel  *eventDateTableModel;
-        /* Объявляем объект будущей иконки приложения для трея */
-           QSystemTrayIcon         * trayIcon;
+    MainTableModel *sizTableModel;
+    QSqlTableModel  *sizTypeTableModel;
+    QSqlTableModel  *ObjectTableModel;
+    QSqlTableModel  *PersonalTableModel;
+    EventList  *eventDateTableModel;
 
-           QTimer *tmr;
+    /* Объявляем объект будущей иконки приложения для трея */
+    QSystemTrayIcon         * trayIcon;
+    QTimer *tmr;
 private:
     /* Также присутствуют два метода, которые формируют модель
      * и внешний вид TableView
@@ -99,7 +93,6 @@ private:
     void setupModel(const QString &tableName,  QSqlTableModel *model,const QStringList &headers);
     void setupModels();
     void createUI();
-
 };
 
 #endif // MAINSIZWINDOW_H

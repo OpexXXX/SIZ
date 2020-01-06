@@ -5,11 +5,11 @@ IDI_ICON1 ICON DISCARDABLE "153.ico"
 #define VER_FILEVERSION_STR         "1.0.0.0\0"
 #define VER_PRODUCTVERSION          1,0,0
 #define VER_PRODUCTVERSION_STR      "1.0.0\0"
-#define VER_FILEDESCRIPTION_STR     "Ведение журнала средств индивидуальной защиты"
-#define VER_INTERNALNAME_STR        "Ореховский А.С."
-#define VER_LEGALCOPYRIGHT_STR      "Opex"
+#define VER_FILEDESCRIPTION_STR     "Vedenie jurnala sredstv zashiti Ermakovskiy RES"
+#define VER_INTERNALNAME_STR        "Orehovskiy A.S.Ermakovskiy RES"
+#define VER_LEGALCOPYRIGHT_STR      "Orehovskiy A.S. Ermakovskiy RES"
 #define VER_ORIGINALFILENAME_STR    "SIZ.exe"
-#define VER_PRODUCTNAME_STR         "Журнал СИЗ"
+#define VER_PRODUCTNAME_STR         "Jurnal sredstv zashiti Ermakovskiy RES"
 
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION     VER_FILEVERSION

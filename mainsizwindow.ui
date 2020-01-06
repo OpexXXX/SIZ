@@ -150,7 +150,7 @@
                 <number>10</number>
                </property>
                <item>
-                <widget class="QPushButton" name="pushButton">
+                <widget class="QPushButton" name="addRowMainTable">
                  <property name="text">
                   <string>Добавить </string>
                  </property>
@@ -182,7 +182,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_2">
+                <widget class="QPushButton" name="deleteRowMainTable">
                  <property name="text">
                   <string>Удалить </string>
                  </property>
@@ -267,7 +267,7 @@
            <number>5</number>
           </property>
           <item>
-           <widget class="QTableView" name="tableView">
+           <widget class="QTableView" name="mainTableView">
             <property name="palette">
              <palette>
               <active>
@@ -538,7 +538,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="daysOfEvent">
             <property name="value">
              <number>20</number>
             </property>
@@ -631,7 +631,7 @@ p, li { white-space: pre-wrap; }
                <number>0</number>
               </property>
               <item>
-               <widget class="QPushButton" name="pushButton_3">
+               <widget class="QPushButton" name="addRowPerechniTable">
                 <property name="text">
                  <string>Добавить</string>
                 </property>
@@ -648,7 +648,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_4">
+               <widget class="QPushButton" name="deleteRowPerechniTable">
                 <property name="text">
                  <string>Удалить</string>
                 </property>
@@ -671,7 +671,7 @@ p, li { white-space: pre-wrap; }
          </layout>
         </item>
         <item>
-         <widget class="QTableView" name="tableView_2"/>
+         <widget class="QTableView" name="perechenTableView"/>
         </item>
        </layout>
       </widget>
@@ -682,6 +682,9 @@ p, li { white-space: pre-wrap; }
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QTableView" name="tableViewTemp"/>
+          </item>
           <item>
            <widget class="QPlainTextEdit" name="plainTextEdit">
             <property name="plainText">
@@ -706,6 +709,13 @@ p, li { white-space: pre-wrap; }
            <widget class="QPushButton" name="pushButton_9">
             <property name="text">
              <string>Показать уведомление [Test]</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>PushButton</string>
             </property>
            </widget>
           </item>

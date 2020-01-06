@@ -32,7 +32,7 @@ void DateEditItemDelegate::setEditorData(QWidget *editor, const QModelIndex &ind
  const QString currentText = index.data(Qt::EditRole).toString();
 
     // if it is valid, adjust the combobox
- QDate datte = *new QDate () ;
+ QDate datte =  QDate () ;
  datte.fromString(currentText,"yyyy-MM-dd");
 
     cb->setDate(QDate::fromString(currentText,"yyyy-MM-dd"));
