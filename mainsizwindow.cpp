@@ -298,26 +298,31 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
         {
             sizTableModel->setFilter(QString( " object ='"+item->data(0,0).toString()+"'")
                                      );
-            sizTableModel->select();
+
         }
         if(parrent == "Сотрудники")
         {
             sizTableModel->setFilter(QString( " personal ='"+item->data(0,0).toString()+"'")
                                      );
-            sizTableModel->select();
+
         }
         if(parrent == "Типы СИЗ")
         {
             sizTableModel->setFilter(QString( " typeSiz ='"+item->data(0,0).toString()+"'")
                                      );
-            sizTableModel->select();
         }
-
+        sizTableModel->select();
+        ui->mainTableView->resizeColumnsToContents();
+        ui->mainTableView->resizeRowsToContents();
+        ui->mainTableView->resizeColumnsToContents();
 
     }
     else {
         sizTableModel->setFilter("");
         sizTableModel->select();
+        ui->mainTableView->resizeColumnsToContents();
+        ui->mainTableView->resizeRowsToContents();
+        ui->mainTableView->resizeColumnsToContents();
     }
 
 
@@ -374,13 +379,13 @@ void MainSizWindow::on_radioButton_group_toggle(int button,bool checked)
     if(checked){
         switch (button) {
         case -2:
-          setModelOnTableView(sizTypeTableModel);
+            setModelOnTableView(sizTypeTableModel);
             break;
         case -3:
-        setModelOnTableView(ObjectTableModel);
+            setModelOnTableView(ObjectTableModel);
             break;
         case -4:
-         setModelOnTableView(PersonalTableModel);
+            setModelOnTableView(PersonalTableModel);
             break;
         default:
             break;
@@ -498,7 +503,7 @@ void MainSizWindow::reloadDelegateMainTabView()
 }
 void MainSizWindow::on_addRowMainTable_clicked()
 {
-      sizTableModel->insertRow(0);
+    sizTableModel->insertRow(0);
 }
 void MainSizWindow::on_deleteRowMainTable_clicked()
 {
@@ -527,7 +532,7 @@ void MainSizWindow::on_deleteRowMainTable_clicked()
 
 void MainSizWindow::on_addRowPerechniTable_clicked()
 {
-     ui->perechenTableView->model()->insertRow(0);
+    ui->perechenTableView->model()->insertRow(0);
 }
 
 void MainSizWindow::on_deleteRowPerechniTable_clicked()
