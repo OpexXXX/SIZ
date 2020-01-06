@@ -309,26 +309,31 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
         {
             sizTableModel->setFilter(QString( " object ='"+item->data(0,0).toString()+"'")
                                      );
-            sizTableModel->select();
+
         }
         if(parrent == "Сотрудники")
         {
             sizTableModel->setFilter(QString( " personal ='"+item->data(0,0).toString()+"'")
                                      );
-            sizTableModel->select();
+
         }
         if(parrent == "Типы СИЗ")
         {
             sizTableModel->setFilter(QString( " typeSiz ='"+item->data(0,0).toString()+"'")
                                      );
-            sizTableModel->select();
+
         }
-
-
+   sizTableModel->select();
+   ui->mainTableView->resizeColumnsToContents();
+   ui->mainTableView->resizeRowsToContents();
+   ui->mainTableView->resizeColumnsToContents();
     }
     else {
         sizTableModel->setFilter("");
         sizTableModel->select();
+        ui->mainTableView->resizeColumnsToContents();
+        ui->mainTableView->resizeRowsToContents();
+        ui->mainTableView->resizeColumnsToContents();
     }
 
 
