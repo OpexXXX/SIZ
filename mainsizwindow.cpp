@@ -18,10 +18,12 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
 
 
     QItemSelectionModel *sm = ui->mainTableView->selectionModel();
-    connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-            this, SLOT(on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex,QModelIndex)));
-    connect(ui->mainTableView->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
-            this, SLOT(on_mainTableView_Data_Changed(QModelIndex,QModelIndex)));
+  //  connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+   //         this, SLOT(on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex,QModelIndex)));
+ //   connect(ui->mainTableView->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
+ //           this, SLOT(on_mainTableView_Data_Changed(QModelIndex,QModelIndex)));
+    connect(mainSizModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+          this, SLOT(on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex,QModelIndex)));
 
     tmr = new QTimer();
     tmr->setInterval(1200000);
@@ -146,6 +148,8 @@ void MainSizWindow::setupModels()
     //    sizProxyTableModel->setSort(5,Qt::AscendingOrder);
     //    sizProxyTableModel->select();
     mainSizModel->select();
+    connect(mainSizModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+          mainSizModel, SLOT(dataToEventCalcChange(QModelIndex,QModelIndex)));
     sizTypeTableModel->select();
     ObjectTableModel->select();
     PersonalTableModel->select();
@@ -167,79 +171,79 @@ void MainSizWindow::setupModel(const QString &tableName, QSqlTableModel* model, 
 }
 void MainSizWindow::reloadEvents()
 {
-    eventArray.clear();
-    ui->listWidget->clear();
-    QSqlQuery q("select * from Siz ");
-    QSqlRecord rec = q.record();
-    //
-    while (q.next()){
-        bool ispit = false, oldOsmotr = false, badVerification=false;                                                             // ИСПЫТЫВАЕТСЯ??
-        int periodOsmotra = 0, periodIspitania =0;                                                          //переодичность осмотра
-        QString result ="";
-        QString number = q.value(rec.indexOf("number")).toString();     //Номер
-        QVariant  tSiz = q.value(rec.indexOf("typeSiz"));                 //Тип СИЗ
-        QString typeSiz =tSiz.toString();
-        ispit = db->getVerifi(typeSiz);
-        periodOsmotra = db->getMounthInspection(typeSiz);
-        periodIspitania = db->getVerifiMounth(typeSiz);
-        QVariant  dateIsp = q.value(rec.indexOf("endVerification"));                 //Дата истечения испытания
-        QDate  endDate =QDate::fromString(dateIsp.toString(),"yyyy-MM-dd");             //Дата истечения испытания
-        QVariant  dateOsm = q.value(rec.indexOf("inspectionDate"));                 //Дата осмотра
-        QDate  osmotrDate =QDate::fromString(dateOsm.toString(),"yyyy-MM-dd");          //Дата осмотра
-        QDate curr = QDate::currentDate();
-        QDate nextOsmotr = osmotrDate.addMonths(periodOsmotra);                               //Дата следующего осмотра
-        //Проверяем не просрочен ли осмотр
-        long long daysToNextOsmotr = curr.daysTo(nextOsmotr);                           //Дней до следующего осмотра
-        long long daysToNextVerification = curr.daysTo(endDate);                        //Дней до испытания
-        int index =q.value(rec.indexOf("index")).toInt();
-        oldOsmotr = !(daysToNextOsmotr>0);
-        badVerification = (daysToNextVerification<0);
-        if (badVerification) {
-            result+=QString("ИЗЪЯТЬ \""+typeSiz+"\" №"+number+" просрочен на "+QString::number(daysToNextVerification*-1)+ " дней");
-            QPair<int,QPair<int,QString> > res;
-            res.first = QString::number(daysToNextVerification).toInt();
-            res.second = QPair<int,QString> (index,result);
-            eventArray.append(res);
-        }else if ((!badVerification) && oldOsmotr ) {
-            result+=QString("ОСМОТРЕТЬ \""+typeSiz+"\" №"+number+" просрочен на "+QString::number(daysToNextOsmotr*-1)+ " дней");
-            QPair<int,QPair<int,QString> > res;
-            res.first = QString::number(daysToNextOsmotr).toInt();
-            res.second = QPair<int,QString> (index,result);
-            eventArray.append(res);
-        }else if ((daysToNextOsmotr<ui->daysOfEvent->value())&&(daysToNextVerification> daysToNextOsmotr)&&ispit) {
-            result+=QString(QString::number(daysToNextOsmotr)+" дней до осмотра \""+typeSiz+"\" №"+number);
+//    eventArray.clear();
+//    ui->listWidget->clear();
+//    QSqlQuery q("select * from Siz ");
+//    QSqlRecord rec = q.record();
+//    //
+//    while (q.next()){
+//        bool ispit = false, oldOsmotr = false, badVerification=false;                                                             // ИСПЫТЫВАЕТСЯ??
+//        int periodOsmotra = 0, periodIspitania =0;                                                          //переодичность осмотра
+//        QString result ="";
+//        QString number = q.value(rec.indexOf("number")).toString();     //Номер
+//        QVariant  tSiz = q.value(rec.indexOf("typeSiz"));                 //Тип СИЗ
+//        QString typeSiz =tSiz.toString();
+//        ispit = db->getVerifi(typeSiz);
+//        periodOsmotra = db->getMounthInspection(typeSiz);
+//        periodIspitania = db->getVerifiMounth(typeSiz);
+//        QVariant  dateIsp = q.value(rec.indexOf("endVerification"));                 //Дата истечения испытания
+//        QDate  endDate =QDate::fromString(dateIsp.toString(),"yyyy-MM-dd");             //Дата истечения испытания
+//        QVariant  dateOsm = q.value(rec.indexOf("inspectionDate"));                 //Дата осмотра
+//        QDate  osmotrDate =QDate::fromString(dateOsm.toString(),"yyyy-MM-dd");          //Дата осмотра
+//        QDate curr = QDate::currentDate();
+//        QDate nextOsmotr = osmotrDate.addMonths(periodOsmotra);                               //Дата следующего осмотра
+//        //Проверяем не просрочен ли осмотр
+//        long long daysToNextOsmotr = curr.daysTo(nextOsmotr);                           //Дней до следующего осмотра
+//        long long daysToNextVerification = curr.daysTo(endDate);                        //Дней до испытания
+//        int index =q.value(rec.indexOf("index")).toInt();
+//        oldOsmotr = !(daysToNextOsmotr>0);
+//        badVerification = (daysToNextVerification<0);
+//        if (badVerification) {
+//            result+=QString("ИЗЪЯТЬ \""+typeSiz+"\" №"+number+" просрочен на "+QString::number(daysToNextVerification*-1)+ " дней");
+//            QPair<int,QPair<int,QString> > res;
+//            res.first = QString::number(daysToNextVerification).toInt();
+//            res.second = QPair<int,QString> (index,result);
+//            eventArray.append(res);
+//        }else if ((!badVerification) && oldOsmotr ) {
+//            result+=QString("ОСМОТРЕТЬ \""+typeSiz+"\" №"+number+" просрочен на "+QString::number(daysToNextOsmotr*-1)+ " дней");
+//            QPair<int,QPair<int,QString> > res;
+//            res.first = QString::number(daysToNextOsmotr).toInt();
+//            res.second = QPair<int,QString> (index,result);
+//            eventArray.append(res);
+//        }else if ((daysToNextOsmotr<ui->daysOfEvent->value())&&(daysToNextVerification> daysToNextOsmotr)&&ispit) {
+//            result+=QString(QString::number(daysToNextOsmotr)+" дней до осмотра \""+typeSiz+"\" №"+number);
 
-            QPair<int,QPair<int,QString> > res;
-            res.first = QString::number(daysToNextOsmotr).toInt();
-            res.second = QPair<int,QString> (index,result);
-            eventArray.append(res);
+//            QPair<int,QPair<int,QString> > res;
+//            res.first = QString::number(daysToNextOsmotr).toInt();
+//            res.second = QPair<int,QString> (index,result);
+//            eventArray.append(res);
 
-        }else if ((daysToNextOsmotr<ui->daysOfEvent->value())&&daysToNextVerification< daysToNextOsmotr&&ispit) {
-            result+=QString(QString::number(daysToNextVerification)+" дней до изъятия \""+typeSiz+"\" №"+number);
+//        }else if ((daysToNextOsmotr<ui->daysOfEvent->value())&&daysToNextVerification< daysToNextOsmotr&&ispit) {
+//            result+=QString(QString::number(daysToNextVerification)+" дней до изъятия \""+typeSiz+"\" №"+number);
 
-            QPair<int,QPair<int,QString> > res =  QPair<int,QPair<int,QString> >();
-            res.first = QString::number(daysToNextVerification).toInt();
-            res.second =  QPair<int,QString> (index,result);
-            eventArray.append(res);
+//            QPair<int,QPair<int,QString> > res =  QPair<int,QPair<int,QString> >();
+//            res.first = QString::number(daysToNextVerification).toInt();
+//            res.second =  QPair<int,QString> (index,result);
+//            eventArray.append(res);
 
-        }else if ((daysToNextOsmotr<ui->daysOfEvent->value())&&(!ispit)) {
-            result+=QString(QString::number(daysToNextOsmotr)+" дней до осмотра \""+typeSiz+"\" №"+number);
+//        }else if ((daysToNextOsmotr<ui->daysOfEvent->value())&&(!ispit)) {
+//            result+=QString(QString::number(daysToNextOsmotr)+" дней до осмотра \""+typeSiz+"\" №"+number);
 
-            QPair<int,QPair<int,QString> > res;
-            res.first = QString::number(daysToNextOsmotr).toInt();
-            res.second =QPair<int,QString> (index,result);
-            eventArray.append(res);
+//            QPair<int,QPair<int,QString> > res;
+//            res.first = QString::number(daysToNextOsmotr).toInt();
+//            res.second =QPair<int,QString> (index,result);
+//            eventArray.append(res);
 
-        }
+//        }
 
 
-    }
+//    }
 
-    qSort(eventArray.begin(), eventArray.end(), [](QPair<int,QPair<int,QString> >  a, QPair<int,QPair<int,QString> >  b) { return a.first < b.first; } );
-    // qSort(array.begin(), array.end(), [](QPair<int,QString> a, QPair<int,QString> b) { return a.first < b.first; } );
-    for (int i=0;i<eventArray.count();i++) {
-        ui->listWidget->addItem(QString(QString::number(i+1)+". "+eventArray[i].second.second));
-    }
+//    qSort(eventArray.begin(), eventArray.end(), [](QPair<int,QPair<int,QString> >  a, QPair<int,QPair<int,QString> >  b) { return a.first < b.first; } );
+//    // qSort(array.begin(), array.end(), [](QPair<int,QString> a, QPair<int,QString> b) { return a.first < b.first; } );
+//    for (int i=0;i<eventArray.count();i++) {
+//        ui->listWidget->addItem(QString(QString::number(i+1)+". "+eventArray[i].second.second));
+//    }
 }
 void MainSizWindow::createUI()
 { trayIcon = new QSystemTrayIcon(this);
@@ -445,53 +449,52 @@ void MainSizWindow::on_radioButton_group_toggle(int button,bool checked)
 }
 void MainSizWindow::on_mainTableView_Data_Changed(QModelIndex current,QModelIndex prevous)
 {
-    reloadEvents();
-    on_mainTableViewTriggerSelectionModel_currentRowChanged(current,prevous);
+  //  reloadEvents();
+  //  on_mainTableViewTriggerSelectionModel_currentRowChanged(current,prevous);
 }
 void MainSizWindow::on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex current,QModelIndex prevous)
 {
+qDebug()<< "EVENT";
+//    if(current.row()>=0)
+//    {
+//        bool SizOk = true;
+//        QAbstractItemModel * model = sizProxyTableModel;
+//        QModelIndex primaryKeyIndex = model->index(current.row(), 0);
+//        QModelIndex osmotrIndex = model->index(current.row(), 7);
+//        QModelIndex typeSiz = model->index(current.row(), 5);
 
-    if(current.row()>=0)
-    {
+//        int id = model->data(primaryKeyIndex, Qt::DisplayRole).toInt();
+//        QString sDate = model->data(osmotrIndex, Qt::DisplayRole).toString();
+//        QDate dateOsmotr = QDate::fromString(model->data(osmotrIndex, Qt::DisplayRole).toString(),"dd.MM.yyyy");
+//        QString typeS = model->data(typeSiz, Qt::DisplayRole).toString();
+//        int mounthInspection  = db->getMounthInspection(typeS);
+//        int mounthVerification  = db->getVerifiMounth(typeS);
 
-        bool SizOk = true;
-        QAbstractItemModel * model = sizProxyTableModel;
-        QModelIndex primaryKeyIndex = model->index(current.row(), 0);
-        QModelIndex osmotrIndex = model->index(current.row(), 7);
-        QModelIndex typeSiz = model->index(current.row(), 5);
+//        QDate dateNextInspp = dateOsmotr.addMonths(mounthInspection);
 
-        int id = model->data(primaryKeyIndex, Qt::DisplayRole).toInt();
-        QString sDate = model->data(osmotrIndex, Qt::DisplayRole).toString();
-        QDate dateOsmotr = QDate::fromString(model->data(osmotrIndex, Qt::DisplayRole).toString(),"dd.MM.yyyy");
-        QString typeS = model->data(typeSiz, Qt::DisplayRole).toString();
-        int mounthInspection  = db->getMounthInspection(typeS);
-        int mounthVerification  = db->getVerifiMounth(typeS);
+//        for (int i=0;i<eventArray.count();i++) {
+//            if(eventArray[i].second.first ==id)
+//            {
+//                ui->selectedItemOsmotrButton->show();
+//                ui->selectedItemLabel->show();
+//                ui->selectedItemDateEdit->setDate(dateNextInspp);
+//                ui->selectedItemLabel->setText(eventArray[i].second.second + "\n Осмотр раз в "+QString::number(mounthInspection)+" мес. \n Следующий осмотр:");
+//                SizOk = false;
+//                break;
+//            }
+//            else
+//            {
+//                ui->selectedItemOsmotrButton->hide();
+//            }
 
-        QDate dateNextInspp = dateOsmotr.addMonths(mounthInspection);
-
-        for (int i=0;i<eventArray.count();i++) {
-            if(eventArray[i].second.first ==id)
-            {
-                ui->selectedItemOsmotrButton->show();
-                ui->selectedItemLabel->show();
-                ui->selectedItemDateEdit->setDate(dateNextInspp);
-                ui->selectedItemLabel->setText(eventArray[i].second.second + "\n Осмотр раз в "+QString::number(mounthInspection)+" мес. \n Следующий осмотр:");
-                SizOk = false;
-                break;
-            }
-            else
-            {
-                ui->selectedItemOsmotrButton->hide();
-            }
-
-        }
-        if(SizOk)
-        {
-            ui->selectedItemDateEdit->setDate(dateNextInspp);
-            QString ispit = mounthVerification>0?"Испытания раз в "+QString::number(mounthVerification)+"мес. \n":"Не испытывается. \n";
-            ui->selectedItemLabel->setText(ispit + "Осмотр раз в "+QString::number(mounthInspection)+" мес. \n Следующий осмотр:");
-        }
-    }
+//        }
+//        if(SizOk)
+//        {
+//            ui->selectedItemDateEdit->setDate(dateNextInspp);
+//            QString ispit = mounthVerification>0?"Испытания раз в "+QString::number(mounthVerification)+"мес. \n":"Не испытывается. \n";
+//            ui->selectedItemLabel->setText(ispit + "Осмотр раз в "+QString::number(mounthInspection)+" мес. \n Следующий осмотр:");
+//        }
+//    }
 }
 void MainSizWindow::on_selectedItemOsmotrButton_clicked()
 {

@@ -24,10 +24,17 @@ enum MainSizModelHead
     bool_verification,
     verifiPediod,
     inspectPediod,
-    personalyty
+    personalyty,
+    event,
+    daysToEvent
 };
 enum SizEvent{
-
+    noEvent=0,
+    verificationExpired,
+    inspectionExpired,
+    verificationSoon,
+    inspectionSoon,
+    serviceLifeExpired
 };
 
 class MainTableModel : public QSortFilterProxyModel

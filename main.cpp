@@ -8,6 +8,7 @@
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
     QLockFile lockFile(QDir::temp().absoluteFilePath("lurity.lock"));
     if(!lockFile.tryLock(100)){
