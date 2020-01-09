@@ -116,3 +116,20 @@ QVariant MainTableModel::data(const QModelIndex &index, int role) const
     }
     return value;
 }
+void MainTableModel::checkRowForEvent(const QModelIndex &index)
+{
+
+}
+bool MainTableModel::setData(const QModelIndex &index,
+                              const QVariant &value, int role)
+{
+
+int col = index.column();
+    if (((col>=2 &&col<=5) || (col>=11 &&col<=14))&&role == Qt::EditRole) {
+
+qDebug()<<index;
+
+    }
+    return this->QAbstractProxyModel::setData(index,value,role);
+
+}

@@ -26,6 +26,9 @@ enum MainSizModelHead
     inspectPediod,
     personalyty
 };
+enum SizEvent{
+
+};
 
 class MainTableModel : public QSortFilterProxyModel
 {
@@ -38,7 +41,9 @@ public:
     MainTableModel(QObject *parent = nullptr);
     ~MainTableModel();
     QVariant data(const QModelIndex &item, int role) const;
+    bool setData(const QModelIndex &index,const QVariant &value, int role);
 
+    void checkRowForEvent(const QModelIndex &index);
 };
 
 
