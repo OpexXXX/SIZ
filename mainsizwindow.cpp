@@ -96,11 +96,11 @@ void MainSizWindow::setupModels()
      * */
 
     sizProxyTableModel = new MainTableModel(this);
-    mainSizModel = new QSqlRelationalTableModel(this);
+    mainSizModel = new sizModel(this);
     sizTypeTableModel= new QSqlTableModel(this);
     ObjectTableModel= new QSqlTableModel(this);
     PersonalTableModel= new QSqlTableModel(this);
-    eventDateTableModel= new EventList(this);
+   // eventDateTableModel= new EventList(this);
 
     QStringList headerList;
     headerList.clear();
@@ -277,7 +277,7 @@ void MainSizWindow::createUI()
 
     //    //Типы СИЗ
     setModelOnTableView(sizTypeTableModel);
-    ui->tableViewTemp->setModel(eventDateTableModel);
+  //  ui->tableViewTemp->setModel(eventDateTableModel);
     // Разрешаем выделение строк
     ui->tableViewTemp->setSelectionBehavior(QAbstractItemView::SelectRows);
     // Устанавливаем режим выделения лишь одно строки в таблице
@@ -631,7 +631,7 @@ void MainSizWindow::on_pushButton_clicked()
         //               organization.setType("gzdfgzgdzgzdfg");
         //               organization.setNumber("fesgrgsrhtshshs");
 
-        eventDateTableModel->dataChanged(index,index);
+    //    eventDateTableModel->dataChanged(index,index);
 
     }
 }

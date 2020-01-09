@@ -16,14 +16,14 @@
 #include <QIcon>
 #include <QCloseEvent>
 #include <QHideEvent>
+#include <QSortFilterProxyModel>
 #include "database.h"
 #include "maintablemodel.h"
 #include "ui_mainsizwindow.h"
 #include "comboboxitemdelegate.h"
 #include "checkboxitemdelegate.h"
 #include "dateedititemdelegate.h"
-#include "eventmodel.h"
-#include <QSortFilterProxyModel>
+#include "sizmodel.h"
 
 namespace Ui {
 class MainSizWindow;
@@ -75,14 +75,14 @@ public:
 private:
     QSortFilterProxyModel *sizFilterProxyModel;
     MainTableModel *sizProxyTableModel;
-    QSqlRelationalTableModel *mainSizModel;
+    sizModel *mainSizModel;
 
 
 
     QSqlTableModel  *sizTypeTableModel;
     QSqlTableModel  *ObjectTableModel;
     QSqlTableModel  *PersonalTableModel;
-    EventList  *eventDateTableModel;
+   // EventList  *eventDateTableModel;
 /*oneName"	TEXT,
     "verification"	BOOL,
     "periodicityVer"	INTEGER,
