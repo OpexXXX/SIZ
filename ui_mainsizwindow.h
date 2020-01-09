@@ -243,7 +243,7 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush1);
         mainTableView->setPalette(palette);
         mainTableView->setStyleSheet(QString::fromUtf8(""));
-        mainTableView->setEditTriggers(QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed);
+        mainTableView->setEditTriggers(QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed);
 
         verticalLayout_8->addWidget(mainTableView);
 

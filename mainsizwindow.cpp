@@ -99,6 +99,7 @@ void MainSizWindow::setupModels()
 
     sizProxyTableModel = new MainTableModel(this);
     mainSizModel = new sizModel(this);
+
     sizTypeTableModel= new QSqlTableModel(this);
     ObjectTableModel= new QSqlTableModel(this);
     PersonalTableModel= new QSqlTableModel(this);
@@ -150,6 +151,7 @@ void MainSizWindow::setupModels()
     mainSizModel->select();
     connect(mainSizModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
           mainSizModel, SLOT(dataToEventCalcChange(QModelIndex,QModelIndex)));
+    mainSizModel->updateAllEvents();
     sizTypeTableModel->select();
     ObjectTableModel->select();
     PersonalTableModel->select();
@@ -166,7 +168,7 @@ void MainSizWindow::setupModel(const QString &tableName, QSqlTableModel* model, 
         }
     }
     // Устанавливаем сортировку по возрастанию данных по нулевой колонке
-    model->setEditStrategy(QSqlTableModel::OnFieldChange);
+    model->setEditStrategy(QSqlTableModel::OnRowChange);
     model->setSort(0,Qt::AscendingOrder);
 }
 void MainSizWindow::reloadEvents()
@@ -303,9 +305,18 @@ void MainSizWindow::createUI()
     ui->mainTableView->resizeRowsToContents();
     ui->mainTableView->resizeColumnsToContents();
     ui->mainTableView->horizontalHeader()->setStretchLastSection(true);
-    //    ui->mainTableView->hideColumn(0);
-    //    ui->mainTableView->hideColumn(2);
-    //    ui->mainTableView->hideColumn(6);
+
+    ui->mainTableView->hideColumn(0);
+    ui->mainTableView->hideColumn(2);
+    ui->mainTableView->hideColumn(10);
+    ui->mainTableView->hideColumn(11);
+    ui->mainTableView->hideColumn(12);
+    ui->mainTableView->hideColumn(13);
+    ui->mainTableView->hideColumn(14);
+    ui->mainTableView->hideColumn(15);
+    ui->mainTableView->hideColumn(16);
+    ui->mainTableView->verticalHeader()->hide();
+
     reloadDelegateMainTabView();
     ui->mainTableView->setSortingEnabled(true);
 
@@ -434,12 +445,15 @@ void MainSizWindow::on_radioButton_group_toggle(int button,bool checked)
         switch (button) {
         case -2:
             setModelOnTableView(sizTypeTableModel);
+              ui->perechenTableView->showRow(0);
             break;
         case -3:
             setModelOnTableView(ObjectTableModel);
+             ui->perechenTableView->hideRow(0);
             break;
         case -4:
             setModelOnTableView(PersonalTableModel);
+             ui->perechenTableView->hideRow(0);
             break;
         default:
             break;
@@ -619,7 +633,7 @@ void MainSizWindow::on_deleteRowPerechniTable_clicked()
 
 void MainSizWindow::on_daysOfEvent_valueChanged(int arg1)
 {
-    reloadEvents();
+   mainSizModel->setDaysToEvents(arg1);
 }
 
 void MainSizWindow::on_pushButton_clicked()
