@@ -2,13 +2,32 @@
 #define MAINTABLEMODEL_H
 
 #include <QSqlTableModel>
+#include<QSortFilterProxyModel>
 #include <QColor>
 #include <QDate>
 #include <QFont>
 #include "database.h"
 #include <QColor>
 #include <QBrush>
-class MainTableModel : public QSqlTableModel
+enum MainSizModelHead
+{ id=0,
+    number,
+    verificationDate,
+    endVerificationDate,
+    inspectionDate,
+    nameSiz,
+    object,
+    personalDate,
+    persona,
+    note,
+    bool_removed,
+    bool_verification,
+    verifiPediod,
+    inspectPediod,
+    personalyty
+};
+
+class MainTableModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 private:
@@ -16,10 +35,10 @@ private:
     QString getTooltipForRow(int index) const;
 public:
     DataBase        *db;
-    MainTableModel(QObject *parent = nullptr,QList<QPair<int,QPair<int,QString> > >  *eventArray=nullptr);
+    MainTableModel(QObject *parent = nullptr);
     ~MainTableModel();
     QVariant data(const QModelIndex &item, int role) const;
-    QList<QPair<int,QPair<int,QString> > >  *eventArray;
+
 };
 
 

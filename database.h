@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSql>
 #include <QSqlQuery>
+#include <QSqlRelation>
 #include <QSqlError>
 #include <QSqlDatabase>
 #include <QFile>
@@ -20,11 +21,49 @@
 #define TABLE_MESSAGE           "Message"
 #define TABLE_RANDOM            "Random"
 
-#define SIZTABLE                "Siz"
-#define TYPESIZTABLE            "TypeSiz"
+
+
+#define SIZTABLE                        "Siz"
+#define SIZTABLE_INDEX                  "index"
+#define SIZTABLE_NUMBER                 "number"
+#define SIZTABLE_VERIFICATION           "verification"
+#define SIZTABLE_ENDVERIFICATION        "endVerification"
+#define SIZTABLE_INSPECTION             "inspectionDate"
+#define SIZTABLE_T_NAMETYPESIZ          "typeSiz"
+#define SIZTABLE_OBJECT                 "object"
+#define SIZTABLE_PERSONALDATE           "personalDate"
+#define SIZTABLE_PERSONA                "personal"
+#define SIZTABLE_NOTE                   "note"
+#define SIZTABLE_REMOVED                "removed"
+#define SIZTABLE_T_VER                  "tVerification"
+#define SIZTABLE_T_VERPERIOD            "tPeriodicityVer"
+#define SIZTABLE_T_INSPEDIOD            "tPeriodicityInsp"
+#define SIZTABLE_T_PERSONALYTY          "tPersonaly"
+
+#define TYPESIZTABLE                    "TypeSiz"
+#define TYPESIZTABLE_ID                    "id"
+#define TYPESIZTABLE_NAME               "oneName"
+#define TYPESIZTABLE_VER                "verification"
+#define TYPESIZTABLE_VERPERIOD          "periodicityVer"
+#define TYPESIZTABLE_INSPEDIOD          "periodicityInsp"
+#define TYPESIZTABLE_PERSONALYTY        "personaly"
+
+/*CREATE TABLE "TypeSiz" (
+    "id"	INTEGER,
+    "oneName"	TEXT,
+    "verification"	BOOL,
+    "periodicityVer"	INTEGER,
+    "periodicityInsp"	INTEGER,
+    "personaly"	BOOL,
+    PRIMARY KEY("id")*/
 #define OBJECTTABLE             "Object"
+#define OBJECTTABLE_ID             "id"
+#define OBJECTTABLE_NAME             "name"
+
 #define PERSONALTABEL           "Personal"
-#define EVENTTABLE              "eventDate"
+#define PERSONALTABEL_ID           "id"
+#define PERSONALTABEL_NAME           "name"
+
 
 class DataBase : public QObject
 {

@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QTreeWidgetItem>
 #include <QStandardItemModel>
+#include <QSqlRelationalTableModel>
 #include <QIcon>
 #include <QCloseEvent>
 #include <QHideEvent>
@@ -22,6 +23,7 @@
 #include "checkboxitemdelegate.h"
 #include "dateedititemdelegate.h"
 #include "eventmodel.h"
+#include <QSortFilterProxyModel>
 
 namespace Ui {
 class MainSizWindow;
@@ -71,12 +73,21 @@ public:
     DataBase        *db;
     QList<QPair<int,QPair<int,QString> > >  eventArray;
 private:
-    MainTableModel *sizTableModel;
+    QSortFilterProxyModel *sizFilterProxyModel;
+    MainTableModel *sizProxyTableModel;
+    QSqlRelationalTableModel *mainSizModel;
+
+
+
     QSqlTableModel  *sizTypeTableModel;
     QSqlTableModel  *ObjectTableModel;
     QSqlTableModel  *PersonalTableModel;
     EventList  *eventDateTableModel;
-
+/*oneName"	TEXT,
+    "verification"	BOOL,
+    "periodicityVer"	INTEGER,
+    "periodicityInsp"	INTEGER,
+    "personaly"	BOOL,*/
     /* Объявляем объект будущей иконки приложения для трея */
     QSystemTrayIcon         * trayIcon;
     QTimer *tmr;

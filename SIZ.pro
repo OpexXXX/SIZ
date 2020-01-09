@@ -32,8 +32,7 @@ SOURCES += \
     checkboxitemdelegate.cpp \
     dateedititemdelegate.cpp \
     maintablemodel.cpp \
-    eventmodel.cpp \
-    eventsiz.cpp
+    eventmodel.cpp
 
 HEADERS += \
         mainsizwindow.h \
@@ -42,8 +41,7 @@ HEADERS += \
     checkboxitemdelegate.h \
     dateedititemdelegate.h \
     maintablemodel.h \
-    eventmodel.h \
-    eventsiz.h
+    eventmodel.h
 
 
 FORMS += \

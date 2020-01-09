@@ -13,8 +13,8 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
     reloadEvents();
     createUI();
 
-    sizTableModel->setSort(5,Qt::AscendingOrder);
-    sizTableModel->select();
+    //    sizProxyTableModel->setSort(5,Qt::AscendingOrder);
+    //    sizProxyTableModel->select();
 
 
     QItemSelectionModel *sm = ui->mainTableView->selectionModel();
@@ -39,7 +39,7 @@ void MainSizWindow::Style()
 {
     ui->listWidget->setStyleSheet("font: 14pt; selection-color: rgb(0, 0, 0); selection-background-color: rgb(232, 237, 240);");
     qApp->setStyleSheet("QWidget {  selection-color: rgb(0, 0, 0); selection-background-color: rgba(232, 237, 240,  100); }"
-                        "QmainTableView{ font: 13pt; selection-background-color: rgba(232, 237, 240,  100);  }");
+                        "mainTableView{ font: 13pt; selection-background-color: rgba(232, 237, 240,  100);  }");
 
 
 }
@@ -94,28 +94,42 @@ void MainSizWindow::setupModels()
     /* Инициализируем модель для представления данных
      * с заданием названий колонок
      * */
-    sizTableModel = new MainTableModel(this,&eventArray);
+
+    sizProxyTableModel = new MainTableModel(this);
+    mainSizModel = new QSqlRelationalTableModel(this);
     sizTypeTableModel= new QSqlTableModel(this);
     ObjectTableModel= new QSqlTableModel(this);
     PersonalTableModel= new QSqlTableModel(this);
     eventDateTableModel= new EventList(this);
 
     QStringList headerList;
-
-    headerList<< tr("п/п")
-              << tr("Номер")
-              <<tr("Изъято")
-             <<tr("Испытанно")
-            <<tr("Испытать")
-           <<tr("Наименование")
-          <<tr("Осмотренно")
-         <<tr("Осмотренно")
-        <<tr("Объект")
-       << tr("Сотрудник")
-       <<tr("Примечание")
-      <<tr("Выдан в пользование");
-    setupModel(SIZTABLE,sizTableModel,headerList);
     headerList.clear();
+    setupModel(SIZTABLE,mainSizModel,headerList);
+    mainSizModel->setRelation(MainSizModelHead::nameSiz, QSqlRelation(TYPESIZTABLE, TYPESIZTABLE_ID, TYPESIZTABLE_NAME));
+    mainSizModel->setRelation(MainSizModelHead::bool_verification, QSqlRelation(TYPESIZTABLE, TYPESIZTABLE_ID, TYPESIZTABLE_VER));
+    mainSizModel->setRelation(MainSizModelHead::verifiPediod, QSqlRelation(TYPESIZTABLE, TYPESIZTABLE_ID, TYPESIZTABLE_VERPERIOD));
+    mainSizModel->setRelation(MainSizModelHead::inspectPediod, QSqlRelation(TYPESIZTABLE, TYPESIZTABLE_ID, TYPESIZTABLE_INSPEDIOD));
+    mainSizModel->setRelation(MainSizModelHead::personalyty, QSqlRelation(TYPESIZTABLE, TYPESIZTABLE_ID, TYPESIZTABLE_PERSONALYTY));
+    mainSizModel->setRelation(MainSizModelHead::object, QSqlRelation(OBJECTTABLE, OBJECTTABLE_ID, OBJECTTABLE_NAME));
+    mainSizModel->setRelation(MainSizModelHead::persona, QSqlRelation(PERSONALTABEL, PERSONALTABEL_ID, PERSONALTABEL_NAME));
+    // mainSizModel->setRelation(4, QSqlRelation(DEVICE, "id", DEVICE_IP));
+
+
+    sizProxyTableModel->setSourceModel(mainSizModel);
+    //    headerList<< tr("п/п")
+    //              << tr("Номер")
+    //              <<tr("Изъято")
+    //             <<tr("Испытанно")
+    //            <<tr("Испытать")
+    //           <<tr("Наименование")
+    //          <<tr("Осмотренно")
+    //         <<tr("Осмотренно")
+    //        <<tr("Объект")
+    //       << tr("Сотрудник")
+    //       <<tr("Примечание")
+    //      <<tr("Выдан в пользование");
+
+
 
     headerList<<  tr("Наименование")
                <<tr("Испытывается")
@@ -129,8 +143,9 @@ void MainSizWindow::setupModels()
 
     setupModel(PERSONALTABEL,PersonalTableModel,headerList);
 
-    sizTableModel->setSort(5,Qt::AscendingOrder);
-    sizTableModel->select();
+    //    sizProxyTableModel->setSort(5,Qt::AscendingOrder);
+    //    sizProxyTableModel->select();
+    mainSizModel->select();
     sizTypeTableModel->select();
     ObjectTableModel->select();
     PersonalTableModel->select();
@@ -273,7 +288,8 @@ void MainSizWindow::createUI()
     ui->tableViewTemp->resizeColumnsToContents();
     ui->tableViewTemp->horizontalHeader()->setStretchLastSection(true);
     //СИЗ
-    ui->mainTableView->setModel(sizTableModel);     // Устанавливаем модель на mainTableView
+
+    ui->mainTableView->setModel(sizProxyTableModel);    // Устанавливаем модель на mainTableView
     // Разрешаем выделение строк
     ui->mainTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     // Устанавливаем режим выделения лишь одно строки в таблице
@@ -283,13 +299,13 @@ void MainSizWindow::createUI()
     ui->mainTableView->resizeRowsToContents();
     ui->mainTableView->resizeColumnsToContents();
     ui->mainTableView->horizontalHeader()->setStretchLastSection(true);
-    ui->mainTableView->hideColumn(0);
-    ui->mainTableView->hideColumn(2);
-    ui->mainTableView->hideColumn(6);
+    //    ui->mainTableView->hideColumn(0);
+    //    ui->mainTableView->hideColumn(2);
+    //    ui->mainTableView->hideColumn(6);
     reloadDelegateMainTabView();
     ui->mainTableView->setSortingEnabled(true);
 
-    sizTableModel->select(); // Делаем выборку данных из таблицы
+    //   sizProxyTableModel->select(); // Делаем выборку данных из таблицы
 
 
     ui->selectedItemOsmotrButton->hide();
@@ -307,30 +323,30 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 
         if(parrent == "Объекты")
         {
-            sizTableModel->setFilter(QString( " object ='"+item->data(0,0).toString()+"'")
-                                     );
+            /*  sizProxyTableModel->setFilter(QString( " object ='"+item->data(0,0).toString()+"'")
+                                     );*/
 
         }
         if(parrent == "Сотрудники")
         {
-            sizTableModel->setFilter(QString( " personal ='"+item->data(0,0).toString()+"'")
+            /* sizProxyTableModel->setFilter(QString( " personal ='"+item->data(0,0).toString()+"'")
                                      );
-
+*/
         }
         if(parrent == "Типы СИЗ")
         {
-            sizTableModel->setFilter(QString( " typeSiz ='"+item->data(0,0).toString()+"'")
-                                     );
+            /*  sizProxyTableModel->setFilter(QString( " typeSiz ='"+item->data(0,0).toString()+"'")
+                                     );*/
 
         }
-   sizTableModel->select();
-   ui->mainTableView->resizeColumnsToContents();
-   ui->mainTableView->resizeRowsToContents();
-   ui->mainTableView->resizeColumnsToContents();
+        // sizProxyTableModel->select();
+        ui->mainTableView->resizeColumnsToContents();
+        ui->mainTableView->resizeRowsToContents();
+        ui->mainTableView->resizeColumnsToContents();
     }
     else {
-        sizTableModel->setFilter("");
-        sizTableModel->select();
+        //   sizProxyTableModel->setFilter("");
+        //    sizProxyTableModel->select();
         ui->mainTableView->resizeColumnsToContents();
         ui->mainTableView->resizeRowsToContents();
         ui->mainTableView->resizeColumnsToContents();
@@ -390,9 +406,9 @@ void MainSizWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 
     QString sqlTableIndex = QString::number(eventArray[indexRow].second.first);
     QString filter =  "\"index\"="+ sqlTableIndex;
-    sizTableModel->setFilter(filter);
-    sizTableModel->select();
-    if(sizTableModel->rowCount()>0) ui->mainTableView->selectRow(0);
+    //  sizProxyTableModel->setFilter(filter);
+    //  sizProxyTableModel->select();
+    if(sizProxyTableModel->rowCount()>0) ui->mainTableView->selectRow(0);
     ui->tabWidget->setCurrentIndex(0);
     ui->mainTableView->setFocus();
 }
@@ -413,13 +429,13 @@ void MainSizWindow::on_radioButton_group_toggle(int button,bool checked)
     if(checked){
         switch (button) {
         case -2:
-          setModelOnTableView(sizTypeTableModel);
+            setModelOnTableView(sizTypeTableModel);
             break;
         case -3:
-        setModelOnTableView(ObjectTableModel);
+            setModelOnTableView(ObjectTableModel);
             break;
         case -4:
-         setModelOnTableView(PersonalTableModel);
+            setModelOnTableView(PersonalTableModel);
             break;
         default:
             break;
@@ -439,7 +455,7 @@ void MainSizWindow::on_mainTableViewTriggerSelectionModel_currentRowChanged(QMod
     {
 
         bool SizOk = true;
-        QAbstractItemModel * model = sizTableModel;
+        QAbstractItemModel * model = sizProxyTableModel;
         QModelIndex primaryKeyIndex = model->index(current.row(), 0);
         QModelIndex osmotrIndex = model->index(current.row(), 7);
         QModelIndex typeSiz = model->index(current.row(), 5);
@@ -483,12 +499,12 @@ void MainSizWindow::on_selectedItemOsmotrButton_clicked()
     if(listIndex.count()>0){
         QModelIndex current = ui->mainTableView->selectionModel()->selectedRows()[0];
 
-        QAbstractItemModel * model = sizTableModel;
+        QAbstractItemModel * model = sizProxyTableModel;
         QModelIndex osmotrIndex = model->index(current.row(), 7);
-        sizTableModel->setData(osmotrIndex,ui->selectedItemDateEdit->date().toString("yyyy-MM-dd"));
+        sizProxyTableModel->setData(osmotrIndex,ui->selectedItemDateEdit->date().toString("yyyy-MM-dd"));
         QModelIndexList listIndex = ui->mainTableView->selectionModel()->selectedRows();
         reloadEvents();
-        sizTableModel->dataChanged(osmotrIndex,osmotrIndex);
+        sizProxyTableModel->dataChanged(osmotrIndex,osmotrIndex);
     }
 }
 void MainSizWindow::on_pushButton_5_toggled(bool checked)
@@ -528,24 +544,24 @@ void MainSizWindow::addItemsTreeWidget(QList<QString> listChild, QString nameTop
 }
 void MainSizWindow::reloadDelegateMainTabView()
 {
-    ComboBoxItemDelegate* cbid = new ComboBoxItemDelegate(ui->mainTableView,db->getTypeSiz());
-    ComboBoxItemDelegate* cbido = new ComboBoxItemDelegate(ui->mainTableView,db->getObject());
-    ComboBoxItemDelegate* cbidp = new ComboBoxItemDelegate(ui->mainTableView,db->getPersonal());
-    CheckBoxItemDelegate* chbib = new CheckBoxItemDelegate (ui->mainTableView);
+    ComboBoxItemDelegate* cbid = new ComboBoxItemDelegate(ui->mainTableView,sizTypeTableModel);
+    ComboBoxItemDelegate* cbido = new ComboBoxItemDelegate(ui->mainTableView,ObjectTableModel);
+    ComboBoxItemDelegate* cbidp = new ComboBoxItemDelegate(ui->mainTableView,PersonalTableModel);
     DateEditItemDelegate* deid = new DateEditItemDelegate(ui->mainTableView);
-    ui->mainTableView->setItemDelegateForColumn(2,chbib);
-    ui->mainTableView->setItemDelegateForColumn(5, cbid);
-    ui->mainTableView->setItemDelegateForColumn(6, chbib);
-    ui->mainTableView->setItemDelegateForColumn(3, deid);
-    ui->mainTableView->setItemDelegateForColumn(4, deid);
-    ui->mainTableView->setItemDelegateForColumn(7, deid);
-    ui->mainTableView->setItemDelegateForColumn(8, cbido);
-    ui->mainTableView->setItemDelegateForColumn(9, cbidp);
-    ui->mainTableView->setItemDelegateForColumn(11, deid);
+    ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::nameSiz,cbid);
+    ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::object, cbido);
+    ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::persona, cbidp);
+
+    ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::personalDate, deid);
+    ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::inspectionDate, deid);
+    ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::verificationDate, deid);
+
+
+    ui->mainTableView->setItemDelegateForColumn( MainSizModelHead::personalDate  , deid);
 }
 void MainSizWindow::on_addRowMainTable_clicked()
 {
-      sizTableModel->insertRow(0);
+    sizProxyTableModel->insertRow(0);
 }
 void MainSizWindow::on_deleteRowMainTable_clicked()
 {
@@ -565,8 +581,8 @@ void MainSizWindow::on_deleteRowMainTable_clicked()
 
         if(ret==QMessageBox::Yes)
         {
-            sizTableModel->removeRows(indexes.at(1).row(),1);
-            sizTableModel->select();
+            //   sizProxyTableModel->removeRows(indexes.at(1).row(),1);
+            //     sizProxyTableModel->select();
         }
 
     }
@@ -574,7 +590,7 @@ void MainSizWindow::on_deleteRowMainTable_clicked()
 
 void MainSizWindow::on_addRowPerechniTable_clicked()
 {
-     ui->perechenTableView->model()->insertRow(0);
+    ui->perechenTableView->model()->insertRow(0);
 }
 
 void MainSizWindow::on_deleteRowPerechniTable_clicked()
@@ -606,16 +622,16 @@ void MainSizWindow::on_daysOfEvent_valueChanged(int arg1)
 void MainSizWindow::on_pushButton_clicked()
 {
     QModelIndex index = ui->tableViewTemp->selectionModel()->currentIndex();
-       if (index.isValid()) {
-           EventSiz& organization = eventDateTableModel->getEvent(index);
+    if (index.isValid()) {
+        //  EventSiz& organization = eventDateTableModel->getEvent(index);
 
 
 
-               organization.setId(1452);
-               organization.setType("gzdfgzgdzgzdfg");
-               organization.setNumber("fesgrgsrhtshshs");
+        //               organization.setId(1452);
+        //               organization.setType("gzdfgzgdzgzdfg");
+        //               organization.setNumber("fesgrgsrhtshshs");
 
-eventDateTableModel->dataChanged(index,index);
+        eventDateTableModel->dataChanged(index,index);
 
-       }
+    }
 }

@@ -1,19 +1,17 @@
 #include "comboboxitemdelegate.h"
 #include <QComboBox>
+#include <QAbstractItemModel>
 #include "mainsizwindow.h"
 
-ComboBoxItemDelegate::ComboBoxItemDelegate(QObject *parent , const QStringList &itemName )
+ComboBoxItemDelegate::ComboBoxItemDelegate(QObject *parent ,QAbstractItemModel *model )
     : QStyledItemDelegate(parent)
 {
 
-this->objects = itemName;
+    this->cbModel=model;
 
 }
 
 
-ComboBoxItemDelegate::~ComboBoxItemDelegate()
-{
-}
 
 
 QWidget *ComboBoxItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -29,11 +27,13 @@ QWidget *ComboBoxItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
 
 cb->addItem(QString(""));
         // Инициализируем наш Комбо
-    for (int i = 0 ; i<this->objects.length();i++)
-    {
+cb->setModel(cbModel);
+cb->setModelColumn(1);
+//    for (int i = 0 ; i<this->objects.length();i++)
+//    {
 
-      cb->addItem(QString(objects[i]));
-}
+//      cb->addItem(QString(objects[i]));
+//}
 
 
     return cb;
@@ -57,5 +57,9 @@ void ComboBoxItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 {
     QComboBox *cb = qobject_cast<QComboBox *>(editor);
     Q_ASSERT(cb);
-    model->setData(index, cb->currentText(), Qt::EditRole);
+     QModelIndex primaryKeyIndex = cbModel->index(cb->currentIndex(), 0);
+    int id =  cbModel->data(primaryKeyIndex, Qt::DisplayRole).toInt();
+  //  QVariant c = cb->(, Qt::UserRole );
+
+    model->setData(index, id, Qt::EditRole);
 }
