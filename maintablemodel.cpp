@@ -7,29 +7,73 @@ MainTableModel::MainTableModel(QObject *parent):QSortFilterProxyModel (parent)
 }
 MainTableModel::~MainTableModel(){}
 
-QColor MainTableModel::calculateColorForRow(int index) const
+QColor MainTableModel::getColorForRow(int event) const
 {
     QColor col = QColor(Qt::white);
-  /*  for (int i = 0;i<eventArray->count() ;i++ ) {
-        if(eventArray->at(i).second.first==index){
-            if(eventArray->at(i).first<=0)
-                col= QColor(239, 41, 41,120);
-            else
-                col= QColor(252, 175, 62,120);
-            return col;
-        }
-    }*/
+
+    switch (event) {
+    case SizEvent::inspectionSoon:
+        col=INSPECTION_SOON_COLOR;
+        break;
+    case SizEvent::verificationSoon:
+        col=VERIFICATION_SOON_COLOR;
+        break;
+    case SizEvent::inspectionExpired:
+        col=INSPECTION_EXPIRED_COLOR;
+        break;
+    case SizEvent::serviceLifeExpired:
+        col=SERVICELIFE_EXPIRED_COLOR;
+        break;
+    case SizEvent::verificationExpired:
+        col=VERIFICATION_EXPIRED_COLOR;
+        break;
+    default:
+        col = QColor(Qt::white);
+        break;
+    }
+
     return col;
 }
-QString MainTableModel::getTooltipForRow(int index) const
+
+QString MainTableModel::getTooltipForRow(QModelIndex index) const
+
 {
+    QVariant e =  data(MainTableModel::index(index.row(),MainSizModelHead::event,index.parent()),Qt::DisplayRole);
+    QVariant d =  data(MainTableModel::index(index.row(),MainSizModelHead::daysToEvent,index.parent()),Qt::DisplayRole);
+
+    int days = d.toInt();
+    if(days<0)days*=(-1);
     QString tooltip = "";
-    /*for (int i = 0;i<eventArray->count() ;i++ ) {
-        if(eventArray->at(i).second.first==index){
-           tooltip= eventArray->at(i).second.second;
-            return tooltip;
-        }
-    }*/
+
+    switch (e.toInt()) {
+    case SizEvent::inspectionSoon:
+        tooltip="Осмотреть через";
+        break;
+    case SizEvent::verificationSoon:
+        tooltip="Изъять на испытание через";
+        break;
+    case SizEvent::inspectionExpired:
+        tooltip="Просрочен осмотр на ";
+        break;
+    case SizEvent::serviceLifeExpired:
+        tooltip="Срок эксплуатации закончился";
+        break;
+    case SizEvent::verificationExpired:
+        tooltip="Срок испытания закончился";
+        break;
+    default:
+        tooltip = "";
+        break;
+    }
+     int mounth=0;
+    if(d>31){
+        mounth=days/31;
+        days=days%31;
+         tooltip+=QString::number(mounth)+"мес. "+ QString::number(days)+" дн.";
+    }else{
+
+        tooltip+=" "+QString::number(days)+" дн.";
+    }
     return tooltip;
 }
 QVariant MainTableModel::data(const QModelIndex &index, int role) const
@@ -39,15 +83,15 @@ QVariant MainTableModel::data(const QModelIndex &index, int role) const
     if (role == Qt::ToolTipRole) {
        // QModelIndex primaryKeyIndex = QIdentityProxyModel::index(index.row(), 0);
        // int id = data(primaryKeyIndex,0).toInt();
-        QString tooltip = getTooltipForRow(id);
+        QString tooltip = getTooltipForRow(index);
         return tooltip;
     }
     if (role == Qt::BackgroundRole) {
       //  QModelIndex primaryKeyIndex = QIdentityProxyModel::index(index.row(), 0);
 //
       //  int id = data(primaryKeyIndex,0).toInt();
-
-        QColor color = calculateColorForRow(id);
+        QVariant c =  data(MainTableModel::index(index.row(),MainSizModelHead::event,index.parent()),Qt::DisplayRole);
+        QColor color = getColorForRow(c.toInt());
         return QBrush(color);
     }
       QString result ="";

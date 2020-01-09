@@ -4,30 +4,18 @@
 
 sizModel::sizModel(QObject *parent):QSqlRelationalTableModel (parent)
 {
-      connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-             SLOT(dataToEventCalcChange(QModelIndex,QModelIndex)));
+      connect(this, &sizModel::dataChanged,this,
+             &sizModel::dataToEventCalcChange);
 
 }
 
-bool sizModel::setData(const QModelIndex &index,
-                       const QVariant &value, int role)
-{
 
-
-    return this->QSqlRelationalTableModel::setData(index,value,role);
-}
-QVariant sizModel::getColumnValue(const QModelIndex &index, int column){
-    QVariant d =  data(sizModel::index(index.row(),column));
+QVariant sizModel::getColumnValue(QModelIndex index, int column){
+    QVariant d =  data(sizModel::index(index.row(),column,index.parent()));
     return d;
 }
-void sizModel::chekRowForEvent(const QModelIndex &index)
+void sizModel::chekRowForEvent(QModelIndex index)
 {
-    QVariant d =  data(sizModel::index(index.row(),2,index.parent()));
-    qDebug()<<d;
-    d =  data(sizModel::index(index.row(),3,index.parent()));
-    qDebug()<<d;
-    d =  data(sizModel::index(index.row(),4,index.parent()));
-    qDebug()<<d;
 
     bool ispitivaemiy = false,
             oldOsmotrEvent = false,
@@ -74,31 +62,54 @@ return;
         // result+=QString(QString::number(daysToNextOsmotr)+" дней до осмотра \""+typeSiz+"\" №"+number);
         setEventDataToRow(SizEvent::inspectionSoon,daysToNextOsmotr,index);
     } else{
-        setEventDataToRow(SizEvent::noEvent,0,index);
+        int vall = 0;
+
+        if(ispitivaemiy) {vall = daysToNextOsmotr<daysToNextVerification?daysToNextOsmotr:daysToNextVerification;}
+        else {
+            vall = daysToNextOsmotr;
+        }
+
+        setEventDataToRow(SizEvent::noEvent,vall,index);
+
     }
 }
-void sizModel::setEventDataToRow(int event, int daysToEvent ,const QModelIndex &index){
-    setData(sizModel::index(index.row(),MainSizModelHead::event),event,Qt::EditRole);
-    setData(sizModel::index(index.row(),MainSizModelHead::daysToEvent),daysToEvent,Qt::EditRole);
+void sizModel::setEventDataToRow(int event, int daysToEvent , QModelIndex index){
+  QSqlTableModel::setData(sizModel::index(index.row(),MainSizModelHead::event,index.parent()),event,Qt::EditRole);
+  QSqlTableModel::setData(sizModel::index(index.row(),MainSizModelHead::daysToEvent,index.parent()),daysToEvent,Qt::EditRole);
 }
 void sizModel::setTypeSizData(const QModelIndex &index)
 {
 
-    int typeSiz = data(sizModel::index(index.row(),5)).toInt();
+    QVariant typeSiz =  QSqlTableModel ::data(sizModel::index(index.row(),5));
 
-    setData(sizModel::index(index.row(),MainSizModelHead::bool_verification),typeSiz,Qt::EditRole);
-    setData(sizModel::index(index.row(),MainSizModelHead::verifiPediod),typeSiz,Qt::EditRole);
-    setData(sizModel::index(index.row(),MainSizModelHead::inspectPediod),typeSiz,Qt::EditRole);
-    setData(sizModel::index(index.row(),MainSizModelHead::personalyty),typeSiz,Qt::EditRole);
-    dataChanged(sizModel::index(index.row(),MainSizModelHead::bool_verification),sizModel::index(index.row(),MainSizModelHead::personalyty));
+   QSqlTableModel::setData(sizModel::index(index.row(),MainSizModelHead::bool_verification),typeSiz,Qt::EditRole);
+     QSqlTableModel::setData(sizModel::index(index.row(),MainSizModelHead::verifiPediod),typeSiz,Qt::EditRole);
+     QSqlTableModel::setData(sizModel::index(index.row(),MainSizModelHead::inspectPediod),typeSiz,Qt::EditRole);
+     QSqlTableModel::setData(sizModel::index(index.row(),MainSizModelHead::personalyty),typeSiz,Qt::EditRole);
+    //dataChanged(sizModel::index(index.row(),MainSizModelHead::bool_verification),sizModel::index(index.row(),MainSizModelHead::personalyty));
+}
+void sizModel::updateAllEvents()
+{
+     //model->setEditStrategy(QSqlTableModel::OnRowChange);
+   EditStrategy strategy  =  this->editStrategy();
+   this->setEditStrategy(EditStrategy::OnManualSubmit);
+   //wbrn
+   int count = this->rowCount();
+   for (int i =0;i<count;i++) {
+       chekRowForEvent(sizModel::index(i,0));
+   }
+  qDebug()<< this->submitAll();
+   this->setEditStrategy(strategy);
+
 }
 
 void sizModel::dataToEventCalcChange(QModelIndex current, QModelIndex prevous)
 {
-    qDebug()<<"MODEL EVENT";
+
     if (current==prevous){
         int col = current.column();
         if ((col>=2 &&col<=5)) {
+            qDebug()<<"MODEL EVENT "<<current;
                 if (col == 5 )
                 {
                     setTypeSizData(current);
@@ -106,4 +117,12 @@ void sizModel::dataToEventCalcChange(QModelIndex current, QModelIndex prevous)
                     chekRowForEvent(current);
         }
     }
+}
+void sizModel::setDaysToEvents(int days){
+    if(_daysToEvent!=days)
+    {
+        _daysToEvent=days;
+        updateAllEvents();
+    }
+    _daysToEvent=days;
 }

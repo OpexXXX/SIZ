@@ -6,15 +6,17 @@ class sizModel : public QSqlRelationalTableModel
 {
 public:
       sizModel(QObject *parent = nullptr);
-     bool setData(const QModelIndex &index,const QVariant &value, int role);
+
      void setDaysToEvents(int days);
      int getDaysToEvent();
+     void updateAllEvents();
+
 private:
-     void chekRowForEvent(const QModelIndex &index);
+     void chekRowForEvent(QModelIndex index);
      void setTypeSizData(const QModelIndex &index);
      int _daysToEvent=20;
-     QVariant getColumnValue(const QModelIndex &index, int column);
-     void setEventDataToRow(int event, int daysToEvent, const QModelIndex &index);
+     QVariant getColumnValue(QModelIndex index, int column);
+     void setEventDataToRow(int event, int daysToEvent, QModelIndex index);
 public slots:
      void dataToEventCalcChange(QModelIndex,QModelIndex);
 };

@@ -1,13 +1,13 @@
 #ifndef EVENTMODEL_H
 #define EVENTMODEL_H
-#include <QSqlQueryModel>
+#include <QSortFilterProxyModel>
 #include <QVariant>
 #include <QList>
 #include <QModelIndex>
 #include <QSqlQuery>
 #include <QSqlRecord>
 
-class EventList : public QSqlQueryModel
+class EventList : public QSortFilterProxyModel
 {
 public:
     EventList(QObject *parent);

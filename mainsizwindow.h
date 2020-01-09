@@ -73,8 +73,9 @@ public:
     DataBase        *db;
     QList<QPair<int,QPair<int,QString> > >  eventArray;
 private:
-    QSortFilterProxyModel *sizFilterProxyModel;
+
     MainTableModel *sizProxyTableModel;
+
     sizModel *mainSizModel;
 
 

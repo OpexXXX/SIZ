@@ -9,6 +9,9 @@
 #include "database.h"
 #include <QColor>
 #include <QBrush>
+
+
+
 enum MainSizModelHead
 { id=0,
     number,
@@ -37,12 +40,18 @@ enum SizEvent{
     serviceLifeExpired
 };
 
+#define VERIFICATION_EXPIRED_COLOR  QColor( 255,0,0,120)
+#define INSPECTION_EXPIRED_COLOR    QColor( 255,99,71,120)
+#define VERIFICATION_SOON_COLOR     QColor(0,206,209,120)
+#define INSPECTION_SOON_COLOR       QColor(50,205,50,120)
+#define SERVICELIFE_EXPIRED_COLOR   QColor( 255,0,0,120)
+
 class MainTableModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 private:
-    QColor calculateColorForRow(int index) const;
-    QString getTooltipForRow(int index) const;
+    QColor getColorForRow(int event) const;
+    QString getTooltipForRow(QModelIndex index) const;
 public:
     DataBase        *db;
     MainTableModel(QObject *parent = nullptr);
