@@ -75,7 +75,7 @@ public:
      * Подключение к базе данных и вставка записей в таблицу
      * */
     void connectToDataBase();
-    bool inserIntoTable(const QVariantList &data);
+
     QList<QString> getObject();
     QList<QString> getTypeSiz();
     QList<QString>  getPersonal();

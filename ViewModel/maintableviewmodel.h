@@ -2,7 +2,7 @@
 #define MAINTABLEMODEL_H
 
 #include <QSqlTableModel>
-#include<QSortFilterProxyModel>
+#include <QSortFilterProxyModel>
 #include <QColor>
 #include <QDate>
 #include <QFont>
@@ -52,14 +52,12 @@ class MainTableModel : public QSortFilterProxyModel
 private:
     QColor getColorForRow(int event) const;
     QString getTooltipForRow(QModelIndex index) const;
+    void setHeaders();
 public:
     DataBase        *db;
     MainTableModel(QObject *parent = nullptr);
     ~MainTableModel();
     QVariant data(const QModelIndex &item, int role) const;
-
-
-
 };
 
 

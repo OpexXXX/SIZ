@@ -20,7 +20,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QListWidget>
+#include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
@@ -60,7 +60,7 @@ public:
     QTextBrowser *textBrowser;
     QWidget *tab_4;
     QVBoxLayout *verticalLayout;
-    QListWidget *listWidget;
+    QListView *listEventView;
     QHBoxLayout *horizontalLayout_9;
     QLabel *label;
     QSpinBox *daysOfEvent;
@@ -271,11 +271,11 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        listWidget = new QListWidget(tab_4);
-        listWidget->setObjectName(QString::fromUtf8("listWidget"));
-        listWidget->setStyleSheet(QString::fromUtf8(""));
+        listEventView = new QListView(tab_4);
+        listEventView->setObjectName(QString::fromUtf8("listEventView"));
+        listEventView->setStyleSheet(QString::fromUtf8(""));
 
-        verticalLayout->addWidget(listWidget);
+        verticalLayout->addWidget(listEventView);
 
         horizontalLayout_9 = new QHBoxLayout();
         horizontalLayout_9->setSpacing(6);
@@ -429,7 +429,7 @@ public:
 
         retranslateUi(MainSizWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
         addRowMainTable->setDefault(false);
 
 

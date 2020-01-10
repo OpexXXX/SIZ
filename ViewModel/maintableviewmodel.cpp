@@ -1,12 +1,37 @@
-#include "maintablemodel.h"
+#include "maintableviewmodel.h"
 
 MainTableModel::MainTableModel(QObject *parent):QSortFilterProxyModel (parent)
 {
 
+}
+
+MainTableModel::~MainTableModel(){
 
 }
-MainTableModel::~MainTableModel(){}
+void MainTableModel::setHeaders()
+{
 
+     QStringList headerList;
+        headerList<< tr("п/п")
+                  << tr("Номер")
+                  <<tr("Изъято")
+                 <<tr("Испытанно")
+                <<tr("Испытать")
+               <<tr("Наименование")
+              <<tr("Осмотренно")
+             <<tr("Осмотренно")
+            <<tr("Объект")
+           << tr("Сотрудник")
+           <<tr("Примечание")
+          <<tr("Выдан в пользование");
+    if(headerList.count()>0&&headerList.count()<=this->columnCount()){
+
+        for(int i = 0; i < headerList.count(); i++){
+            this->setHeaderData(i, Qt::Horizontal,headerList[i]);
+        }
+    }
+
+}
 QColor MainTableModel::getColorForRow(int event) const
 {
     QColor col = QColor(Qt::white);
@@ -65,11 +90,11 @@ QString MainTableModel::getTooltipForRow(QModelIndex index) const
         tooltip = "";
         break;
     }
-     int mounth=0;
+    int mounth=0;
     if(d>31){
         mounth=days/31;
         days=days%31;
-         tooltip+=QString::number(mounth)+"мес. "+ QString::number(days)+" дн.";
+        tooltip+=QString::number(mounth)+"мес. "+ QString::number(days)+" дн.";
     }else{
 
         tooltip+=" "+QString::number(days)+" дн.";
@@ -79,22 +104,34 @@ QString MainTableModel::getTooltipForRow(QModelIndex index) const
 QVariant MainTableModel::data(const QModelIndex &index, int role) const
 {
     QVariant value = QSortFilterProxyModel::data(index, role);
-
+    if (role == Qt::FontRole) {
+        QFont font;
+        QSqlTableModel *source_model = qobject_cast<QSqlTableModel *>(sourceModel());
+        QModelIndex indexSourse = mapToSource(index);
+        for (int i =0;i<source_model->columnCount();i++) {
+            if(source_model->isDirty(source_model->index(indexSourse.row(),i))&&((i>0)&&(i<11)))
+            {
+                font.setBold(true);
+                break;
+            }
+        }
+        return font;
+    }
     if (role == Qt::ToolTipRole) {
-       // QModelIndex primaryKeyIndex = QIdentityProxyModel::index(index.row(), 0);
-       // int id = data(primaryKeyIndex,0).toInt();
+        // QModelIndex primaryKeyIndex = QIdentityProxyModel::index(index.row(), 0);
+        // int id = data(primaryKeyIndex,0).toInt();
         QString tooltip = getTooltipForRow(index);
         return tooltip;
     }
     if (role == Qt::BackgroundRole) {
-      //  QModelIndex primaryKeyIndex = QIdentityProxyModel::index(index.row(), 0);
-//
-      //  int id = data(primaryKeyIndex,0).toInt();
+        //  QModelIndex primaryKeyIndex = QIdentityProxyModel::index(index.row(), 0);
+        //
+        //  int id = data(primaryKeyIndex,0).toInt();
         QVariant c =  data(MainTableModel::index(index.row(),MainSizModelHead::event,index.parent()),Qt::DisplayRole);
         QColor color = getColorForRow(c.toInt());
         return QBrush(color);
     }
-      QString result ="";
+    QString result ="";
     if (role == Qt::DisplayRole){
         switch (index.column()) {
         case MainSizModelHead::verificationDate:         //Дата поверки

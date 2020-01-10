@@ -28,22 +28,24 @@ SOURCES += \
         main.cpp \
         mainsizwindow.cpp \
         database.cpp \
-    comboboxitemdelegate.cpp \
-    checkboxitemdelegate.cpp \
-    dateedititemdelegate.cpp \
-    maintablemodel.cpp \
-    eventmodel.cpp \
-    sizmodel.cpp
+    ViewModel/delegate/comboboxitemdelegate.cpp \
+    ViewModel/delegate/checkboxitemdelegate.cpp \
+    sizmodel.cpp \
+    ViewModel/eventviewmodel.cpp \
+    ViewModel/maintableviewmodel.cpp \
+    ViewModel/delegate/dateedititemdelegate.cpp \
+    ViewModel/treeviewmodel.cpp
 
 HEADERS += \
         mainsizwindow.h \
         database.h \
-    comboboxitemdelegate.h \
-    checkboxitemdelegate.h \
-    dateedititemdelegate.h \
-    maintablemodel.h \
-    eventmodel.h \
-    sizmodel.h
+     ViewModel/delegate/comboboxitemdelegate.h \
+     ViewModel/delegate/checkboxitemdelegate.h \
+     ViewModel/delegate/dateedititemdelegate.h \
+    sizmodel.h \
+     ViewModel/eventviewmodel.h \
+     ViewModel/maintableviewmodel.h \
+    ViewModel/treeviewmodel.h
 
 
 FORMS += \

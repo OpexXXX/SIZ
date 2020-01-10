@@ -1,5 +1,5 @@
 #include "sizmodel.h"
-#include "maintablemodel.h"
+#include "ViewModel/maintableviewmodel.h"
 
 
 sizModel::sizModel(QObject *parent):QSqlRelationalTableModel (parent)
@@ -91,15 +91,15 @@ void sizModel::setTypeSizData(const QModelIndex &index)
 void sizModel::updateAllEvents()
 {
      //model->setEditStrategy(QSqlTableModel::OnRowChange);
-   EditStrategy strategy  =  this->editStrategy();
+  // EditStrategy strategy  =  this->editStrategy();
    this->setEditStrategy(EditStrategy::OnManualSubmit);
    //wbrn
    int count = this->rowCount();
    for (int i =0;i<count;i++) {
        chekRowForEvent(sizModel::index(i,0));
    }
-  qDebug()<< this->submitAll();
-   this->setEditStrategy(strategy);
+ // qDebug()<< this->submitAll();
+
 
 }
 
@@ -118,6 +118,7 @@ void sizModel::dataToEventCalcChange(QModelIndex current, QModelIndex prevous)
         }
     }
 }
+
 void sizModel::setDaysToEvents(int days){
     if(_daysToEvent!=days)
     {

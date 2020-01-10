@@ -12,17 +12,19 @@
 #include <QMessageBox>
 #include <QTreeWidgetItem>
 #include <QStandardItemModel>
+#include <QSqlTableModel>
 #include <QSqlRelationalTableModel>
 #include <QIcon>
 #include <QCloseEvent>
 #include <QHideEvent>
 #include <QSortFilterProxyModel>
 #include "database.h"
-#include "maintablemodel.h"
+#include "ViewModel/maintableviewmodel.h"
+#include "ViewModel/eventviewmodel.h"
 #include "ui_mainsizwindow.h"
-#include "comboboxitemdelegate.h"
-#include "checkboxitemdelegate.h"
-#include "dateedititemdelegate.h"
+#include "ViewModel/delegate/comboboxitemdelegate.h"
+#include "ViewModel/delegate/checkboxitemdelegate.h"
+#include "ViewModel/delegate/dateedititemdelegate.h"
 #include "sizmodel.h"
 
 namespace Ui {
@@ -71,38 +73,27 @@ public:
          * и моделью представления таблицы базы данных
          * */
     DataBase        *db;
-    QList<QPair<int,QPair<int,QString> > >  eventArray;
+
 private:
-
-    MainTableModel *sizProxyTableModel;
-
+    /* Модели*/
     sizModel *mainSizModel;
-
-
-
     QSqlTableModel  *sizTypeTableModel;
     QSqlTableModel  *ObjectTableModel;
     QSqlTableModel  *PersonalTableModel;
-   // EventList  *eventDateTableModel;
-/*oneName"	TEXT,
-    "verification"	BOOL,
-    "periodicityVer"	INTEGER,
-    "periodicityInsp"	INTEGER,
-    "personaly"	BOOL,*/
+    /*Прокси модели*/
+    MainTableModel *sizProxyTableModel;
+    EventViewModel  *eventProxyTableModel;
+
     /* Объявляем объект будущей иконки приложения для трея */
     QSystemTrayIcon         * trayIcon;
     QTimer *tmr;
 private:
-    /* Также присутствуют два метода, которые формируют модель
-     * и внешний вид TableView
-     * */
     void reloadTreeWidgetItems();
     void addItemsTreeWidget(QList<QString> listChild, QString nameTop);
-    void reloadDelegateMainTabView();
+    void setDelegateMainTabView();
     void setModelOnTableView(QSqlTableModel* model);
     void Style();
-    void reloadEvents();
-    void setupModel(const QString &tableName,  QSqlTableModel *model,const QStringList &headers);
+    void setHeadersOnModel(const QStringList &headers, QSqlTableModel *model);
     void setupModels();
     void createUI();
 };

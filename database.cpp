@@ -105,37 +105,7 @@ bool DataBase::createTable()
 
 /* Метод для вставки записи в базу данных
  * */
-bool DataBase::inserIntoTable(const QVariantList &data)
-{
-    /* Запрос SQL формируется из QVariantList,
-     * в который передаются данные для вставки в таблицу.
-     * */
-    QSqlQuery query;
-    /* В начале SQL запрос формируется с ключами,
-     * которые потом связываются методом bindValue
-     * для подстановки данных из QVariantList
-     * */
-    query.prepare("INSERT INTO " TABLE " ( " TABLE_DATE ", "
-                  TABLE_TIME ", "
-                  TABLE_RANDOM ", "
-                  TABLE_MESSAGE " ) "
-                                "VALUES (:Date, :Time, :Random, :Message )");
-    query.bindValue(":Date",        data[0].toDate().toString("dd.MM.yyyy"));
-    query.bindValue(":Time",        data[1].toTime().toString("hh:mm"));
-    query.bindValue(":Random",      data[2].toInt());
-    query.bindValue(":Message",     data[3].toString());
 
-
-    // После чего выполняется запросом методом exec()
-    if(!query.exec()){
-        qDebug() << "error insert into " << TABLE;
-        qDebug() << query.lastError().text();
-        return false;
-    } else {
-        return true;
-    }
-    return false;
-}
 QList<QString>  DataBase::getObject()
 {
     QSqlQuery q("select * from Object");
