@@ -26,7 +26,7 @@
 #include "ViewModel/delegate/checkboxitemdelegate.h"
 #include "ViewModel/delegate/dateedititemdelegate.h"
 #include "sizmodel.h"
-
+#include "define.h"
 namespace Ui {
 class MainSizWindow;
 }

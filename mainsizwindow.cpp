@@ -14,8 +14,8 @@ MainSizWindow::MainSizWindow(QWidget *parent) :
 void MainSizWindow::Style()
 {
     ui->listEventView->setStyleSheet("font: 14pt; selection-color: rgb(0, 0, 0); selection-background-color: rgb(232, 237, 240);");
-    qApp->setStyleSheet("QWidget {  selection-color: rgb(0, 0, 0); selection-background-color: rgba(232, 237, 240,  100); }"
-                        "mainTableView{ font: 13pt; selection-background-color: rgba(232, 237, 240,  100);  }");
+    qApp->setStyleSheet("QWidget {  selection-color: rgb(0, 0, 0); selection-background-color: rgba(212, 217, 250,  250); }"
+                        "QTableView{ font: 13pt; selection-background-color: rgba(212, 217, 250,  250);  }");
 
 
 }
@@ -23,6 +23,7 @@ void MainSizWindow::closeEvent(QCloseEvent * event)
 {
 
     if(this->isVisible() ){
+        mainSizModel->submitAll();
         event->ignore();
         this->hide();
 
@@ -33,6 +34,7 @@ void MainSizWindow::closeEvent(QCloseEvent * event)
                               myicon,
                               2000);
     }
+    mainSizModel->submitAll();
 }
 void MainSizWindow::hideEvent(QHideEvent *event)
 {
@@ -78,10 +80,8 @@ void MainSizWindow::setupModels()
     sizTypeTableModel= new QSqlTableModel(this);
     ObjectTableModel= new QSqlTableModel(this);
     PersonalTableModel= new QSqlTableModel(this);
-   // eventDateTableModel= new EventList(this);
 
-    QStringList headerList;
-    headerList.clear();
+
 
 
     mainSizModel->setTable(SIZTABLE);
@@ -92,9 +92,26 @@ void MainSizWindow::setupModels()
     mainSizModel->setRelation(MainSizModelHead::personalyty,        QSqlRelation(TYPESIZTABLE, TYPESIZTABLE_ID, TYPESIZTABLE_PERSONALYTY));
     mainSizModel->setRelation(MainSizModelHead::object,             QSqlRelation(OBJECTTABLE, OBJECTTABLE_ID, OBJECTTABLE_NAME));
     mainSizModel->setRelation(MainSizModelHead::persona,            QSqlRelation(PERSONALTABEL, PERSONALTABEL_ID, PERSONALTABEL_NAME));
+    QStringList headers;
+    headers<< tr("п/п")
+           << tr("Номер")
+          <<tr("Испытанно")
+         <<tr("Испытать")
+        <<tr("Осмотренно")
+        <<tr("Наименование")
+       <<tr("Объект")
+      <<tr("Выдан в пользование")
+     << tr("Сотрудник")
+     <<tr("Примечание")
+      <<tr("Осмотренно")
+    <<tr("Изъято");
+    setHeadersOnModel(headers,mainSizModel);
 
     sizProxyTableModel->setSourceModel(mainSizModel);
     eventProxyTableModel->setSourceModel(mainSizModel);
+
+    eventProxyTableModel->sort(16);
+
 
     sizTypeTableModel->setTable(TYPESIZTABLE);
     ObjectTableModel->setTable( OBJECTTABLE);
@@ -108,7 +125,7 @@ void MainSizWindow::setupModels()
     sizTypeTableModel->select();
     ObjectTableModel->select();
     PersonalTableModel->select();
-
+    mainSizModel->updateAllTypeSizData();
     mainSizModel->updateAllEvents();
 }
 void MainSizWindow::setHeadersOnModel(const QStringList &headers, QSqlTableModel *model)
@@ -128,6 +145,7 @@ void MainSizWindow::setHeadersOnModel(const QStringList &headers, QSqlTableModel
 
 void MainSizWindow::createUI()
 {
+
     trayIcon = new QSystemTrayIcon(this);
     QIcon  myicon =  QIcon(":/new/icon/153png.png");
     trayIcon->setIcon(myicon);
@@ -160,11 +178,14 @@ void MainSizWindow::createUI()
             this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     reloadTreeWidgetItems();
+    QStringList headers;
+
 
     //    //Типы СИЗ
     setModelOnTableView(sizTypeTableModel);
 
     //СИЗ
+
 
     ui->mainTableView->setModel(sizProxyTableModel);
     // Разрешаем выделение строк
@@ -192,7 +213,7 @@ void MainSizWindow::createUI()
     //   sizProxyTableModel->select(); // Делаем выборку данных из таблицы
 
     ui->listEventView->setModel(eventProxyTableModel);
-ui->listEventView->setModelColumn(1);
+    ui->listEventView->setModelColumn(10);
     ui->selectedItemOsmotrButton->hide();
     ui->selectedItemLabel->setText("");
     ui->textBrowser->hide();
@@ -378,7 +399,7 @@ void MainSizWindow::setDelegateMainTabView()
 }
 void MainSizWindow::on_addRowMainTable_clicked()
 {
-    sizProxyTableModel->insertRow(0);
+    mainSizModel->submitAll();
 }
 void MainSizWindow::on_deleteRowMainTable_clicked()
 {

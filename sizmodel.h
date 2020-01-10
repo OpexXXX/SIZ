@@ -2,6 +2,8 @@
 #define SIZMODEL_H
 #include <QSqlRelationalTableModel>
 #include <QDebug>
+#include "define.h"
+
 class sizModel : public QSqlRelationalTableModel
 {
 public:
@@ -10,7 +12,7 @@ public:
      void setDaysToEvents(int days);
      int getDaysToEvent();
      void updateAllEvents();
-
+     void updateAllTypeSizData();
 private:
      void chekRowForEvent(QModelIndex index);
      void setTypeSizData(const QModelIndex &index);

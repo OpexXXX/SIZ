@@ -9,42 +9,9 @@
 #include "database.h"
 #include <QColor>
 #include <QBrush>
+#include "define.h"
 
 
-
-enum MainSizModelHead
-{ id=0,
-    number,
-    verificationDate,
-    endVerificationDate,
-    inspectionDate,
-    nameSiz,
-    object,
-    personalDate,
-    persona,
-    note,
-    bool_removed,
-    bool_verification,
-    verifiPediod,
-    inspectPediod,
-    personalyty,
-    event,
-    daysToEvent
-};
-enum SizEvent{
-    noEvent=0,
-    verificationExpired,
-    inspectionExpired,
-    verificationSoon,
-    inspectionSoon,
-    serviceLifeExpired
-};
-
-#define VERIFICATION_EXPIRED_COLOR  QColor( 255,0,0,120)
-#define INSPECTION_EXPIRED_COLOR    QColor( 255,99,71,120)
-#define VERIFICATION_SOON_COLOR     QColor(0,206,209,120)
-#define INSPECTION_SOON_COLOR       QColor(50,205,50,120)
-#define SERVICELIFE_EXPIRED_COLOR   QColor( 255,0,0,120)
 
 class MainTableModel : public QSortFilterProxyModel
 {

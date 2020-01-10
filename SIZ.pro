@@ -45,7 +45,8 @@ HEADERS += \
     sizmodel.h \
      ViewModel/eventviewmodel.h \
      ViewModel/maintableviewmodel.h \
-    ViewModel/treeviewmodel.h
+    ViewModel/treeviewmodel.h \
+    define.h
 
 
 FORMS += \
