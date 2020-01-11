@@ -178,14 +178,13 @@ void MainSizWindow::createUI()
             this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     reloadTreeWidgetItems();
-    QStringList headers;
 
+    QStringList headers;
 
     //    //Типы СИЗ
     setModelOnTableView(sizTypeTableModel);
 
     //СИЗ
-
 
     ui->mainTableView->setModel(sizProxyTableModel);
     // Разрешаем выделение строк
@@ -221,28 +220,24 @@ void MainSizWindow::createUI()
 }
 void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
-
-
-
     if(item->parent()!=nullptr) {
+
         QString parrent = item->parent()->data(0,0).toString();
+
+        sizProxyTableModel->setFilterRegExp(QRegExp(item->text(0), Qt::CaseInsensitive,
+                                                    QRegExp::FixedString));
 
         if(parrent == "Объекты")
         {
-            /*  sizProxyTableModel->setFilter(QString( " object ='"+item->data(0,0).toString()+"'")
-                                     );*/
-
+                    sizProxyTableModel->setFilterKeyColumn(6);
         }
         if(parrent == "Сотрудники")
         {
-            /* sizProxyTableModel->setFilter(QString( " personal ='"+item->data(0,0).toString()+"'")
-                                     );
-*/
+            sizProxyTableModel->setFilterKeyColumn(8);
         }
         if(parrent == "Типы СИЗ")
         {
-            /*  sizProxyTableModel->setFilter(QString( " typeSiz ='"+item->data(0,0).toString()+"'")
-                                     );*/
+           sizProxyTableModel->setFilterKeyColumn(5);
 
         }
         // sizProxyTableModel->select();
@@ -251,8 +246,8 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
         ui->mainTableView->resizeColumnsToContents();
     }
     else {
-        //   sizProxyTableModel->setFilter("");
-        //    sizProxyTableModel->select();
+        sizProxyTableModel->setFilterRegExp(QRegExp("", Qt::CaseInsensitive, QRegExp::FixedString));
+
         ui->mainTableView->resizeColumnsToContents();
         ui->mainTableView->resizeRowsToContents();
         ui->mainTableView->resizeColumnsToContents();
@@ -263,7 +258,7 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 
 void MainSizWindow::on_tabWidget_currentChanged(int index)
 {
-    reloadTreeWidgetItems();
+   // reloadTreeWidgetItems();
 }
 void MainSizWindow::updateTime()
 {
@@ -472,4 +467,20 @@ void MainSizWindow::on_pushButton_clicked()
     //    eventDateTableModel->dataChanged(index,index);
 
     }
+}
+
+void MainSizWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+     //qDebug()<< current->text(0)<< current->parent();
+
+}
+
+void MainSizWindow::on_listEventView_doubleClicked(const QModelIndex &index)
+{
+
+QModelIndex sourseIndex = eventProxyTableModel->mapToSource(index);
+ QModelIndex mainTableIndex = sizProxyTableModel->mapFromSource(sourseIndex);
+ ui->mainTableView->selectRow(mainTableIndex.row());
+ ui->tabWidget->setCurrentIndex(0);
+
 }

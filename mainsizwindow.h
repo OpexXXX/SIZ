@@ -67,6 +67,10 @@ private slots:
     void on_daysOfEvent_valueChanged(int arg1);
     void on_pushButton_clicked();
 
+    void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+    void on_listEventView_doubleClicked(const QModelIndex &index);
+
 public:
     Ui::MainSizWindow *ui;
     /* В проекте используются объекты для взаимодействия с информацией в базе данных

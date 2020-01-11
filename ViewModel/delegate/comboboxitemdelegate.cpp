@@ -46,7 +46,11 @@ void ComboBoxItemDelegate::setEditorData(QWidget *editor, const QModelIndex &ind
     Q_ASSERT(cb);
     // get the index of the text in the combobox that matches the current value of the item
     const QString currentText = index.data(Qt::EditRole).toString();
-    const int cbIndex = cb->findText(currentText);
+    int cbIndex = cb->findText(currentText);
+
+    if(cbIndex<0) {
+        cbIndex = index.data(Qt::EditRole).toInt();
+    }
     // if it is valid, adjust the combobox
     if (cbIndex >= 0)
        cb->setCurrentIndex(cbIndex);
@@ -60,6 +64,5 @@ void ComboBoxItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
      QModelIndex primaryKeyIndex = cbModel->index(cb->currentIndex(), 0);
     int id =  cbModel->data(primaryKeyIndex, Qt::DisplayRole).toInt();
   //  QVariant c = cb->(, Qt::UserRole );
-
     model->setData(index, id, Qt::EditRole);
 }

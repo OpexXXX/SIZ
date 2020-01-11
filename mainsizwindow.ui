@@ -40,7 +40,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -86,56 +86,16 @@
              <bool>false</bool>
             </property>
             <property name="headerHidden">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <attribute name="headerVisible">
-             <bool>false</bool>
+             <bool>true</bool>
             </attribute>
             <column>
              <property name="text">
-              <string/>
+              <string notr="true">1</string>
              </property>
             </column>
-            <item>
-             <property name="text">
-              <string>Объекты</string>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <item>
-              <property name="text">
-               <string>Новый дочерний элемент</string>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>13</pointsize>
-               </font>
-              </property>
-             </item>
-            </item>
-            <item>
-             <property name="text">
-              <string>Типы СИЗ</string>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Персонал</string>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-            </item>
            </widget>
           </item>
           <item>
