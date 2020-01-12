@@ -6,6 +6,7 @@
         <file>128.png</file>
         <file>add.png</file>
         <file>remove-trash.png</file>
+        <file>Save-as_37111.png</file>
     </qresource>
     <qresource prefix="/new/database">
         <file>siz.db</file>

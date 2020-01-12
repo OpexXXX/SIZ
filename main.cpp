@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText("Приложение уже запущено.\n"
                        "Приложение свернуто в трее.");
+
         msgBox.exec();
         return 1;
     }

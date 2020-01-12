@@ -70,6 +70,10 @@ private slots:
     void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
     void on_listEventView_doubleClicked(const QModelIndex &index);
+    void slotCustomMenuRequested(QPoint pos);
+    void slotRevertRecordRow();
+
+    void on_pushButton_2_clicked();
 
 public:
     Ui::MainSizWindow *ui;

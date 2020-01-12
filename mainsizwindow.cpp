@@ -21,19 +21,6 @@ void MainSizWindow::Style()
 }
 void MainSizWindow::closeEvent(QCloseEvent * event)
 {
-
-    if(this->isVisible() ){
-        mainSizModel->submitAll();
-        event->ignore();
-        this->hide();
-
-        QIcon  myicon =  QIcon(":/new/icon/153png.png");
-        trayIcon->showMessage("Журнал СИЗ",
-                              trUtf8("Приложение свернуто в трей. Для того чтобы, "
-                                     "развернуть окно приложения, щелкните по иконке приложения в трее"),
-                              myicon,
-                              2000);
-    }
     mainSizModel->submitAll();
 }
 void MainSizWindow::hideEvent(QHideEvent *event)
@@ -95,15 +82,15 @@ void MainSizWindow::setupModels()
     QStringList headers;
     headers<< tr("п/п")
            << tr("Номер")
-          <<tr("Испытанно")
-         <<tr("Испытать")
-        <<tr("Осмотренно")
+           <<tr("Испытанно")
+          <<tr("На испытание")
+         <<tr("Осмотрено")
         <<tr("Наименование")
        <<tr("Объект")
       <<tr("Выдан в пользование")
      << tr("Сотрудник")
      <<tr("Примечание")
-      <<tr("Осмотренно")
+    <<tr("Осмотренно")
     <<tr("Изъято");
     setHeadersOnModel(headers,mainSizModel);
 
@@ -137,8 +124,8 @@ void MainSizWindow::setHeadersOnModel(const QStringList &headers, QSqlTableModel
         }
     }
     // Устанавливаем сортировку по возрастанию данных по нулевой колонке
-    model->setEditStrategy(QSqlTableModel::OnRowChange);
-    model->setSort(0,Qt::AscendingOrder);
+
+
 }
 
 
@@ -208,8 +195,12 @@ void MainSizWindow::createUI()
     ui->mainTableView->verticalHeader()->hide();
     setDelegateMainTabView();
     ui->mainTableView->setSortingEnabled(true);
+    ui->mainTableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->mainTableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotCustomMenuRequested(QPoint)));
+    QItemSelectionModel *sm = ui->mainTableView->selectionModel();
+    connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+            this, SLOT(on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex,QModelIndex)));
 
-    //   sizProxyTableModel->select(); // Делаем выборку данных из таблицы
 
     ui->listEventView->setModel(eventProxyTableModel);
     ui->listEventView->setModelColumn(10);
@@ -218,6 +209,38 @@ void MainSizWindow::createUI()
     ui->textBrowser->hide();
 
 }
+void MainSizWindow::slotCustomMenuRequested(QPoint pos)
+{
+    /* Создаем объект контекстного меню */
+    QMenu * menu = new QMenu(this);
+    /* Создаём действия для контекстного меню */
+    QAction * revertRow = new QAction(trUtf8("Отменить изменения в строке"), this);
+    QAction * deleteRow = new QAction(trUtf8("Удалить"), this);
+    /* Подключаем СЛОТы обработчики для действий контекстного меню */
+    connect(revertRow, SIGNAL(triggered()), this, SLOT(slotRevertRecordRow()));     // Обработчик вызова диалога редактирования
+    connect(deleteRow, SIGNAL(triggered()), this, SLOT(on_deleteRowMainTable_clicked())); // Обработчик удаления записи
+    /* Устанавливаем действия в меню */
+    menu->addAction(revertRow);
+    menu->addAction(deleteRow);
+    /* Вызываем контекстное меню */
+    menu->popup(ui->mainTableView->viewport()->mapToGlobal(pos));
+}
+
+void MainSizWindow::slotRevertRecordRow(){
+    int row = ui->mainTableView->selectionModel()->currentIndex().row();
+
+    /* Проверяем, что строка была действительно выбрана
+     * */
+    QModelIndex selected = sizProxyTableModel->index(row,0);
+    QModelIndex selectedSourse = sizProxyTableModel->mapToSource(selected);
+    if(selectedSourse.isValid()){
+        mainSizModel->revertRow(selectedSourse.row());
+    }
+}
+
+
+
+
 void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
     if(item->parent()!=nullptr) {
@@ -229,7 +252,7 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 
         if(parrent == "Объекты")
         {
-                    sizProxyTableModel->setFilterKeyColumn(6);
+            sizProxyTableModel->setFilterKeyColumn(6);
         }
         if(parrent == "Сотрудники")
         {
@@ -237,7 +260,7 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
         }
         if(parrent == "Типы СИЗ")
         {
-           sizProxyTableModel->setFilterKeyColumn(5);
+            sizProxyTableModel->setFilterKeyColumn(5);
 
         }
         // sizProxyTableModel->select();
@@ -258,11 +281,11 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 
 void MainSizWindow::on_tabWidget_currentChanged(int index)
 {
-   // reloadTreeWidgetItems();
+    // reloadTreeWidgetItems();
 }
 void MainSizWindow::updateTime()
 {
-   /* if( !this->hasFocus() ){
+    /* if( !this->hasFocus() ){
         QString message;
         if(ui->listWidget->count()>0){
             for (int i=0;i<ui->listWidget->count()&&i<4;i++) {
@@ -304,15 +327,15 @@ void MainSizWindow::on_radioButton_group_toggle(int button,bool checked)
         switch (button) {
         case -2:
             setModelOnTableView(sizTypeTableModel);
-              ui->perechenTableView->showRow(0);
+            ui->perechenTableView->showRow(0);
             break;
         case -3:
             setModelOnTableView(ObjectTableModel);
-             ui->perechenTableView->hideRow(0);
+            ui->perechenTableView->hideRow(0);
             break;
         case -4:
             setModelOnTableView(PersonalTableModel);
-             ui->perechenTableView->hideRow(0);
+            ui->perechenTableView->hideRow(0);
             break;
         default:
             break;
@@ -326,8 +349,52 @@ void MainSizWindow::on_mainTableView_Data_Changed(QModelIndex current,QModelInde
 }
 void MainSizWindow::on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex current,QModelIndex prevous)
 {
+    QModelIndex nS= sizProxyTableModel->index(current.row(),MainSizModelHead::nameSiz);
+    QString nameSiz = sizProxyTableModel->data(nS,Qt::DisplayRole).toString();
+    QModelIndex nu= sizProxyTableModel->index(current.row(),MainSizModelHead::number);
+    QString number = sizProxyTableModel->data(nu,Qt::DisplayRole).toString();
+    QModelIndex   bool_verification= sizProxyTableModel->index(current.row(),MainSizModelHead::bool_verification);
+    bool verivication = sizProxyTableModel->data(bool_verification,Qt::DisplayRole).toBool();
 
+    QModelIndex   inspectionD= sizProxyTableModel->index(current.row(),MainSizModelHead::inspectionDate);
+    QString inspectionDa= sizProxyTableModel->data(inspectionD,Qt::DisplayRole).toString();
+    QDate inspectionDate = QDate::fromString(inspectionDa,"dd.MM.yyyy");
+    QModelIndex  verifiP= sizProxyTableModel->index(current.row(),MainSizModelHead::verifiPediod);
+    int  verifiPediod= sizProxyTableModel->data(verifiP,Qt::DisplayRole).toInt();
+    QModelIndex  inspectP= sizProxyTableModel->index(current.row(),MainSizModelHead::inspectPediod);
+    int  inspectPediod= sizProxyTableModel->data(inspectP,Qt::DisplayRole).toInt();
+    QModelIndex   ev= sizProxyTableModel->index(current.row(),MainSizModelHead::event);
+    int  event= sizProxyTableModel->data(ev,Qt::DisplayRole).toInt();
+    QModelIndex   daysToE= sizProxyTableModel->index(current.row(),MainSizModelHead::daysToEvent);
+    int  daysToEvent= sizProxyTableModel->data(daysToE,Qt::DisplayRole).toInt();
+    QDate nextOsmotr =inspectionDate.addMonths(inspectPediod);
+    ui->selectedItemDateEdit->setDate(nextOsmotr);
 
+    if(event == SizEvent::noEvent){
+        ui->selectedItemDateEdit->show();
+        ui->selectedItemOsmotrButton->hide();
+        ui->selectedItemLabel->setText(QString("%1 \n осматривается раз в %2 мес. \n Следующий осмотр: ").arg(nameSiz,QString::number(inspectPediod)) );
+    }
+    if(event == SizEvent::inspectionSoon){
+        ui->selectedItemDateEdit->show();
+        ui->selectedItemOsmotrButton->show();
+        ui->selectedItemLabel->setText(QString("Осмотр через %1 дн.\n %2 \n осматривается раз в %3 мес. \n Следующий осмотр: ").arg(QString::number(daysToEvent),nameSiz,QString::number(inspectPediod)) );
+    }
+    if(event == SizEvent::verificationSoon){
+        ui->selectedItemDateEdit->hide();
+        ui->selectedItemOsmotrButton->hide();
+        ui->selectedItemLabel->setText(QString("На испытание через %1 дн.\n %2 \n осматривается раз в %3 мес. \n ").arg(QString::number(daysToEvent),nameSiz,QString::number(inspectPediod)) );
+    }
+    if(event == SizEvent::inspectionExpired){
+        ui->selectedItemOsmotrButton->show();
+        ui->selectedItemDateEdit->show();
+        ui->selectedItemLabel->setText(QString("Просрочен осмотр на %1 дн.\n %2 \n осматривается раз в %3 мес. \n Следующий осмотр: ").arg(QString::number(daysToEvent),nameSiz,QString::number(inspectPediod)) );
+    }
+    if(event == SizEvent::verificationExpired){
+        ui->selectedItemDateEdit->hide();
+        ui->selectedItemOsmotrButton->hide();
+        ui->selectedItemLabel->setText(QString("ИЗЪЯТЬ НА ИСПЫТАНИЕ %1 дн.\n %2 \n осматривается раз в %3 мес. \n Следующий осмотр: ").arg(QString::number(daysToEvent),nameSiz,QString::number(inspectPediod)) );
+    }
 }
 void MainSizWindow::on_selectedItemOsmotrButton_clicked()
 {
@@ -337,10 +404,12 @@ void MainSizWindow::on_selectedItemOsmotrButton_clicked()
 
         QAbstractItemModel * model = sizProxyTableModel;
         QModelIndex osmotrIndex = model->index(current.row(), 7);
+
         sizProxyTableModel->setData(osmotrIndex,ui->selectedItemDateEdit->date().toString("yyyy-MM-dd"),Qt::EditRole);
+
         QModelIndexList listIndex = ui->mainTableView->selectionModel()->selectedRows();
 
-        sizProxyTableModel->dataChanged(osmotrIndex,osmotrIndex);
+       // sizProxyTableModel->dataChanged(osmotrIndex,osmotrIndex);
     }
 }
 void MainSizWindow::on_pushButton_5_toggled(bool checked)
@@ -390,11 +459,55 @@ void MainSizWindow::setDelegateMainTabView()
     ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::personalDate, deid);
     ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::inspectionDate, deid);
     ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::verificationDate, deid);
+    ui->mainTableView->setItemDelegateForColumn(MainSizModelHead::endVerificationDate, deid);
     ui->mainTableView->setItemDelegateForColumn( MainSizModelHead::personalDate  , deid);
 }
 void MainSizWindow::on_addRowMainTable_clicked()
 {
-    mainSizModel->submitAll();
+    // mainSizModel->submitAll();
+    // mainSizModel->insertRow(1);
+
+    sizProxyTableModel->insertRow(0);
+    for (int i=0;i<sizProxyTableModel->rowCount();i++) {
+
+        QModelIndex ind = sizProxyTableModel->index(i,5);
+        if( sizProxyTableModel->data(ind,Qt::DisplayRole)=="") {
+            QModelIndex nameSiz = sizProxyTableModel->index(i,MainSizModelHead::nameSiz);
+            QModelIndex nameObj = sizProxyTableModel->index(i,MainSizModelHead::object);
+            QModelIndex namePersona = sizProxyTableModel->index(i,MainSizModelHead::persona);
+
+            sizProxyTableModel->setData(nameSiz,0);
+            sizProxyTableModel->setData(nameObj,0);
+            sizProxyTableModel->setData(namePersona,0);
+            qDebug()<<ind;
+            ui->mainTableView->selectRow(ind.row());
+            return;
+        }
+
+
+
+    }
+    sizProxyTableModel->setFilterFixedString("");
+    for (int i=0;i<sizProxyTableModel->rowCount();i++) {
+
+        QModelIndex ind = sizProxyTableModel->index(i,5);
+        if( sizProxyTableModel->data(ind,Qt::DisplayRole)=="") {
+            QModelIndex nameSiz = sizProxyTableModel->index(i,MainSizModelHead::nameSiz);
+            QModelIndex nameObj = sizProxyTableModel->index(i,MainSizModelHead::object);
+            QModelIndex namePersona = sizProxyTableModel->index(i,MainSizModelHead::persona);
+
+            sizProxyTableModel->setData(nameSiz,0);
+            sizProxyTableModel->setData(nameObj,0);
+            sizProxyTableModel->setData(namePersona,0);
+            qDebug()<<ind;
+            ui->mainTableView->selectRow(ind.row());
+            return;
+        }
+
+
+
+    }
+
 }
 void MainSizWindow::on_deleteRowMainTable_clicked()
 {
@@ -414,8 +527,11 @@ void MainSizWindow::on_deleteRowMainTable_clicked()
 
         if(ret==QMessageBox::Yes)
         {
-            //   sizProxyTableModel->removeRows(indexes.at(1).row(),1);
-            //     sizProxyTableModel->select();
+            sizProxyTableModel->removeRows(indexes.at(1).row(),1);
+            sizModel* mod =  (sizModel*) sizProxyTableModel->sourceModel();
+
+
+
         }
 
     }
@@ -449,38 +565,43 @@ void MainSizWindow::on_deleteRowPerechniTable_clicked()
 
 void MainSizWindow::on_daysOfEvent_valueChanged(int arg1)
 {
-   mainSizModel->setDaysToEvents(arg1);
+    mainSizModel->setDaysToEvents(arg1);
 }
 
 void MainSizWindow::on_pushButton_clicked()
 {
-    QModelIndex index = ui->tableViewTemp->selectionModel()->currentIndex();
-    if (index.isValid()) {
-        //  EventSiz& organization = eventDateTableModel->getEvent(index);
 
 
-
-        //               organization.setId(1452);
-        //               organization.setType("gzdfgzgdzgzdfg");
-        //               organization.setNumber("fesgrgsrhtshshs");
-
-    //    eventDateTableModel->dataChanged(index,index);
-
-    }
 }
 
 void MainSizWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-     //qDebug()<< current->text(0)<< current->parent();
+    //qDebug()<< current->text(0)<< current->parent();
 
 }
 
 void MainSizWindow::on_listEventView_doubleClicked(const QModelIndex &index)
 {
 
-QModelIndex sourseIndex = eventProxyTableModel->mapToSource(index);
- QModelIndex mainTableIndex = sizProxyTableModel->mapFromSource(sourseIndex);
- ui->mainTableView->selectRow(mainTableIndex.row());
- ui->tabWidget->setCurrentIndex(0);
+    QModelIndex sourseIndex = eventProxyTableModel->mapToSource(index);
+    QModelIndex mainTableIndex = sizProxyTableModel->mapFromSource(sourseIndex);
+    qDebug()<<mainTableIndex.isValid();
 
+
+    QModelIndex event = mainSizModel->index(sourseIndex.row(),MainSizModelHead::event);
+    QString filter =mainSizModel->data(event,Qt::DisplayRole).toString();
+    QRegExp reg;
+    reg.setPattern("[12345]");
+    sizProxyTableModel->setFilterRegExp(reg);
+    sizProxyTableModel->setFilterKeyColumn(MainSizModelHead::event);
+    mainTableIndex = sizProxyTableModel->mapFromSource(sourseIndex);
+    ui->mainTableView->selectRow(mainTableIndex.row());
+    ui->tabWidget->setCurrentIndex(0);
+
+
+}
+
+void MainSizWindow::on_pushButton_2_clicked()
+{
+    mainSizModel->submitAll();
 }

@@ -22,7 +22,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpinBox>
@@ -45,6 +44,7 @@ public:
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout_7;
     QHBoxLayout *horizontalLayout_4;
+    QPushButton *pushButton_2;
     QTreeWidget *treeWidget;
     QGroupBox *gridGroupBox;
     QGridLayout *gridLayout;
@@ -77,14 +77,6 @@ public:
     QPushButton *addRowPerechniTable;
     QPushButton *deleteRowPerechniTable;
     QTableView *perechenTableView;
-    QWidget *tab_2;
-    QVBoxLayout *verticalLayout_2;
-    QVBoxLayout *verticalLayout_5;
-    QTableView *tableViewTemp;
-    QPlainTextEdit *plainTextEdit;
-    QSpinBox *spinBox_2;
-    QPushButton *pushButton_9;
-    QPushButton *pushButton;
     QButtonGroup *buttonGroup;
 
     void setupUi(QMainWindow *MainSizWindow)
@@ -129,6 +121,15 @@ public:
 
         verticalLayout_7->addLayout(horizontalLayout_4);
 
+        pushButton_2 = new QPushButton(tab);
+        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/new/icon/Save-as_37111.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_2->setIcon(icon1);
+        pushButton_2->setIconSize(QSize(32, 32));
+
+        verticalLayout_7->addWidget(pushButton_2);
+
         treeWidget = new QTreeWidget(tab);
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
         __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
@@ -144,8 +145,8 @@ public:
         treeWidget->setProperty("showDropIndicator", QVariant(false));
         treeWidget->setIconSize(QSize(20, 20));
         treeWidget->setWordWrap(false);
-        treeWidget->setHeaderHidden(false);
-        treeWidget->header()->setVisible(true);
+        treeWidget->setHeaderHidden(true);
+        treeWidget->header()->setVisible(false);
 
         verticalLayout_7->addWidget(treeWidget);
 
@@ -162,9 +163,9 @@ public:
         horizontalLayout_5->setContentsMargins(-1, 10, -1, -1);
         addRowMainTable = new QPushButton(gridGroupBox);
         addRowMainTable->setObjectName(QString::fromUtf8("addRowMainTable"));
-        QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/new/icon/add.png"), QSize(), QIcon::Normal, QIcon::Off);
-        addRowMainTable->setIcon(icon1);
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/new/icon/add.png"), QSize(), QIcon::Normal, QIcon::Off);
+        addRowMainTable->setIcon(icon2);
         addRowMainTable->setIconSize(QSize(32, 32));
         addRowMainTable->setCheckable(false);
         addRowMainTable->setChecked(false);
@@ -175,9 +176,9 @@ public:
 
         deleteRowMainTable = new QPushButton(gridGroupBox);
         deleteRowMainTable->setObjectName(QString::fromUtf8("deleteRowMainTable"));
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/new/icon/remove-trash.png"), QSize(), QIcon::Normal, QIcon::Off);
-        deleteRowMainTable->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/new/icon/remove-trash.png"), QSize(), QIcon::Normal, QIcon::Off);
+        deleteRowMainTable->setIcon(icon3);
         deleteRowMainTable->setIconSize(QSize(32, 32));
 
         horizontalLayout_5->addWidget(deleteRowMainTable);
@@ -344,14 +345,14 @@ public:
         horizontalLayout_3->setContentsMargins(-1, 0, -1, -1);
         addRowPerechniTable = new QPushButton(tab_3);
         addRowPerechniTable->setObjectName(QString::fromUtf8("addRowPerechniTable"));
-        addRowPerechniTable->setIcon(icon1);
+        addRowPerechniTable->setIcon(icon2);
         addRowPerechniTable->setIconSize(QSize(32, 32));
 
         horizontalLayout_3->addWidget(addRowPerechniTable);
 
         deleteRowPerechniTable = new QPushButton(tab_3);
         deleteRowPerechniTable->setObjectName(QString::fromUtf8("deleteRowPerechniTable"));
-        deleteRowPerechniTable->setIcon(icon2);
+        deleteRowPerechniTable->setIcon(icon3);
         deleteRowPerechniTable->setIconSize(QSize(32, 32));
 
         horizontalLayout_3->addWidget(deleteRowPerechniTable);
@@ -368,51 +369,11 @@ public:
 
         perechenTableView = new QTableView(tab_3);
         perechenTableView->setObjectName(QString::fromUtf8("perechenTableView"));
+        perechenTableView->verticalHeader()->setVisible(false);
 
         horizontalLayout_2->addWidget(perechenTableView);
 
         tabWidget->addTab(tab_3, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QString::fromUtf8("tab_2"));
-        verticalLayout_2 = new QVBoxLayout(tab_2);
-        verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        verticalLayout_5 = new QVBoxLayout();
-        verticalLayout_5->setSpacing(6);
-        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
-        tableViewTemp = new QTableView(tab_2);
-        tableViewTemp->setObjectName(QString::fromUtf8("tableViewTemp"));
-
-        verticalLayout_5->addWidget(tableViewTemp);
-
-        plainTextEdit = new QPlainTextEdit(tab_2);
-        plainTextEdit->setObjectName(QString::fromUtf8("plainTextEdit"));
-
-        verticalLayout_5->addWidget(plainTextEdit);
-
-        spinBox_2 = new QSpinBox(tab_2);
-        spinBox_2->setObjectName(QString::fromUtf8("spinBox_2"));
-        spinBox_2->setMaximum(20000);
-        spinBox_2->setSingleStep(1000);
-        spinBox_2->setValue(1000);
-
-        verticalLayout_5->addWidget(spinBox_2);
-
-        pushButton_9 = new QPushButton(tab_2);
-        pushButton_9->setObjectName(QString::fromUtf8("pushButton_9"));
-
-        verticalLayout_5->addWidget(pushButton_9);
-
-        pushButton = new QPushButton(tab_2);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-
-        verticalLayout_5->addWidget(pushButton);
-
-
-        verticalLayout_2->addLayout(verticalLayout_5);
-
-        tabWidget->addTab(tab_2, QString());
 
         verticalLayout_6->addWidget(tabWidget);
 
@@ -430,6 +391,7 @@ public:
     void retranslateUi(QMainWindow *MainSizWindow)
     {
         MainSizWindow->setWindowTitle(QApplication::translate("MainSizWindow", " \320\226\321\203\321\200\320\275\320\260\320\273 \320\241\320\230\320\227", nullptr));
+        pushButton_2->setText(QApplication::translate("MainSizWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\262\321\201\320\265", nullptr));
         gridGroupBox->setTitle(QApplication::translate("MainSizWindow", "\320\222\321\213\320\264\320\265\320\273\320\265\320\275\320\275\320\260\321\217 \320\267\320\260\320\277\320\270\321\201\321\214", nullptr));
         addRowMainTable->setText(QApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 ", nullptr));
         deleteRowMainTable->setText(QApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 ", nullptr));
@@ -674,10 +636,6 @@ public:
         addRowPerechniTable->setText(QApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", nullptr));
         deleteRowPerechniTable->setText(QApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainSizWindow", "\320\237\320\265\321\200\320\265\321\207\320\275\320\270", nullptr));
-        plainTextEdit->setPlainText(QString());
-        pushButton_9->setText(QApplication::translate("MainSizWindow", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\203\320\262\320\265\320\264\320\276\320\274\320\273\320\265\320\275\320\270\320\265 [Test]", nullptr));
-        pushButton->setText(QApplication::translate("MainSizWindow", "PushButton", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainSizWindow", "\320\241\321\202\321\200\320\260\320\275\320\270\321\206\320\260", nullptr));
     } // retranslateUi
 
 };
