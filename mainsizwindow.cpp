@@ -1,23 +1,26 @@
 #include "mainsizwindow.h"
-
+#include <QTimer>
 MainSizWindow::MainSizWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainSizWindow)
 {
+
     ui->setupUi(this);
     db = new DataBase();
     db->connectToDataBase();
     setupModels();
     Style();
     createUI();
+    messageTimer = new QTimer(this);
+    connect(messageTimer, &QTimer::timeout, this, &MainSizWindow::updateTime);
+    messageTimer->start(1000*60*20);
+    updateTime();
 }
 void MainSizWindow::Style()
 {
     ui->listEventView->setStyleSheet("font: 14pt; selection-color: rgb(0, 0, 0); selection-background-color: rgb(232, 237, 240);");
     qApp->setStyleSheet("QWidget {  selection-color: rgb(0, 0, 0); selection-background-color: rgba(212, 217, 250,  250); }"
                         "QTableView{ font: 13pt; selection-background-color: rgba(212, 217, 250,  250);  }");
-
-
 }
 void MainSizWindow::closeEvent(QCloseEvent * event)
 {
@@ -172,7 +175,6 @@ void MainSizWindow::createUI()
     setModelOnTableView(sizTypeTableModel);
 
     //СИЗ
-
     ui->mainTableView->setModel(sizProxyTableModel);
     // Разрешаем выделение строк
     ui->mainTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -200,8 +202,6 @@ void MainSizWindow::createUI()
     QItemSelectionModel *sm = ui->mainTableView->selectionModel();
     connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
             this, SLOT(on_mainTableViewTriggerSelectionModel_currentRowChanged(QModelIndex,QModelIndex)));
-
-
     ui->listEventView->setModel(eventProxyTableModel);
     ui->listEventView->setModelColumn(10);
     ui->selectedItemOsmotrButton->hide();
@@ -238,18 +238,13 @@ void MainSizWindow::slotRevertRecordRow(){
     }
 }
 
-
-
-
 void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
     if(item->parent()!=nullptr) {
-
         QString parrent = item->parent()->data(0,0).toString();
 
         sizProxyTableModel->setFilterRegExp(QRegExp(item->text(0), Qt::CaseInsensitive,
                                                     QRegExp::FixedString));
-
         if(parrent == "Объекты")
         {
             sizProxyTableModel->setFilterKeyColumn(6);
@@ -261,7 +256,6 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
         if(parrent == "Типы СИЗ")
         {
             sizProxyTableModel->setFilterKeyColumn(5);
-
         }
         // sizProxyTableModel->select();
         ui->mainTableView->resizeColumnsToContents();
@@ -270,13 +264,10 @@ void MainSizWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
     }
     else {
         sizProxyTableModel->setFilterRegExp(QRegExp("", Qt::CaseInsensitive, QRegExp::FixedString));
-
         ui->mainTableView->resizeColumnsToContents();
         ui->mainTableView->resizeRowsToContents();
         ui->mainTableView->resizeColumnsToContents();
     }
-
-
 }
 
 void MainSizWindow::on_tabWidget_currentChanged(int index)
@@ -285,19 +276,18 @@ void MainSizWindow::on_tabWidget_currentChanged(int index)
 }
 void MainSizWindow::updateTime()
 {
-    /* if( !this->hasFocus() ){
+    if( !this->hasFocus() ){
         QString message;
-        if(ui->listWidget->count()>0){
-            for (int i=0;i<ui->listWidget->count()&&i<4;i++) {
-                message+= ui->listWidget->item(i)->text()+"; \n";
+        if(eventProxyTableModel->rowCount()>0){
+            for (int i=0;i<eventProxyTableModel->rowCount()&&i<4;i++) {
+                message+= eventProxyTableModel->data(eventProxyTableModel->index(i,10),Qt::DisplayRole).toString()+"; \n";
             }
             QIcon  myicon =  QIcon(":/new/icon/153png.png");
-
             trayIcon->showMessage("Журнал СИЗ",
                                   trUtf8(message.toUtf8()),
                                   myicon
                                   );}
-    }*/
+    }
 }
 
 void MainSizWindow::on_pushButton_9_clicked()
@@ -409,7 +399,7 @@ void MainSizWindow::on_selectedItemOsmotrButton_clicked()
 
         QModelIndexList listIndex = ui->mainTableView->selectionModel()->selectedRows();
 
-       // sizProxyTableModel->dataChanged(osmotrIndex,osmotrIndex);
+        // sizProxyTableModel->dataChanged(osmotrIndex,osmotrIndex);
     }
 }
 void MainSizWindow::on_pushButton_5_toggled(bool checked)
@@ -604,4 +594,9 @@ void MainSizWindow::on_listEventView_doubleClicked(const QModelIndex &index)
 void MainSizWindow::on_pushButton_2_clicked()
 {
     mainSizModel->submitAll();
+}
+
+void MainSizWindow::on_spinBox_valueChanged(int arg1)
+{
+    messageTimer->setInterval(arg1*60*1000);
 }

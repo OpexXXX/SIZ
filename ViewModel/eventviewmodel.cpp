@@ -120,7 +120,6 @@ QColor EventViewModel::getColorForRow(int event) const
         col = QColor(Qt::white);
         break;
     }
-
     return col;
 }
 
@@ -158,8 +157,6 @@ QVariant EventViewModel::data(const QModelIndex &index, int role) const
     QString result ="";
     if (role == Qt::DisplayRole&& index.column()==10){
         if (value.isValid()) {
-
-
             return getMessage(index);
             //
         }

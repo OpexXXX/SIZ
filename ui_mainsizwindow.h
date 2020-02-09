@@ -15,6 +15,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDateEdit>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -61,9 +62,6 @@ public:
     QWidget *tab_4;
     QVBoxLayout *verticalLayout;
     QListView *listEventView;
-    QHBoxLayout *horizontalLayout_9;
-    QLabel *label;
-    QSpinBox *daysOfEvent;
     QWidget *tab_3;
     QHBoxLayout *horizontalLayout_2;
     QVBoxLayout *verticalLayout_3;
@@ -77,6 +75,12 @@ public:
     QPushButton *addRowPerechniTable;
     QPushButton *deleteRowPerechniTable;
     QTableView *perechenTableView;
+    QWidget *tab_2;
+    QFormLayout *formLayout;
+    QSpinBox *daysOfEvent;
+    QLabel *label;
+    QSpinBox *spinBox;
+    QLabel *label_4;
     QButtonGroup *buttonGroup;
 
     void setupUi(QMainWindow *MainSizWindow)
@@ -269,29 +273,6 @@ public:
 
         verticalLayout->addWidget(listEventView);
 
-        horizontalLayout_9 = new QHBoxLayout();
-        horizontalLayout_9->setSpacing(6);
-        horizontalLayout_9->setObjectName(QString::fromUtf8("horizontalLayout_9"));
-        label = new QLabel(tab_4);
-        label->setObjectName(QString::fromUtf8("label"));
-        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy3);
-        label->setMaximumSize(QSize(250, 16777215));
-
-        horizontalLayout_9->addWidget(label);
-
-        daysOfEvent = new QSpinBox(tab_4);
-        daysOfEvent->setObjectName(QString::fromUtf8("daysOfEvent"));
-        daysOfEvent->setValue(20);
-
-        horizontalLayout_9->addWidget(daysOfEvent);
-
-
-        verticalLayout->addLayout(horizontalLayout_9);
-
         tabWidget->addTab(tab_4, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
@@ -374,6 +355,43 @@ public:
         horizontalLayout_2->addWidget(perechenTableView);
 
         tabWidget->addTab(tab_3, QString());
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QString::fromUtf8("tab_2"));
+        formLayout = new QFormLayout(tab_2);
+        formLayout->setSpacing(6);
+        formLayout->setContentsMargins(11, 11, 11, 11);
+        formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        daysOfEvent = new QSpinBox(tab_2);
+        daysOfEvent->setObjectName(QString::fromUtf8("daysOfEvent"));
+        daysOfEvent->setValue(20);
+
+        formLayout->setWidget(0, QFormLayout::LabelRole, daysOfEvent);
+
+        label = new QLabel(tab_2);
+        label->setObjectName(QString::fromUtf8("label"));
+        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy3);
+        label->setMaximumSize(QSize(250, 16777215));
+
+        formLayout->setWidget(0, QFormLayout::FieldRole, label);
+
+        spinBox = new QSpinBox(tab_2);
+        spinBox->setObjectName(QString::fromUtf8("spinBox"));
+        spinBox->setMinimum(1);
+        spinBox->setMaximum(360);
+        spinBox->setSingleStep(10);
+
+        formLayout->setWidget(1, QFormLayout::LabelRole, spinBox);
+
+        label_4 = new QLabel(tab_2);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+
+        formLayout->setWidget(1, QFormLayout::FieldRole, label_4);
+
+        tabWidget->addTab(tab_2, QString());
 
         verticalLayout_6->addWidget(tabWidget);
 
@@ -381,7 +399,7 @@ public:
 
         retranslateUi(MainSizWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(3);
         addRowMainTable->setDefault(false);
 
 
@@ -626,7 +644,6 @@ public:
 "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\320\235\320\265 \320\264\320\276\320\277\321\203\321\201\320\272\320\260\320\265\321\202\321\201\321\217 \321\200\320\260\320\261\320\276\321\202\320\260\321\202\321\214 \321\201 \320\272\320\273\320\265\321\211\320\260\320\274\320\270 \320\264\320\276 1000 \320\222, \320\275\320\260\321\205\320\276\320\264\321\217\321\201\321\214 \320\275\320\260 \320\276\320\277\320\276\321\200\320\265 \320\222\320\233, \320\265\321\201\320\273\320\270 \320\272\320\273\320\265\321\211\320\270 \321\201\320\277\320\265\321\206\320\270\320\260\320\273\321\214\320\275\320\276"
                         " \320\275\320\265 \320\277\321\200\320\265\320\264\320\275\320\260\320\267\320\275\320\260\321\207\320\265\320\275\321\213 \320\264\320\273\321\217 \321\215\321\202\320\276\320\271 \321\206\320\265\320\273\320\270.</li></ul></body></html>", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainSizWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", nullptr));
-        label->setText(QApplication::translate("MainSizWindow", "\320\232\320\276\320\273-\320\262\320\276 \320\264\320\275\320\265\320\271 \320\264\320\276 \320\275\320\260\320\277\320\276\320\274\320\270\320\275\320\260\320\275\320\270\321\217", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainSizWindow", "\320\241\320\276\320\261\321\213\321\202\320\270\321\217", nullptr));
         radioButton_3->setText(QApplication::translate("MainSizWindow", "\320\222\320\270\320\264\321\213 \321\201\321\200\320\265\320\264\321\201\321\202\320\262 \320\267\320\260\321\211\320\270\321\202\321\213", nullptr));
         radioButton_2->setText(QApplication::translate("MainSizWindow", "\320\236\320\261\321\212\320\265\320\272\321\202\321\213", nullptr));
@@ -636,6 +653,9 @@ public:
         addRowPerechniTable->setText(QApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", nullptr));
         deleteRowPerechniTable->setText(QApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainSizWindow", "\320\237\320\265\321\200\320\265\321\207\320\275\320\270", nullptr));
+        label->setText(QApplication::translate("MainSizWindow", "\320\264\320\275\320\265\320\271 \320\264\320\276 \320\275\320\260\320\277\320\276\320\274\320\270\320\275\320\260\320\275\320\270\321\217", nullptr));
+        label_4->setText(QApplication::translate("MainSizWindow", "\320\274\320\270\320\275\321\203\321\202 \320\274\320\265\320\266\320\264\321\203 \320\276\320\277\320\276\320\262\320\265\321\211\320\265\320\275\320\270\321\217\320\274\320\270", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainSizWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270", nullptr));
     } // retranslateUi
 
 };

@@ -75,6 +75,8 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_spinBox_valueChanged(int arg1);
+
 public:
     Ui::MainSizWindow *ui;
     /* В проекте используются объекты для взаимодействия с информацией в базе данных
@@ -84,6 +86,7 @@ public:
 
 private:
     /* Модели*/
+     QTimer *messageTimer ;
     sizModel *mainSizModel;
     QSqlTableModel  *sizTypeTableModel;
     QSqlTableModel  *ObjectTableModel;
