@@ -21,6 +21,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
@@ -81,6 +82,14 @@ public:
     QLabel *label;
     QSpinBox *spinBox;
     QLabel *label_4;
+    QLineEdit *lineEdit;
+    QPushButton *pushButton;
+    QPushButton *pushButton_3;
+    QPushButton *pushButton_4;
+    QPushButton *pushButton_6;
+    QLineEdit *lineEdit_2;
+    QLineEdit *lineEdit_3;
+    QLineEdit *lineEdit_4;
     QButtonGroup *buttonGroup;
 
     void setupUi(QMainWindow *MainSizWindow)
@@ -384,12 +393,60 @@ public:
         spinBox->setMaximum(360);
         spinBox->setSingleStep(10);
 
-        formLayout->setWidget(1, QFormLayout::LabelRole, spinBox);
+        formLayout->setWidget(2, QFormLayout::LabelRole, spinBox);
 
         label_4 = new QLabel(tab_2);
         label_4->setObjectName(QString::fromUtf8("label_4"));
 
-        formLayout->setWidget(1, QFormLayout::FieldRole, label_4);
+        formLayout->setWidget(2, QFormLayout::FieldRole, label_4);
+
+        lineEdit = new QLineEdit(tab_2);
+        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        lineEdit->setFrame(false);
+        lineEdit->setReadOnly(true);
+
+        formLayout->setWidget(4, QFormLayout::FieldRole, lineEdit);
+
+        pushButton = new QPushButton(tab_2);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        formLayout->setWidget(4, QFormLayout::LabelRole, pushButton);
+
+        pushButton_3 = new QPushButton(tab_2);
+        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
+
+        formLayout->setWidget(5, QFormLayout::LabelRole, pushButton_3);
+
+        pushButton_4 = new QPushButton(tab_2);
+        pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
+
+        formLayout->setWidget(6, QFormLayout::LabelRole, pushButton_4);
+
+        pushButton_6 = new QPushButton(tab_2);
+        pushButton_6->setObjectName(QString::fromUtf8("pushButton_6"));
+
+        formLayout->setWidget(7, QFormLayout::LabelRole, pushButton_6);
+
+        lineEdit_2 = new QLineEdit(tab_2);
+        lineEdit_2->setObjectName(QString::fromUtf8("lineEdit_2"));
+        lineEdit_2->setFrame(false);
+        lineEdit_2->setReadOnly(true);
+
+        formLayout->setWidget(5, QFormLayout::FieldRole, lineEdit_2);
+
+        lineEdit_3 = new QLineEdit(tab_2);
+        lineEdit_3->setObjectName(QString::fromUtf8("lineEdit_3"));
+        lineEdit_3->setFrame(false);
+        lineEdit_3->setReadOnly(true);
+
+        formLayout->setWidget(6, QFormLayout::FieldRole, lineEdit_3);
+
+        lineEdit_4 = new QLineEdit(tab_2);
+        lineEdit_4->setObjectName(QString::fromUtf8("lineEdit_4"));
+        lineEdit_4->setFrame(false);
+        lineEdit_4->setReadOnly(true);
+
+        formLayout->setWidget(7, QFormLayout::FieldRole, lineEdit_4);
 
         tabWidget->addTab(tab_2, QString());
 
@@ -653,8 +710,16 @@ public:
         addRowPerechniTable->setText(QApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", nullptr));
         deleteRowPerechniTable->setText(QApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainSizWindow", "\320\237\320\265\321\200\320\265\321\207\320\275\320\270", nullptr));
-        label->setText(QApplication::translate("MainSizWindow", "\320\264\320\275\320\265\320\271 \320\264\320\276 \320\275\320\260\320\277\320\276\320\274\320\270\320\275\320\260\320\275\320\270\321\217", nullptr));
+        label->setText(QApplication::translate("MainSizWindow", "\320\264\320\275\320\265\320\271 \320\264\320\276 \321\201\320\276\320\261\321\213\321\202\320\270\321\217", nullptr));
         label_4->setText(QApplication::translate("MainSizWindow", "\320\274\320\270\320\275\321\203\321\202 \320\274\320\265\320\266\320\264\321\203 \320\276\320\277\320\276\320\262\320\265\321\211\320\265\320\275\320\270\321\217\320\274\320\270", nullptr));
+        lineEdit->setText(QApplication::translate("MainSizWindow", "\320\237\321\200\320\270\320\274\320\265\321\200 \321\201\321\202\321\200\320\276\320\272\320\270 \321\201 \320\270\321\201\321\202\320\265\320\272\321\210\320\270\320\274 \320\276\321\201\320\274\320\276\321\202\321\200\320\276\320\274", nullptr));
+        pushButton->setText(QApplication::translate("MainSizWindow", "...", nullptr));
+        pushButton_3->setText(QApplication::translate("MainSizWindow", "...", nullptr));
+        pushButton_4->setText(QApplication::translate("MainSizWindow", "...", nullptr));
+        pushButton_6->setText(QApplication::translate("MainSizWindow", "...", nullptr));
+        lineEdit_2->setText(QApplication::translate("MainSizWindow", "\320\237\321\200\320\270\320\274\320\265\321\200 \321\201\321\202\321\200\320\276\320\272\320\270 \321\201 \320\270\321\201\321\202\320\265\320\272\321\210\320\270\320\274 \320\270\321\201\320\277\321\213\321\202\320\260\320\275\320\270\320\265\320\274", nullptr));
+        lineEdit_3->setText(QApplication::translate("MainSizWindow", "\320\237\321\200\320\270\320\274\320\265\321\200 \321\201\321\202\321\200\320\276\320\272\320\270 \321\201  \320\270\321\201\321\202\320\265\320\272\320\260\321\216\321\211\320\270\320\274 \320\270\321\201\320\277\321\213\321\202\320\260\320\275\320\270\320\265\320\274", nullptr));
+        lineEdit_4->setText(QApplication::translate("MainSizWindow", "\320\237\321\200\320\270\320\274\320\265\321\200 \321\201\321\202\321\200\320\276\320\272\320\270 \321\201  \320\270\321\201\321\202\320\265\320\272\320\260\321\216\321\211\320\270\320\274 \320\276\321\201\320\274\320\276\321\202\321\200\320\276\320\274", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainSizWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270", nullptr));
     } // retranslateUi
 

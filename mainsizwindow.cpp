@@ -560,9 +560,18 @@ void MainSizWindow::on_daysOfEvent_valueChanged(int arg1)
 
 void MainSizWindow::on_pushButton_clicked()
 {
+    ui->listEventView->setStyleSheet("font: 14pt; selection-color: rgb(0, 0, 0); selection-background-color: rgb(232, 237, 240);");
+    qApp->setStyleSheet("QWidget {  selection-color: rgb(0, 0, 0); selection-background-color: rgba(212, 217, 250,  250); }"
+                        "QTableView{ font: 13pt; selection-background-color: rgba(212, 217, 250,  250);  }");
 
 
+    QColor color = QColorDialog::getColor(Qt::yellow, this );
+       if( color.isValid() )
+       {
+         qDebug() << "Color Choosen : " << color.name();
+       }
 }
+
 
 void MainSizWindow::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {

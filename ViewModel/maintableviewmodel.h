@@ -10,7 +10,7 @@
 #include <QColor>
 #include <QBrush>
 #include "define.h"
-
+#include <QColorDialog>
 
 
 class MainTableModel : public QSortFilterProxyModel
