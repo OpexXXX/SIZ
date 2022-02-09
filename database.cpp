@@ -196,10 +196,47 @@ bool  DataBase::readSizFromDB()
 {
     QSqlQuery q("select * from Siz");
     QSqlRecord rec = q.record();
-
     int nameCol = rec.indexOf("number"); // index of the field "name"
-
-
-
     return true;
+}
+void DataBase::expotrToCSV(QFile * file)
+{
+
+    QSqlQuery q("SELECT number, Siz.verification, endVerification, inspectionDate, TypeSiz.oneName, Object.name, personalDate, Personal.name, note, daysToEvent "
+                "FROM Siz "
+                "INNER JOIN  TypeSiz ON Siz.typeSiz = TypeSiz.id "
+                "INNER JOIN  Object ON Siz.object = Object.id "
+                "INNER JOIN  Personal ON Siz.personal = Personal.id ");
+    QSqlRecord rec = q.record();
+
+    const int COLUMN_COUNT = 10;
+    file->write("Номер");
+    file->write(";");
+    file->write("Дата испытания");
+    file->write(";");
+    file->write("Дата следующего испытания");
+    file->write(";");
+    file->write("Дата осмотра");
+    file->write(";");
+    file->write("Тип СИЗ");
+    file->write(";");
+    file->write("Объект");
+    file->write(";");
+    file->write("Выдан в пользование");
+    file->write(";");
+    file->write("Работник");
+    file->write(";");
+    file->write("Заметка");
+    file->write(";");
+    file->write("Дней до ");
+    file->write("\n");
+
+    while (q.next()){
+        for (int i=0;i<COLUMN_COUNT;i++)
+        {
+            file->write(q.value(i).toString().toUtf8());
+            file->write(";");
+        }
+        file->write("\n");
+    }
 }

@@ -40,7 +40,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -62,11 +62,28 @@
           <item>
            <widget class="QPushButton" name="pushButton_2">
             <property name="text">
-             <string>Сохранить все</string>
+             <string>Сохранить</string>
             </property>
             <property name="icon">
              <iconset resource="resourse.qrc">
               <normaloff>:/new/icon/Save-as_37111.png</normaloff>:/new/icon/Save-as_37111.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_export_csv">
+            <property name="text">
+             <string>Экспорт -&gt; CSV</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>csv.png</normaloff>csv.png</iconset>
             </property>
             <property name="iconSize">
              <size>

@@ -18,6 +18,7 @@
 #include <QCloseEvent>
 #include <QHideEvent>
 #include <QSortFilterProxyModel>
+#include <QFileDialog>
 #include "database.h"
 #include "ViewModel/maintableviewmodel.h"
 #include "ViewModel/eventviewmodel.h"
@@ -76,6 +77,8 @@ private slots:
     void on_pushButton_2_clicked();
 
     void on_spinBox_valueChanged(int arg1);
+
+    void on_btn_export_csv_clicked();
 
 public:
     Ui::MainSizWindow *ui;

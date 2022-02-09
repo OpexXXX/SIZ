@@ -1,5 +1,6 @@
 #include "mainsizwindow.h"
 #include <QTimer>
+
 MainSizWindow::MainSizWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainSizWindow)
@@ -608,4 +609,25 @@ void MainSizWindow::on_pushButton_2_clicked()
 void MainSizWindow::on_spinBox_valueChanged(int arg1)
 {
     messageTimer->setInterval(arg1*60*1000);
+}
+
+void MainSizWindow::on_btn_export_csv_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+             tr("Сохранить таблицу СИЗ"), "",
+             tr("Фаил CSV (*.csv);;All Files (*)"));
+    if (fileName.isEmpty())
+            return;
+        else {
+            QFile file(fileName);
+            if (!file.open(QIODevice::WriteOnly)) {
+                QMessageBox::information(this, tr("Unable to open file"),
+                    file.errorString());
+                return;
+            }
+
+        db->expotrToCSV(&file);
+
+    }
+
 }

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainsizwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.4
+** Created by: Qt User Interface Compiler version 5.12.8
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -47,6 +47,7 @@ public:
     QVBoxLayout *verticalLayout_7;
     QHBoxLayout *horizontalLayout_4;
     QPushButton *pushButton_2;
+    QPushButton *btn_export_csv;
     QTreeWidget *treeWidget;
     QGroupBox *gridGroupBox;
     QGridLayout *gridLayout;
@@ -143,6 +144,15 @@ public:
 
         verticalLayout_7->addWidget(pushButton_2);
 
+        btn_export_csv = new QPushButton(tab);
+        btn_export_csv->setObjectName(QString::fromUtf8("btn_export_csv"));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8("csv.png"), QSize(), QIcon::Normal, QIcon::Off);
+        btn_export_csv->setIcon(icon2);
+        btn_export_csv->setIconSize(QSize(32, 32));
+
+        verticalLayout_7->addWidget(btn_export_csv);
+
         treeWidget = new QTreeWidget(tab);
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
         __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
@@ -176,9 +186,9 @@ public:
         horizontalLayout_5->setContentsMargins(-1, 10, -1, -1);
         addRowMainTable = new QPushButton(gridGroupBox);
         addRowMainTable->setObjectName(QString::fromUtf8("addRowMainTable"));
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/new/icon/add.png"), QSize(), QIcon::Normal, QIcon::Off);
-        addRowMainTable->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/new/icon/add.png"), QSize(), QIcon::Normal, QIcon::Off);
+        addRowMainTable->setIcon(icon3);
         addRowMainTable->setIconSize(QSize(32, 32));
         addRowMainTable->setCheckable(false);
         addRowMainTable->setChecked(false);
@@ -189,9 +199,9 @@ public:
 
         deleteRowMainTable = new QPushButton(gridGroupBox);
         deleteRowMainTable->setObjectName(QString::fromUtf8("deleteRowMainTable"));
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/new/icon/remove-trash.png"), QSize(), QIcon::Normal, QIcon::Off);
-        deleteRowMainTable->setIcon(icon3);
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/new/icon/remove-trash.png"), QSize(), QIcon::Normal, QIcon::Off);
+        deleteRowMainTable->setIcon(icon4);
         deleteRowMainTable->setIconSize(QSize(32, 32));
 
         horizontalLayout_5->addWidget(deleteRowMainTable);
@@ -335,14 +345,14 @@ public:
         horizontalLayout_3->setContentsMargins(-1, 0, -1, -1);
         addRowPerechniTable = new QPushButton(tab_3);
         addRowPerechniTable->setObjectName(QString::fromUtf8("addRowPerechniTable"));
-        addRowPerechniTable->setIcon(icon2);
+        addRowPerechniTable->setIcon(icon3);
         addRowPerechniTable->setIconSize(QSize(32, 32));
 
         horizontalLayout_3->addWidget(addRowPerechniTable);
 
         deleteRowPerechniTable = new QPushButton(tab_3);
         deleteRowPerechniTable->setObjectName(QString::fromUtf8("deleteRowPerechniTable"));
-        deleteRowPerechniTable->setIcon(icon3);
+        deleteRowPerechniTable->setIcon(icon4);
         deleteRowPerechniTable->setIconSize(QSize(32, 32));
 
         horizontalLayout_3->addWidget(deleteRowPerechniTable);
@@ -456,7 +466,7 @@ public:
 
         retranslateUi(MainSizWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(0);
         addRowMainTable->setDefault(false);
 
 
@@ -466,7 +476,8 @@ public:
     void retranslateUi(QMainWindow *MainSizWindow)
     {
         MainSizWindow->setWindowTitle(QApplication::translate("MainSizWindow", " \320\226\321\203\321\200\320\275\320\260\320\273 \320\241\320\230\320\227", nullptr));
-        pushButton_2->setText(QApplication::translate("MainSizWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\262\321\201\320\265", nullptr));
+        pushButton_2->setText(QApplication::translate("MainSizWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
+        btn_export_csv->setText(QApplication::translate("MainSizWindow", "\320\255\320\272\321\201\320\277\320\276\321\200\321\202 -> CSV", nullptr));
         gridGroupBox->setTitle(QApplication::translate("MainSizWindow", "\320\222\321\213\320\264\320\265\320\273\320\265\320\275\320\275\320\260\321\217 \320\267\320\260\320\277\320\270\321\201\321\214", nullptr));
         addRowMainTable->setText(QApplication::translate("MainSizWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 ", nullptr));
         deleteRowMainTable->setText(QApplication::translate("MainSizWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 ", nullptr));
