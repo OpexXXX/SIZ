@@ -10,6 +10,9 @@
 #include <QDate>
 #include <QDebug>
 #include <QSqlRecord>
+#include <QTextCodec>
+#include <QTextStream>
+
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -201,42 +204,42 @@ bool  DataBase::readSizFromDB()
 }
 void DataBase::expotrToCSV(QFile * file)
 {
-
-    QSqlQuery q("SELECT number, Siz.verification, endVerification, inspectionDate, TypeSiz.oneName, Object.name, personalDate, Personal.name, note, daysToEvent "
+    QSqlQuery q("SELECT number, Siz.verification, endVerification, inspectionDate, TypeSiz.oneName, Object.name, personalDate, Personal.name, note, daysToEvent, TypeSiz.periodicityVer "
                 "FROM Siz "
                 "INNER JOIN  TypeSiz ON Siz.typeSiz = TypeSiz.id "
                 "INNER JOIN  Object ON Siz.object = Object.id "
                 "INNER JOIN  Personal ON Siz.personal = Personal.id ");
     QSqlRecord rec = q.record();
+    QTextStream out(file);
+    //out.setCodec("UTF-8");
+    out.setCodec("CP1251");
 
-    const int COLUMN_COUNT = 10;
-    file->write("Номер");
-    file->write(";");
-    file->write("Дата испытания");
-    file->write(";");
-    file->write("Дата следующего испытания");
-    file->write(";");
-    file->write("Дата осмотра");
-    file->write(";");
-    file->write("Тип СИЗ");
-    file->write(";");
-    file->write("Объект");
-    file->write(";");
-    file->write("Выдан в пользование");
-    file->write(";");
-    file->write("Работник");
-    file->write(";");
-    file->write("Заметка");
-    file->write(";");
-    file->write("Дней до ");
-    file->write("\n");
+    const int COLUMN_COUNT = 11;
+    QStringList headers;
+
+    headers <<"Номер"
+           <<  "Дата испытания"
+            << "Дата следующего испытания"
+            <<"Дата осмотра"
+           << "Тип СИЗ"
+           <<"Объект"
+          << "Выдан в пользование"
+          << "Работник"
+          << "Заметка"
+          << "Дней до "
+           << "Срок испытания";
+    foreach (auto head, headers) out << head << ";";
+    out << "\n";
 
     while (q.next()){
+        QDate  nextInspDate =QDate::fromString(q.value(2).toString(),"yyyy-MM-dd"); //Дата следующего испытания
+        QDate inspDate = nextInspDate.addMonths(q.value(11).toInt());
+
         for (int i=0;i<COLUMN_COUNT;i++)
         {
-            file->write(q.value(i).toString().toUtf8());
-            file->write(";");
+            if (i == 1) out <<  inspDate.toString("yyyy-MM-dd") << ";";
+            else  out << q.value(i).toString() << ";";
         }
-        file->write("\n");
+        out<< "\n";
     }
 }
