@@ -37,17 +37,14 @@ void MainSizWindow::hideEvent(QHideEvent *event)
 void MainSizWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason){
-    case QSystemTrayIcon::Trigger:
+    case QSystemTrayIcon::DoubleClick:
 
         /* иначе, если окно видимо, то оно скрывается,
              * и наоборот, если скрыто, то разворачивается на экран
              * */
-        if(!this->isVisible()){
-            this->show();
-        } else {
-            this->hide();
-        }
 
+             this->setVisible(!this->isVisible());
+             this->activateWindow();
         break;
     default:
         break;
