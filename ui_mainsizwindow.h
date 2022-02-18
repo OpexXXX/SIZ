@@ -106,7 +106,6 @@ public:
         icon.addFile(QString::fromUtf8(":/new/icon/128.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainSizWindow->setWindowIcon(icon);
         MainSizWindow->setAnimated(true);
-        MainSizWindow->setDockOptions(QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks);
         centralWidget = new QWidget(MainSizWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());

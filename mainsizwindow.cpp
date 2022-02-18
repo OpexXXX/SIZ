@@ -26,6 +26,7 @@ void MainSizWindow::Style()
 void MainSizWindow::closeEvent(QCloseEvent * event)
 {
     mainSizModel->submitAll();
+
 }
 void MainSizWindow::hideEvent(QHideEvent *event)
 {
