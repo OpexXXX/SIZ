@@ -6,7 +6,6 @@ sizModel::sizModel(QObject *parent):QSqlRelationalTableModel (parent)
 {
       connect(this, &sizModel::dataChanged,this,
              &sizModel::dataToEventCalcChange);
-
 }
 
 
@@ -93,6 +92,7 @@ void sizModel::setTypeSizData(const QModelIndex &index)
      QSqlTableModel::setData(sizModel::index(index.row(),MainSizModelHead::personalyty),typeSiz,Qt::EditRole);
     //dataChanged(sizModel::index(index.row(),MainSizModelHead::bool_verification),sizModel::index(index.row(),MainSizModelHead::personalyty));
 }
+
 void sizModel::updateAllTypeSizData()
 {
     int count = this->rowCount();
@@ -104,7 +104,7 @@ void sizModel::updateAllEvents()
 {
      //model->setEditStrategy(QSqlTableModel::OnRowChange);
   // EditStrategy strategy  =  this->editStrategy();
-   this->setEditStrategy(EditStrategy::OnManualSubmit);
+   //this->setEditStrategy(EditStrategy::OnManualSubmit);
    //wbrn
    int count = this->rowCount();
    for (int i =0;i<count;i++) {

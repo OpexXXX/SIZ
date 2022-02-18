@@ -108,7 +108,7 @@ void MainSizWindow::setupModels()
     ObjectTableModel->setTable( OBJECTTABLE);
     PersonalTableModel->setTable(PERSONALTABEL);
 
-    mainSizModel->setEditStrategy(QSqlTableModel::EditStrategy::OnManualSubmit);
+
 
 
 
@@ -117,6 +117,8 @@ void MainSizWindow::setupModels()
     ObjectTableModel->select();
     PersonalTableModel->select();
     mainSizModel->updateAllTypeSizData();
+
+    mainSizModel->setEditStrategy(QSqlTableModel::EditStrategy::OnFieldChange);
     mainSizModel->updateAllEvents();
 }
 void MainSizWindow::setHeadersOnModel(const QStringList &headers, QSqlTableModel *model)
@@ -398,8 +400,8 @@ void MainSizWindow::on_selectedItemOsmotrButton_clicked()
 
         sizProxyTableModel->setData(osmotrIndex,ui->selectedItemDateEdit->date().toString("yyyy-MM-dd"),Qt::EditRole);
 
-        QModelIndexList listIndex = ui->mainTableView->selectionModel()->selectedRows();
-
+        // QModelIndexList listIndex = ui->mainTableView->selectionModel()->selectedRows();
+        // ui->mainTableView->selectRow(current.row());
         // sizProxyTableModel->dataChanged(osmotrIndex,osmotrIndex);
     }
 }
@@ -456,58 +458,39 @@ void MainSizWindow::setDelegateMainTabView()
 void MainSizWindow::on_addRowMainTable_clicked()
 {
     // mainSizModel->submitAll();
-    // mainSizModel->insertRow(1);
+    mainSizModel->setEditStrategy(QSqlTableModel::EditStrategy::OnManualSubmit);
+    sizProxyTableModel->setFilterFixedString("");
+    sizProxyTableModel-> sort(0, Qt::DescendingOrder);
 
     sizProxyTableModel->insertRow(0);
+    QModelIndex index_ins_row;
     for (int i=0;i<sizProxyTableModel->rowCount();i++) {
-
-        QModelIndex ind = sizProxyTableModel->index(i,5);
-        if( sizProxyTableModel->data(ind,Qt::DisplayRole)=="") {
-            QModelIndex nameSiz = sizProxyTableModel->index(i,MainSizModelHead::nameSiz);
-            QModelIndex nameObj = sizProxyTableModel->index(i,MainSizModelHead::object);
-            QModelIndex namePersona = sizProxyTableModel->index(i,MainSizModelHead::persona);
-
-            sizProxyTableModel->setData(nameSiz,0);
-            sizProxyTableModel->setData(nameObj,0);
-            sizProxyTableModel->setData(namePersona,0);
-            qDebug()<<ind;
-            ui->mainTableView->selectRow(ind.row());
-            return;
+        QModelIndex ind = sizProxyTableModel->index(i,0);
+        int curr_id = sizProxyTableModel->data(ind,Qt::DisplayRole).toInt();
+        if ( curr_id == 0 ) {
+            index_ins_row = ind;
+            break;
         }
-
-
-
     }
-    sizProxyTableModel->setFilterFixedString("");
-    for (int i=0;i<sizProxyTableModel->rowCount();i++) {
+    QModelIndex nameSiz = sizProxyTableModel->index(index_ins_row.row(),MainSizModelHead::nameSiz);
+    QModelIndex nameObj = sizProxyTableModel->index(index_ins_row.row(),MainSizModelHead::object);
+    QModelIndex namePersona = sizProxyTableModel->index(index_ins_row.row(),MainSizModelHead::persona);
+    sizProxyTableModel->setData(nameSiz,1);
+    sizProxyTableModel->setData(nameObj,0);
+    sizProxyTableModel->setData(namePersona,0);
+    mainSizModel->submitAll();
+    mainSizModel->setEditStrategy(QSqlTableModel::EditStrategy::OnFieldChange);
+    qDebug() << index_ins_row.row();
+    ui->mainTableView->selectRow(0);
 
-        QModelIndex ind = sizProxyTableModel->index(i,5);
-        if( sizProxyTableModel->data(ind,Qt::DisplayRole)=="") {
-            QModelIndex nameSiz = sizProxyTableModel->index(i,MainSizModelHead::nameSiz);
-            QModelIndex nameObj = sizProxyTableModel->index(i,MainSizModelHead::object);
-            QModelIndex namePersona = sizProxyTableModel->index(i,MainSizModelHead::persona);
-
-            sizProxyTableModel->setData(nameSiz,0);
-            sizProxyTableModel->setData(nameObj,0);
-            sizProxyTableModel->setData(namePersona,0);
-            qDebug()<<ind;
-            ui->mainTableView->selectRow(ind.row());
-            return;
-        }
-
-
-
-    }
-
+    return;
 }
+
 void MainSizWindow::on_deleteRowMainTable_clicked()
 {
     QModelIndexList indexes = ui->mainTableView->selectionModel()->selection().indexes();
-
     if(indexes.count()>0)
     {
-
-
         int ret = QMessageBox::warning(this, tr("Удаление записи"),"Удаление: \n"+
                                        indexes.at(5).data().toString() +
                                        "\n №"+indexes.at(1).data().toString()+
@@ -518,13 +501,22 @@ void MainSizWindow::on_deleteRowMainTable_clicked()
 
         if(ret==QMessageBox::Yes)
         {
-            sizProxyTableModel->removeRows(indexes.at(1).row(),1);
-            sizModel* mod =  (sizModel*) sizProxyTableModel->sourceModel();
-
-
-
+            int selected_id = indexes.at(0).data().toInt();
+           // sizProxyTableModel->removeRows(indexes.at(1).row(),1);
+            QModelIndex index_ins_row;
+            for (int i=0;i<mainSizModel->rowCount();i++) {
+                QModelIndex ind = mainSizModel->index(i,0);
+                int curr_id = mainSizModel->data(ind,Qt::DisplayRole).toInt();
+                if ( curr_id == selected_id ) {
+                    index_ins_row = ind;
+                    break;
+                }
+            }
+            mainSizModel->setEditStrategy(QSqlTableModel::EditStrategy::OnManualSubmit);
+            mainSizModel->removeRow(index_ins_row.row() );
+            mainSizModel->submitAll();
+            mainSizModel->setEditStrategy(QSqlTableModel::EditStrategy::OnFieldChange);
         }
-
     }
 }
 
@@ -567,10 +559,10 @@ void MainSizWindow::on_pushButton_clicked()
 
 
     QColor color = QColorDialog::getColor(Qt::yellow, this );
-       if( color.isValid() )
-       {
-         qDebug() << "Color Choosen : " << color.name();
-       }
+    if( color.isValid() )
+    {
+        qDebug() << "Color Choosen : " << color.name();
+    }
 }
 
 
@@ -614,20 +606,19 @@ void MainSizWindow::on_spinBox_valueChanged(int arg1)
 void MainSizWindow::on_btn_export_csv_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-             tr("Сохранить таблицу СИЗ"), "",
-             tr("Фаил CSV (*.csv);;All Files (*)"));
+                                                    tr("Сохранить таблицу СИЗ"), "",
+                                                    tr("Фаил CSV (*.csv);;All Files (*)"));
     if (fileName.isEmpty())
+        return;
+    else {
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, tr("Unable to open file"),
+                                     file.errorString());
             return;
-        else {
-            QFile file(fileName);
-            if (!file.open(QIODevice::WriteOnly)) {
-                QMessageBox::information(this, tr("Unable to open file"),
-                    file.errorString());
-                return;
-            }
-
+        }
         db->expotrToCSV(&file);
-
+        file.close();
     }
 
 }
