@@ -65,8 +65,8 @@
              <string>Экспорт -&gt; CSV</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>csv.png</normaloff>csv.png</iconset>
+             <iconset resource="resourse.qrc">
+              <normaloff>:/new/icon/csv.png</normaloff>:/new/icon/csv.png</iconset>
             </property>
             <property name="iconSize">
              <size>

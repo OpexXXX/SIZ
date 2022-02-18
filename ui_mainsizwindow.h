@@ -137,7 +137,7 @@ public:
         btn_export_csv = new QPushButton(tab);
         btn_export_csv->setObjectName(QString::fromUtf8("btn_export_csv"));
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8("csv.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8(":/new/icon/csv.png"), QSize(), QIcon::Normal, QIcon::Off);
         btn_export_csv->setIcon(icon1);
         btn_export_csv->setIconSize(QSize(32, 32));
 
