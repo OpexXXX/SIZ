@@ -394,7 +394,7 @@ void MainSizWindow::on_selectedItemOsmotrButton_clicked()
         QModelIndex current = ui->mainTableView->selectionModel()->selectedRows()[0];
 
         QAbstractItemModel * model = sizProxyTableModel;
-        QModelIndex osmotrIndex = model->index(current.row(), 7);
+        QModelIndex osmotrIndex = model->index(current.row(), 4 );
 
         sizProxyTableModel->setData(osmotrIndex,ui->selectedItemDateEdit->date().toString("yyyy-MM-dd"),Qt::EditRole);
 
